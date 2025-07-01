@@ -41,8 +41,10 @@ export const sadhanaEntries = pgTable("sadhana_entries", {
   chantingRounds: integer("chanting_rounds").default(0),
   chantingTarget: integer("chanting_target").default(16),
   readingPrabhupada: boolean("reading_prabhupada").default(false), // Reading Srila Prabhupada's books
+  bookTitle: text("book_title"), // Title of book being read
+  pagesRead: integer("pages_read").default(0), // Pages read that day
   mangalaArati: boolean("mangala_arati").default(false),
-  hearing: boolean("hearing").default(false), // Hearing lectures/kirtans
+  hearing: boolean("hearing").default(false), // Hearing lectures
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

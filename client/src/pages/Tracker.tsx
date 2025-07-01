@@ -9,12 +9,14 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { SadhanaEntry, Challenge, UserChallenge } from "@shared/schema";
-
-const DEFAULT_USER_ID = 1; // For demo purposes
+import { useAuth } from "@/hooks/useAuth";
 
 export default function Tracker() {
+  const { user } = useAuth();
   const [chantingRounds, setChantingRounds] = useState(0);
   const [readingPrabhupada, setReadingPrabhupada] = useState(false);
+  const [bookTitle, setBookTitle] = useState("");
+  const [pagesRead, setPagesRead] = useState(0);
   const [mangalaArati, setMangalaArati] = useState(false);
   const [hearing, setHearing] = useState(false);
   
@@ -24,12 +26,14 @@ export default function Tracker() {
   const today = new Date().toISOString().split('T')[0];
 
   const { data: todaysSadhana } = useQuery<SadhanaEntry | null>({
-    queryKey: [`/api/sadhana/${DEFAULT_USER_ID}/today`],
+    queryKey: [`/api/sadhana/${user?.id}/today`],
     refetchOnMount: true,
+    enabled: !!user?.id,
   });
 
   const { data: sadhanaHistory } = useQuery<SadhanaEntry[]>({
-    queryKey: [`/api/sadhana/${DEFAULT_USER_ID}`],
+    queryKey: [`/api/sadhana/${user?.id}`],
+    enabled: !!user?.id,
   });
 
   const { data: challenges } = useQuery<Challenge[]>({
@@ -37,7 +41,8 @@ export default function Tracker() {
   });
 
   const { data: userChallenges } = useQuery<(UserChallenge & { challenge: Challenge })[]>({
-    queryKey: [`/api/challenges/user/${DEFAULT_USER_ID}`],
+    queryKey: [`/api/challenges/user/${user?.id}`],
+    enabled: !!user?.id,
   });
 
   // Set initial values when data loads
@@ -45,6 +50,8 @@ export default function Tracker() {
     if (todaysSadhana) {
       setChantingRounds(todaysSadhana.chantingRounds || 0);
       setReadingPrabhupada(todaysSadhana.readingPrabhupada || false);
+      setBookTitle(todaysSadhana.bookTitle || "");
+      setPagesRead(todaysSadhana.pagesRead || 0);
       setMangalaArati(todaysSadhana.mangalaArati || false);
       setHearing(todaysSadhana.hearing || false);
     }
@@ -56,15 +63,15 @@ export default function Tracker() {
         return apiRequest('PUT', `/api/sadhana/${todaysSadhana.id}`, data);
       } else {
         return apiRequest('POST', '/api/sadhana', {
-          userId: DEFAULT_USER_ID,
+          userId: user?.id,
           date: today,
           ...data,
         });
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`/api/sadhana/${DEFAULT_USER_ID}/today`] });
-      queryClient.invalidateQueries({ queryKey: [`/api/sadhana/${DEFAULT_USER_ID}`] });
+      queryClient.invalidateQueries({ queryKey: [`/api/sadhana/${user?.id}/today`] });
+      queryClient.invalidateQueries({ queryKey: [`/api/sadhana/${user?.id}`] });
       toast({ title: "Sadhana updated successfully!" });
     },
     onError: () => {
@@ -78,14 +85,14 @@ export default function Tracker() {
   const joinChallengeMutation = useMutation({
     mutationFn: async (challengeId: number) => {
       return apiRequest('POST', '/api/challenges/join', {
-        userId: DEFAULT_USER_ID,
+        userId: user?.id,
         challengeId,
         progress: 0,
         completed: false,
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`/api/challenges/user/${DEFAULT_USER_ID}`] });
+      queryClient.invalidateQueries({ queryKey: [`/api/challenges/user/${user?.id}`] });
       toast({ title: "Challenge joined successfully!" });
     },
     onError: () => {
@@ -101,6 +108,8 @@ export default function Tracker() {
       chantingRounds,
       chantingTarget: 16,
       readingPrabhupada,
+      bookTitle: readingPrabhupada ? bookTitle : null,
+      pagesRead: readingPrabhupada ? pagesRead : 0,
       mangalaArati,
       hearing,
     });
@@ -175,18 +184,67 @@ export default function Tracker() {
             </div>
 
             {/* Reading Srila Prabhupada's Books */}
-            <div className="flex items-center space-x-3 p-3 rounded-lg border">
-              <Checkbox 
-                id="reading-prabhupada"
-                checked={readingPrabhupada} 
-                onCheckedChange={(checked) => setReadingPrabhupada(checked === true)}
-              />
-              <div className="flex items-center space-x-2">
-                <Book className="h-4 w-4 text-orange-600" />
-                <label htmlFor="reading-prabhupada" className="text-sm font-medium cursor-pointer">
-                  Reading Srila Prabhupada's Books
-                </label>
+            <div className="space-y-3 p-3 rounded-lg border">
+              <div className="flex items-center space-x-3">
+                <Checkbox 
+                  id="reading-prabhupada"
+                  checked={readingPrabhupada} 
+                  onCheckedChange={(checked) => setReadingPrabhupada(checked === true)}
+                />
+                <div className="flex items-center space-x-2">
+                  <Book className="h-4 w-4 text-orange-600" />
+                  <label htmlFor="reading-prabhupada" className="text-sm font-medium cursor-pointer">
+                    Reading Srila Prabhupada's Books
+                  </label>
+                </div>
               </div>
+              
+              {readingPrabhupada && (
+                <div className="ml-6 space-y-3">
+                  <div>
+                    <label htmlFor="book-title" className="text-xs font-medium text-gray-600 dark:text-gray-400">
+                      Book Title
+                    </label>
+                    <Input
+                      id="book-title"
+                      type="text"
+                      placeholder="e.g., Bhagavad-gita As It Is"
+                      value={bookTitle}
+                      onChange={(e) => setBookTitle(e.target.value)}
+                      className="mt-1"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="pages-read" className="text-xs font-medium text-gray-600 dark:text-gray-400">
+                      Pages Read Today
+                    </label>
+                    <div className="flex items-center space-x-2 mt-1">
+                      <Button 
+                        variant="outline" 
+                        size="icon"
+                        onClick={() => setPagesRead(Math.max(0, pagesRead - 1))}
+                      >
+                        -
+                      </Button>
+                      <Input 
+                        id="pages-read"
+                        type="number" 
+                        value={pagesRead} 
+                        onChange={(e) => setPagesRead(parseInt(e.target.value) || 0)}
+                        className="w-20 text-center"
+                      />
+                      <Button 
+                        variant="outline" 
+                        size="icon"
+                        onClick={() => setPagesRead(pagesRead + 1)}
+                      >
+                        +
+                      </Button>
+                      <span className="text-xs text-gray-500">pages</span>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Mangala Arati */}
@@ -214,7 +272,7 @@ export default function Tracker() {
               <div className="flex items-center space-x-2">
                 <Headphones className="h-4 w-4 text-orange-600" />
                 <label htmlFor="hearing" className="text-sm font-medium cursor-pointer">
-                  Hearing Lectures/Kirtans
+                  Hearing Lectures
                 </label>
               </div>
             </div>
