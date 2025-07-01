@@ -1,5 +1,6 @@
 import { Search, Bell, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Logo from "@/components/Logo";
 import FestivalBanner from "@/components/FestivalBanner";
 import SadhanaProgress from "@/components/SadhanaProgress";
 import DailyVerse from "@/components/DailyVerse";
@@ -13,9 +14,7 @@ export default function Hub() {
       <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-soft-gray dark:border-gray-700 sticky top-0 z-50">
         <div className="max-w-md mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-gradient-to-br from-sacred-orange to-saffron rounded-full flex items-center justify-center">
-              <span className="text-white text-sm font-bold">🪷</span>
-            </div>
+            <Logo size={32} />
             <h1 className="text-lg font-semibold text-gray-800 dark:text-gray-200">Sadhana Buddy</h1>
           </div>
           <div className="flex items-center space-x-4">
