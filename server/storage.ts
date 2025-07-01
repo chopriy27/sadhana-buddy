@@ -36,6 +36,7 @@ export interface IStorage {
   // Users
   getUser(id: string): Promise<User | undefined>;
   upsertUser(user: UpsertUser): Promise<User>;
+  updateUserProfilePicture(id: string, profileImageUrl: string): Promise<User>;
 
   // Sadhana Entries
   getSadhanaEntry(userId: string, date: string): Promise<SadhanaEntry | undefined>;
@@ -122,6 +123,18 @@ export class DatabaseStorage implements IStorage {
           updatedAt: new Date(),
         },
       })
+      .returning();
+    return user;
+  }
+
+  async updateUserProfilePicture(id: string, profileImageUrl: string): Promise<User> {
+    const [user] = await db
+      .update(schema.users)
+      .set({ 
+        profileImageUrl,
+        updatedAt: new Date() 
+      })
+      .where(eq(schema.users.id, id))
       .returning();
     return user;
   }

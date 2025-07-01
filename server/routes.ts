@@ -1,5 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
+import multer from "multer";
+import path from "path";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
 import { 
@@ -8,6 +10,21 @@ import {
   insertUserChallengeSchema,
   insertFavoriteSongSchema,
 } from "@shared/schema";
+
+// Configure multer for file uploads
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5MB limit
+  },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed'));
+    }
+  },
+});
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
@@ -22,6 +39,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching user:", error);
       res.status(500).json({ message: "Failed to fetch user" });
+    }
+  });
+
+  // Profile picture upload endpoint
+  app.post('/api/upload/profile-picture', isAuthenticated, upload.single('profilePicture'), async (req: any, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ message: "No file uploaded" });
+      }
+
+      const userId = req.user.claims.sub;
+      
+      // Convert buffer to base64 for storage
+      const base64Image = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
+      
+      // Update user profile with new image URL
+      await storage.updateUserProfilePicture(userId, base64Image);
+      
+      res.json({ 
+        message: "Profile picture uploaded successfully",
+        profileImageUrl: base64Image 
+      });
+      
+    } catch (error) {
+      console.error("Error uploading profile picture:", error);
+      res.status(500).json({ message: "Failed to upload profile picture" });
     }
   });
   
