@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { Search, Filter, Play, Heart, X, Book, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,20 +7,68 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import type { DevotionalSong } from "@shared/schema";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import type { DevotionalSong, FavoriteSong } from "@shared/schema";
 
 export default function Songs() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState<string>("");
   const [mood, setMood] = useState<string>("");
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [selectedSong, setSelectedSong] = useState<DevotionalSong | null>(null);
+  const { toast } = useToast();
+  
+  const userId = 1; // For now, using a fixed user ID
 
   const { data: songs, isLoading } = useQuery<DevotionalSong[]>({
     queryKey: ["/api/songs", { category, mood, search }],
   });
 
+  const { data: favorites } = useQuery<(FavoriteSong & { song: DevotionalSong })[]>({
+    queryKey: ["/api/favorites", userId],
+  });
+
+  const addFavoriteMutation = useMutation({
+    mutationFn: (songId: number) => 
+      apiRequest("/api/favorites", "POST", { userId, songId }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/favorites", userId] });
+      toast({ description: "Added to favorites" });
+    },
+    onError: () => {
+      toast({ description: "Failed to add to favorites", variant: "destructive" });
+    },
+  });
+
+  const removeFavoriteMutation = useMutation({
+    mutationFn: (songId: number) => 
+      apiRequest(`/api/favorites/${userId}/${songId}`, "DELETE"),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/favorites", userId] });
+      toast({ description: "Removed from favorites" });
+    },
+    onError: () => {
+      toast({ description: "Failed to remove from favorites", variant: "destructive" });
+    },
+  });
+
   const categories = ["bhajan", "kirtan", "prayer"];
   const moods = ["devotional", "meditative", "joyful"];
+
+  // Helper function to check if song is favorited
+  const isSongFavorited = (songId: number) => {
+    return favorites?.some(fav => fav.songId === songId) || false;
+  };
+
+  // Helper function to toggle favorite status
+  const toggleFavorite = (songId: number) => {
+    if (isSongFavorited(songId)) {
+      removeFavoriteMutation.mutate(songId);
+    } else {
+      addFavoriteMutation.mutate(songId);
+    }
+  };
 
   const filteredSongs = songs?.filter(song => {
     const matchesSearch = search === "" || 
@@ -29,8 +77,9 @@ export default function Songs() {
     
     const matchesCategory = category === "" || category === "all" || song.category === category;
     const matchesMood = mood === "" || mood === "all" || song.mood === mood;
+    const matchesFavorites = !showFavoritesOnly || isSongFavorited(song.id);
     
-    return matchesSearch && matchesCategory && matchesMood;
+    return matchesSearch && matchesCategory && matchesMood && matchesFavorites;
   }) || [];
 
   return (
@@ -52,7 +101,7 @@ export default function Songs() {
           </div>
 
           {/* Filters */}
-          <div className="flex space-x-2">
+          <div className="flex space-x-2 mb-2">
             <Select value={category} onValueChange={setCategory}>
               <SelectTrigger className="flex-1">
                 <SelectValue placeholder="Category" />
@@ -80,6 +129,19 @@ export default function Songs() {
                 ))}
               </SelectContent>
             </Select>
+          </div>
+
+          {/* Favorites Filter */}
+          <div className="flex space-x-2">
+            <Button
+              variant={showFavoritesOnly ? "default" : "outline"}
+              size="sm"
+              onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+              className="flex items-center space-x-2"
+            >
+              <Heart className={`w-4 h-4 ${showFavoritesOnly ? "fill-current" : ""}`} />
+              <span>Favorites Only</span>
+            </Button>
           </div>
         </div>
       </header>
@@ -121,10 +183,17 @@ export default function Songs() {
                         size="icon"
                         onClick={(e) => {
                           e.stopPropagation();
-                          // Handle favorite functionality
+                          toggleFavorite(song.id);
                         }}
+                        disabled={addFavoriteMutation.isPending || removeFavoriteMutation.isPending}
                       >
-                        <Heart className="w-4 h-4" />
+                        <Heart 
+                          className={`w-4 h-4 ${
+                            isSongFavorited(song.id) 
+                              ? "fill-red-500 text-red-500" 
+                              : "text-gray-400 hover:text-red-500"
+                          }`} 
+                        />
                       </Button>
                       <Button 
                         variant="ghost" 

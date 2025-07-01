@@ -102,6 +102,13 @@ export const userChallenges = pgTable("user_challenges", {
   joinedAt: timestamp("joined_at").defaultNow().notNull(),
 });
 
+export const favoriteSongs = pgTable("favorite_songs", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull(),
+  songId: integer("song_id").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 // Insert schemas
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
@@ -150,6 +157,11 @@ export const insertUserChallengeSchema = createInsertSchema(userChallenges).omit
   joinedAt: true,
 });
 
+export const insertFavoriteSongSchema = createInsertSchema(favoriteSongs).omit({
+  id: true,
+  createdAt: true,
+});
+
 // Types
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
@@ -180,3 +192,6 @@ export type InsertChallenge = z.infer<typeof insertChallengeSchema>;
 
 export type UserChallenge = typeof userChallenges.$inferSelect;
 export type InsertUserChallenge = z.infer<typeof insertUserChallengeSchema>;
+
+export type FavoriteSong = typeof favoriteSongs.$inferSelect;
+export type InsertFavoriteSong = z.infer<typeof insertFavoriteSongSchema>;
