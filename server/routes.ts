@@ -369,11 +369,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/goals", async (req, res) => {
     try {
       const validatedData = insertUserGoalsSchema.parse(req.body);
-      const goals = await storage.createUserGoals(validatedData);
+      const userId = validatedData.userId;
+      
+      // Check if user goals already exist
+      const existingGoals = await storage.getUserGoals(userId);
+      
+      let goals;
+      if (existingGoals) {
+        // Update existing goals
+        goals = await storage.updateUserGoals(userId, validatedData);
+      } else {
+        // Create new goals
+        goals = await storage.createUserGoals(validatedData);
+      }
+      
       res.json(goals);
     } catch (error) {
-      console.error("Error creating user goals:", error);
-      res.status(500).json({ message: "Failed to create user goals" });
+      console.error("Error creating/updating user goals:", error);
+      res.status(500).json({ message: "Failed to save user goals" });
     }
   });
 
