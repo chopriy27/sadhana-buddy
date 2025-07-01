@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -21,6 +22,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
   const { toast } = useToast();
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  const [, setLocation] = useLocation();
 
   const setGoalsMutation = useMutation({
     mutationFn: async (goals: {
@@ -38,9 +40,13 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
       queryClient.invalidateQueries({ queryKey: ['/api/goals', user?.id] });
       toast({
         title: "Goals set successfully!",
-        description: "Your daily spiritual practice goals have been saved.",
+        description: "Welcome to your spiritual journey! Redirecting to Hub...",
       });
       onComplete();
+      // Navigate to Hub after a short delay to show the success message
+      setTimeout(() => {
+        setLocation('/');
+      }, 1500);
     },
     onError: () => {
       toast({
