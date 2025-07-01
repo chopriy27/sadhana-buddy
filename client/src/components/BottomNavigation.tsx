@@ -1,5 +1,7 @@
 import { Link, useLocation } from "wouter";
 import { Home, Music, TrendingUp, BookOpen, User } from "lucide-react";
+import { useMobileFeatures } from "@/hooks/use-mobile-features";
+import { ImpactStyle } from "@capacitor/haptics";
 
 const navigationItems = [
   { path: "/", label: "Hub", icon: Home },
@@ -11,9 +13,14 @@ const navigationItems = [
 
 export default function BottomNavigation() {
   const [location] = useLocation();
+  const { triggerHaptic } = useMobileFeatures();
+
+  const handleNavigation = () => {
+    triggerHaptic(ImpactStyle.Light);
+  };
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 z-50">
+    <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 z-50 safe-area-bottom">
       <div className="max-w-md mx-auto">
         <div className="flex justify-around py-2">
           {navigationItems.map((item) => {
@@ -22,7 +29,10 @@ export default function BottomNavigation() {
             
             return (
               <Link key={item.path} href={item.path}>
-                <button className="flex flex-col items-center py-2 px-3 transition-colors">
+                <button 
+                  className="flex flex-col items-center py-2 px-3 transition-colors mobile-touch-target no-select"
+                  onClick={handleNavigation}
+                >
                   {isActive ? (
                     <div className="w-6 h-6 bg-sacred-orange rounded-full flex items-center justify-center mb-1">
                       <Icon className="w-3 h-3 text-white" />

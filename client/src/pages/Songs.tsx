@@ -25,8 +25,8 @@ export default function Songs() {
       song.title.toLowerCase().includes(search.toLowerCase()) ||
       song.author.toLowerCase().includes(search.toLowerCase());
     
-    const matchesCategory = category === "" || song.category === category;
-    const matchesMood = mood === "" || song.mood === mood;
+    const matchesCategory = category === "" || category === "all" || song.category === category;
+    const matchesMood = mood === "" || mood === "all" || song.mood === mood;
     
     return matchesSearch && matchesCategory && matchesMood;
   }) || [];
@@ -56,7 +56,7 @@ export default function Songs() {
                 <SelectValue placeholder="Category" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Categories</SelectItem>
+                <SelectItem value="all">All Categories</SelectItem>
                 {categories.map(cat => (
                   <SelectItem key={cat} value={cat}>
                     {cat.charAt(0).toUpperCase() + cat.slice(1)}
@@ -70,7 +70,7 @@ export default function Songs() {
                 <SelectValue placeholder="Mood" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Moods</SelectItem>
+                <SelectItem value="all">All Moods</SelectItem>
                 {moods.map(m => (
                   <SelectItem key={m} value={m}>
                     {m.charAt(0).toUpperCase() + m.slice(1)}
