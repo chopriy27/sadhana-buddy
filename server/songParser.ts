@@ -154,7 +154,12 @@ function buildComprehensiveSongList(): ParsedSong[] {
     });
   });
   
-  return songs;
+  // Remove duplicates based on title and author
+  const uniqueSongs = songs.filter((song, index, array) => {
+    return array.findIndex(s => s.title === song.title && s.author === song.author) === index;
+  });
+  
+  return uniqueSongs;
 }
 
 function isLikelySongTitle(line: string, lines: string[], index: number): boolean {

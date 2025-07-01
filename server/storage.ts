@@ -562,17 +562,24 @@ export class MemStorage implements IStorage {
       
       // Also add known traditional songs that might not be in the PDF
       knownVaishnavSongs.forEach(knownSong => {
-        const traditionalSong: DevotionalSong = {
-          id: this.currentId++,
-          title: knownSong.title,
-          author: knownSong.author,
-          category: 'traditional',
-          mood: 'devotional',
-          lyrics: null,
-          audioUrl: null,
-          createdAt: new Date()
-        };
-        this.devotionalSongs.set(traditionalSong.id, traditionalSong);
+        // Check if this song already exists to avoid duplicates
+        const existingSong = Array.from(this.devotionalSongs.values()).find(
+          s => s.title === knownSong.title && s.author === knownSong.author
+        );
+        
+        if (!existingSong) {
+          const traditionalSong: DevotionalSong = {
+            id: this.currentId++,
+            title: knownSong.title,
+            author: knownSong.author,
+            category: 'traditional',
+            mood: 'devotional',
+            lyrics: null,
+            audioUrl: null,
+            createdAt: new Date()
+          };
+          this.devotionalSongs.set(traditionalSong.id, traditionalSong);
+        }
       });
       
       const totalSongs = this.devotionalSongs.size;
