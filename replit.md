@@ -104,5 +104,30 @@ Preferred communication style: Simple, everyday language.
 
 ## Changelog
 
-Changelog:
-- July 01, 2025. Initial setup
+- July 01, 2025: Initial setup and core application development
+- July 01, 2025: Mobile app conversion with Capacitor integration
+  - Added Capacitor for iOS and Android deployment
+  - Implemented mobile-specific features (haptic feedback, splash screen, status bar)
+  - Added PWA manifest and mobile-optimized CSS
+  - Created app icons and mobile UI improvements
+  - Ready for App Store deployment
+
+## Mobile App Deployment
+
+The application has been configured as a native mobile app using Capacitor:
+
+### iOS Deployment
+1. The `ios/` platform has been added
+2. App configured with proper iOS metadata and icons
+3. Ready for Xcode compilation and App Store submission
+
+### Android Deployment  
+1. The `android/` platform has been added
+2. App configured with proper Android metadata
+3. Ready for Android Studio compilation and Google Play Store submission
+
+### Build Commands
+- `npm run build` - Builds the web assets
+- `npx cap sync` - Syncs web assets to native platforms
+- `npx cap open ios` - Opens in Xcode for iOS development
+- `npx cap open android` - Opens in Android Studio for Android development
