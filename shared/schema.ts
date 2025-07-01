@@ -39,12 +39,10 @@ export const sadhanaEntries = pgTable("sadhana_entries", {
   userId: varchar("user_id").notNull(),
   date: text("date").notNull(), // YYYY-MM-DD format
   chantingRounds: integer("chanting_rounds").default(0),
-  chantingTarget: integer("chanting_target").default(16),
   readingPrabhupada: boolean("reading_prabhupada").default(false), // Reading Srila Prabhupada's books
   bookTitle: text("book_title"), // Title of book being read
   pagesRead: integer("pages_read").default(0), // Pages read that day
-  mangalaArati: boolean("mangala_arati").default(false),
-  hearing: boolean("hearing").default(false), // Hearing lectures
+  hearingMinutes: integer("hearing_minutes").default(0), // Minutes spent hearing lectures/kirtans
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -104,6 +102,17 @@ export const userProgress = pgTable("user_progress", {
   totalChantingRounds: integer("total_chanting_rounds").default(0),
   currentStreak: integer("current_streak").default(0),
   longestStreak: integer("longest_streak").default(0),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const userGoals = pgTable("user_goals", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull().unique(),
+  dailyChantingRounds: integer("daily_chanting_rounds").notNull().default(16),
+  dailyReadingPages: integer("daily_reading_pages").notNull().default(5),
+  dailyHearingMinutes: integer("daily_hearing_minutes").notNull().default(30),
+  isOnboardingComplete: boolean("is_onboarding_complete").default(false),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
@@ -188,6 +197,12 @@ export const insertFavoriteSongSchema = createInsertSchema(favoriteSongs).omit({
   createdAt: true,
 });
 
+export const insertUserGoalsSchema = createInsertSchema(userGoals).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 // Types
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
@@ -222,3 +237,6 @@ export type InsertUserChallenge = z.infer<typeof insertUserChallengeSchema>;
 
 export type FavoriteSong = typeof favoriteSongs.$inferSelect;
 export type InsertFavoriteSong = z.infer<typeof insertFavoriteSongSchema>;
+
+export type UserGoals = typeof userGoals.$inferSelect;
+export type InsertUserGoals = z.infer<typeof insertUserGoalsSchema>;

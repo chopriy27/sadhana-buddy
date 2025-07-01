@@ -21,6 +21,8 @@ import {
   type InsertUserChallenge,
   type FavoriteSong,
   type InsertFavoriteSong,
+  type UserGoals,
+  type InsertUserGoals,
   type UpsertUser,
 } from "@shared/schema";
 import { db } from "./db";
@@ -85,6 +87,11 @@ export interface IStorage {
   addFavoriteSong(favorite: InsertFavoriteSong): Promise<FavoriteSong>;
   removeFavoriteSong(userId: string, songId: number): Promise<boolean>;
   isSongFavorited(userId: string, songId: number): Promise<boolean>;
+
+  // User Goals
+  getUserGoals(userId: string): Promise<UserGoals | undefined>;
+  createUserGoals(goals: InsertUserGoals): Promise<UserGoals>;
+  updateUserGoals(userId: string, goals: Partial<InsertUserGoals>): Promise<UserGoals>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -420,6 +427,32 @@ export class DatabaseStorage implements IStorage {
         eq(schema.favoriteSongs.songId, songId)
       ));
     return !!favorite;
+  }
+
+  // User Goals
+  async getUserGoals(userId: string): Promise<UserGoals | undefined> {
+    const [goals] = await db
+      .select()
+      .from(schema.userGoals)
+      .where(eq(schema.userGoals.userId, userId));
+    return goals;
+  }
+
+  async createUserGoals(insertGoals: InsertUserGoals): Promise<UserGoals> {
+    const [goals] = await db
+      .insert(schema.userGoals)
+      .values(insertGoals)
+      .returning();
+    return goals;
+  }
+
+  async updateUserGoals(userId: string, updateData: Partial<InsertUserGoals>): Promise<UserGoals> {
+    const [goals] = await db
+      .update(schema.userGoals)
+      .set({ ...updateData, updatedAt: new Date() })
+      .where(eq(schema.userGoals.userId, userId))
+      .returning();
+    return goals;
   }
 
   // Seed data methods
