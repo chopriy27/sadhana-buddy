@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Calendar, Plus, CheckCircle, Circle, Target } from "lucide-react";
+import { Calendar, Plus, CheckCircle, Circle, Target, Book, Music, Sun, Headphones } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
@@ -14,9 +14,9 @@ const DEFAULT_USER_ID = 1; // For demo purposes
 
 export default function Tracker() {
   const [chantingRounds, setChantingRounds] = useState(0);
-  const [reading, setReading] = useState(false);
+  const [readingPrabhupada, setReadingPrabhupada] = useState(false);
   const [mangalaArati, setMangalaArati] = useState(false);
-  const [eveningProgram, setEveningProgram] = useState(false);
+  const [hearing, setHearing] = useState(false);
   
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -43,10 +43,10 @@ export default function Tracker() {
   // Set initial values when data loads
   useState(() => {
     if (todaysSadhana) {
-      setChantingRounds(todaysSadhana.chantingRounds);
-      setReading(todaysSadhana.reading);
-      setMangalaArati(todaysSadhana.mangalaArati);
-      setEveningProgram(todaysSadhana.eveningProgram || false);
+      setChantingRounds(todaysSadhana.chantingRounds || 0);
+      setReadingPrabhupada(todaysSadhana.readingPrabhupada || false);
+      setMangalaArati(todaysSadhana.mangalaArati || false);
+      setHearing(todaysSadhana.hearing || false);
     }
   });
 
@@ -100,9 +100,9 @@ export default function Tracker() {
     updateSadhanaMutation.mutate({
       chantingRounds,
       chantingTarget: 16,
-      reading,
+      readingPrabhupada,
       mangalaArati,
-      eveningProgram,
+      hearing,
     });
   };
 
@@ -115,7 +115,7 @@ export default function Tracker() {
     );
     
     for (const entry of sortedHistory) {
-      if (entry.chantingRounds >= entry.chantingTarget && entry.reading && entry.mangalaArati) {
+      if ((entry.chantingRounds || 0) >= (entry.chantingTarget || 16) && entry.readingPrabhupada && entry.mangalaArati) {
         streak++;
       } else {
         break;
@@ -174,31 +174,49 @@ export default function Tracker() {
               </div>
             </div>
 
-            {/* Reading */}
-            <div className="flex items-center justify-between">
-              <label className="text-sm font-medium">Spiritual Reading</label>
-              <Switch 
-                checked={reading} 
-                onCheckedChange={setReading}
+            {/* Reading Srila Prabhupada's Books */}
+            <div className="flex items-center space-x-3 p-3 rounded-lg border">
+              <Checkbox 
+                id="reading-prabhupada"
+                checked={readingPrabhupada} 
+                onCheckedChange={(checked) => setReadingPrabhupada(checked === true)}
               />
+              <div className="flex items-center space-x-2">
+                <Book className="h-4 w-4 text-orange-600" />
+                <label htmlFor="reading-prabhupada" className="text-sm font-medium cursor-pointer">
+                  Reading Srila Prabhupada's Books
+                </label>
+              </div>
             </div>
 
             {/* Mangala Arati */}
-            <div className="flex items-center justify-between">
-              <label className="text-sm font-medium">Mangala Arati</label>
-              <Switch 
+            <div className="flex items-center space-x-3 p-3 rounded-lg border">
+              <Checkbox 
+                id="mangala-arati"
                 checked={mangalaArati} 
-                onCheckedChange={setMangalaArati}
+                onCheckedChange={(checked) => setMangalaArati(checked === true)}
               />
+              <div className="flex items-center space-x-2">
+                <Sun className="h-4 w-4 text-orange-600" />
+                <label htmlFor="mangala-arati" className="text-sm font-medium cursor-pointer">
+                  Mangala Arati
+                </label>
+              </div>
             </div>
 
-            {/* Evening Program */}
-            <div className="flex items-center justify-between">
-              <label className="text-sm font-medium">Evening Program</label>
-              <Switch 
-                checked={eveningProgram} 
-                onCheckedChange={setEveningProgram}
+            {/* Hearing */}
+            <div className="flex items-center space-x-3 p-3 rounded-lg border">
+              <Checkbox 
+                id="hearing"
+                checked={hearing} 
+                onCheckedChange={(checked) => setHearing(checked === true)}
               />
+              <div className="flex items-center space-x-2">
+                <Headphones className="h-4 w-4 text-orange-600" />
+                <label htmlFor="hearing" className="text-sm font-medium cursor-pointer">
+                  Hearing Lectures/Kirtans
+                </label>
+              </div>
             </div>
 
             <Button 
@@ -236,11 +254,11 @@ export default function Tracker() {
                   <div>
                     <p className="font-medium text-sm">{uc.challenge.title}</p>
                     <p className="text-xs text-gray-600 dark:text-gray-400">
-                      {uc.progress}/{uc.challenge.target} completed
+                      {uc.progress || 0}/{uc.challenge.target} completed
                     </p>
                   </div>
                   <Badge variant={uc.completed ? "default" : "secondary"}>
-                    {uc.completed ? "Completed" : `${Math.round((uc.progress / uc.challenge.target) * 100)}%`}
+                    {uc.completed ? "Completed" : `${Math.round(((uc.progress || 0) / uc.challenge.target) * 100)}%`}
                   </Badge>
                 </div>
               ))}
