@@ -15,24 +15,44 @@ import BottomNavigation from "@/components/BottomNavigation";
 
 function Landing() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-8 text-center">
-      <div className="max-w-md space-y-6">
-        <h1 className="text-4xl font-bold text-sacred-orange">
-          🕉️ Sadhana Buddy
-        </h1>
-        <p className="text-lg text-gray-600 dark:text-gray-300">
-          Your spiritual practice companion for Krishna consciousness
-        </p>
-        <div className="space-y-4">
-          <p className="text-gray-500 dark:text-gray-400">
-            Track your daily sadhana, explore devotional songs, and grow in your spiritual journey
+    <div className="flex flex-col items-center justify-center min-h-screen p-8 text-center bg-gradient-to-br from-orange-50 via-yellow-50 to-orange-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+      <div className="max-w-md space-y-8">
+        {/* Logo/Icon */}
+        <div className="w-20 h-20 mx-auto bg-gradient-to-br from-sacred-orange to-orange-600 rounded-2xl flex items-center justify-center shadow-lg">
+          <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center">
+            <div className="w-8 h-8 bg-gradient-to-br from-sacred-orange to-orange-600 rounded-lg"></div>
+          </div>
+        </div>
+        
+        {/* Title */}
+        <div className="space-y-3">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
+            Sadhana Buddy
+          </h1>
+          <p className="text-lg text-gray-600 dark:text-gray-300 font-medium">
+            Your spiritual practice companion
           </p>
+        </div>
+        
+        {/* Features */}
+        <div className="space-y-4">
+          <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 dark:border-gray-700/50">
+            <p className="text-gray-700 dark:text-gray-300">
+              Track daily sadhana, explore devotional songs, and grow in your spiritual journey with Krishna consciousness
+            </p>
+          </div>
+          
+          {/* Sign In Button */}
           <button
             onClick={() => window.location.href = '/api/login'}
-            className="w-full bg-sacred-orange hover:bg-sacred-orange/90 text-white font-semibold py-3 px-6 rounded-lg transition duration-200"
+            className="w-full bg-gradient-to-r from-sacred-orange to-orange-600 hover:from-orange-600 hover:to-sacred-orange text-white font-semibold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
           >
-            Sign In to Continue
+            Begin Your Journey
           </button>
+          
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            Sign in to access your personal spiritual practice dashboard
+          </p>
         </div>
       </div>
     </div>
