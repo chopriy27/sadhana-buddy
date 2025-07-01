@@ -31,6 +31,7 @@ import {
   type InsertUserChallenge,
 } from "@shared/schema";
 import { parseVaishnavCalendar, convertToFestivals } from "./calendarParser";
+import { parseVaishnavSongBook, convertToDevotionalSongs, knownVaishnavSongs } from "./songParser";
 import { readFileSync } from "fs";
 import { join } from "path";
 
@@ -110,6 +111,8 @@ export class MemStorage implements IStorage {
     this.userChallenges = new Map();
     this.currentId = 1;
     this.seedData();
+    this.loadVaishnavCalendar();
+    this.loadVaishnavSongs();
   }
 
   private seedData() {
@@ -357,7 +360,13 @@ export class MemStorage implements IStorage {
 
   async createDevotionalSong(insertSong: InsertDevotionalSong): Promise<DevotionalSong> {
     const id = this.currentId++;
-    const song: DevotionalSong = { ...insertSong, id, createdAt: new Date() };
+    const song: DevotionalSong = { 
+      ...insertSong, 
+      id, 
+      createdAt: new Date(),
+      lyrics: insertSong.lyrics ?? null,
+      audioUrl: insertSong.audioUrl ?? null
+    };
     this.devotionalSongs.set(id, song);
     return song;
   }
@@ -522,6 +531,73 @@ export class MemStorage implements IStorage {
     } catch (error) {
       console.error('Error loading Vaishnava calendar:', error);
       console.log('Using default festival data instead');
+    }
+  }
+
+  private loadVaishnavSongs(): void {
+    try {
+      const songBookPath = join(process.cwd(), 'attached_assets', 'Vaishnava song book_1751340349202.pdf');
+      console.log(`Loading songs from Vaishnava song book...`);
+      
+      // Parse songs from the PDF
+      const parsedSongs = parseVaishnavSongBook(songBookPath);
+      const devotionalSongs = convertToDevotionalSongs(parsedSongs);
+      
+      console.log(`Parsed ${devotionalSongs.length} songs from song book`);
+      
+      // Clear existing sample songs first
+      this.devotionalSongs.clear();
+      
+      // Add parsed songs to storage
+      devotionalSongs.forEach(song => {
+        const songWithId: DevotionalSong = {
+          ...song,
+          id: this.currentId++,
+          createdAt: new Date(),
+          lyrics: song.lyrics ?? null,
+          audioUrl: song.audioUrl ?? null
+        };
+        this.devotionalSongs.set(songWithId.id, songWithId);
+      });
+      
+      // Also add known traditional songs that might not be in the PDF
+      knownVaishnavSongs.forEach(knownSong => {
+        const traditionalSong: DevotionalSong = {
+          id: this.currentId++,
+          title: knownSong.title,
+          author: knownSong.author,
+          category: 'traditional',
+          mood: 'devotional',
+          lyrics: null,
+          audioUrl: null,
+          createdAt: new Date()
+        };
+        this.devotionalSongs.set(traditionalSong.id, traditionalSong);
+      });
+      
+      const totalSongs = this.devotionalSongs.size;
+      console.log(`Successfully loaded ${totalSongs} devotional songs`);
+      
+    } catch (error) {
+      console.error('Failed to load Vaishnava songs:', error);
+      
+      // Fallback to known songs only
+      this.devotionalSongs.clear();
+      knownVaishnavSongs.forEach(knownSong => {
+        const traditionalSong: DevotionalSong = {
+          id: this.currentId++,
+          title: knownSong.title,
+          author: knownSong.author,
+          category: 'traditional', 
+          mood: 'devotional',
+          lyrics: null,
+          audioUrl: null,
+          createdAt: new Date()
+        };
+        this.devotionalSongs.set(traditionalSong.id, traditionalSong);
+      });
+      
+      console.log(`Loaded ${knownVaishnavSongs.length} traditional songs as fallback`);
     }
   }
 }
