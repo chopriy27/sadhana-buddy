@@ -1,6 +1,6 @@
 import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
-import { QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider, useQuery } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useMobileFeatures } from "@/hooks/use-mobile-features";
@@ -12,6 +12,7 @@ import Journal from "@/pages/Journal";
 import Profile from "@/pages/Profile";
 import NotFound from "@/pages/not-found";
 import BottomNavigation from "@/components/BottomNavigation";
+import Onboarding from "@/components/Onboarding";
 
 function Landing() {
   return (
@@ -61,9 +62,18 @@ function Landing() {
 
 function Router() {
   const { isReady } = useMobileFeatures();
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, user } = useAuth();
 
-  if (!isReady || isLoading) {
+  // Check if user has completed onboarding
+  const { data: userGoals, isLoading: goalsLoading } = useQuery({
+    queryKey: ['/api/goals', user?.id],
+    enabled: !!user?.id && isAuthenticated,
+    retry: false,
+  });
+
+  const hasCompletedOnboarding = userGoals?.isOnboardingComplete;
+
+  if (!isReady || isLoading || (isAuthenticated && goalsLoading)) {
     return (
       <div className="min-h-screen bg-sacred-orange flex items-center justify-center">
         <div className="text-center text-white">
@@ -74,6 +84,17 @@ function Router() {
           <p className="text-sm opacity-80">Loading your spiritual journey...</p>
         </div>
       </div>
+    );
+  }
+
+  // Show onboarding for authenticated users who haven't completed it
+  if (isAuthenticated && !hasCompletedOnboarding) {
+    return (
+      <Onboarding
+        onComplete={() => {
+          queryClient.invalidateQueries({ queryKey: ['/api/goals', user?.id] });
+        }}
+      />
     );
   }
 
@@ -95,7 +116,7 @@ function Router() {
           <Route component={NotFound} />
         </Switch>
       </div>
-      {isAuthenticated && <BottomNavigation />}
+      {isAuthenticated && hasCompletedOnboarding && <BottomNavigation />}
     </>
   );
 }

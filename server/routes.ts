@@ -9,6 +9,7 @@ import {
   insertJournalEntrySchema,
   insertUserChallengeSchema,
   insertFavoriteSongSchema,
+  insertUserGoalsSchema,
 } from "@shared/schema";
 
 // Configure multer for file uploads
@@ -350,6 +351,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ isFavorited });
     } catch (error) {
       res.status(500).json({ message: "Failed to check favorite status" });
+    }
+  });
+
+  // User Goals routes
+  app.get("/api/goals/:userId", async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const goals = await storage.getUserGoals(userId);
+      res.json(goals);
+    } catch (error) {
+      console.error("Error fetching user goals:", error);
+      res.status(500).json({ message: "Failed to fetch user goals" });
+    }
+  });
+
+  app.post("/api/goals", async (req, res) => {
+    try {
+      const validatedData = insertUserGoalsSchema.parse(req.body);
+      const goals = await storage.createUserGoals(validatedData);
+      res.json(goals);
+    } catch (error) {
+      console.error("Error creating user goals:", error);
+      res.status(500).json({ message: "Failed to create user goals" });
+    }
+  });
+
+  app.put("/api/goals/:userId", async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const updateData = req.body;
+      const goals = await storage.updateUserGoals(userId, updateData);
+      res.json(goals);
+    } catch (error) {
+      console.error("Error updating user goals:", error);
+      res.status(500).json({ message: "Failed to update user goals" });
     }
   });
 
