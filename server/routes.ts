@@ -1,6 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
+import { setupAuth, isAuthenticated } from "./replitAuth";
 import { 
   insertSadhanaEntrySchema,
   insertJournalEntrySchema,
@@ -9,11 +10,25 @@ import {
 } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Auth middleware
+  await setupAuth(app);
+
+  // Auth routes
+  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      res.json(user);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      res.status(500).json({ message: "Failed to fetch user" });
+    }
+  });
   
   // Sadhana endpoints
-  app.get("/api/sadhana/:userId", async (req, res) => {
+  app.get("/api/sadhana/:userId", isAuthenticated, async (req: any, res) => {
     try {
-      const userId = parseInt(req.params.userId);
+      const userId = req.user.claims.sub;
       const entries = await storage.getSadhanaEntries(userId, 30);
       res.json(entries);
     } catch (error) {
@@ -21,9 +36,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/sadhana/:userId/today", async (req, res) => {
+  app.get("/api/sadhana/:userId/today", isAuthenticated, async (req: any, res) => {
     try {
-      const userId = parseInt(req.params.userId);
+      const userId = req.user.claims.sub;
       const today = new Date().toISOString().split('T')[0];
       const entry = await storage.getSadhanaEntry(userId, today);
       res.json(entry || null);

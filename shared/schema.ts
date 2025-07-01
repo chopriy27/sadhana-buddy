@@ -1,18 +1,42 @@
-import { pgTable, text, serial, integer, boolean, timestamp, jsonb } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  text,
+  varchar,
+  serial,
+  integer,
+  boolean,
+  timestamp,
+  jsonb,
+  index,
+} from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
+// Session storage table for Replit Auth
+export const sessions = pgTable(
+  "sessions",
+  {
+    sid: varchar("sid").primaryKey(),
+    sess: jsonb("sess").notNull(),
+    expire: timestamp("expire").notNull(),
+  },
+  (table) => [index("IDX_session_expire").on(table.expire)],
+);
+
+// User storage table for Replit Auth
 export const users = pgTable("users", {
-  id: serial("id").primaryKey(),
-  username: text("username").notNull().unique(),
-  email: text("email").notNull().unique(),
-  password: text("password").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
+  id: varchar("id").primaryKey().notNull(),
+  email: varchar("email").unique(),
+  firstName: varchar("first_name"),
+  lastName: varchar("last_name"),
+  profileImageUrl: varchar("profile_image_url"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 export const sadhanaEntries = pgTable("sadhana_entries", {
   id: serial("id").primaryKey(),
-  userId: integer("user_id").notNull(),
+  userId: varchar("user_id").notNull(),
   date: text("date").notNull(), // YYYY-MM-DD format
   chantingRounds: integer("chanting_rounds").default(0),
   chantingTarget: integer("chanting_target").default(16),
@@ -24,7 +48,7 @@ export const sadhanaEntries = pgTable("sadhana_entries", {
 
 export const journalEntries = pgTable("journal_entries", {
   id: serial("id").primaryKey(),
-  userId: integer("user_id").notNull(),
+  userId: varchar("user_id").notNull(),
   title: text("title").notNull(),
   content: text("content").notNull(),
   mood: text("mood"), // grateful, reflective, inspired, etc.
@@ -72,7 +96,7 @@ export const dailyVerses = pgTable("daily_verses", {
 
 export const userProgress = pgTable("user_progress", {
   id: serial("id").primaryKey(),
-  userId: integer("user_id").notNull(),
+  userId: varchar("user_id").notNull(),
   booksRead: text("books_read").array().default([]),
   lecturesHeard: integer("lectures_heard").array().default([]),
   totalChantingRounds: integer("total_chanting_rounds").default(0),
@@ -95,7 +119,7 @@ export const challenges = pgTable("challenges", {
 
 export const userChallenges = pgTable("user_challenges", {
   id: serial("id").primaryKey(),
-  userId: integer("user_id").notNull(),
+  userId: varchar("user_id").notNull(),
   challengeId: integer("challenge_id").notNull(),
   progress: integer("progress").default(0),
   completed: boolean("completed").default(false),
@@ -104,7 +128,7 @@ export const userChallenges = pgTable("user_challenges", {
 
 export const favoriteSongs = pgTable("favorite_songs", {
   id: serial("id").primaryKey(),
-  userId: integer("user_id").notNull(),
+  userId: varchar("user_id").notNull(),
   songId: integer("song_id").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
@@ -165,6 +189,7 @@ export const insertFavoriteSongSchema = createInsertSchema(favoriteSongs).omit({
 // Types
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
+export type UpsertUser = typeof users.$inferInsert;
 
 export type SadhanaEntry = typeof sadhanaEntries.$inferSelect;
 export type InsertSadhanaEntry = z.infer<typeof insertSadhanaEntrySchema>;

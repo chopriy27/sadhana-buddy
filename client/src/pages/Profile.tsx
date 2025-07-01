@@ -1,23 +1,28 @@
 import { useQuery } from "@tanstack/react-query";
-import { User, BookOpen, Play, Target, Award, Calendar, TrendingUp } from "lucide-react";
+import { User, BookOpen, Play, Target, Award, Calendar, TrendingUp, LogOut } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
 import type { UserProgress, SadhanaEntry, JournalEntry } from "@shared/schema";
 
-const DEFAULT_USER_ID = 1; // For demo purposes
-
 export default function Profile() {
+  const { user } = useAuth();
+  
   const { data: userProgress } = useQuery<UserProgress | null>({
-    queryKey: [`/api/progress/${DEFAULT_USER_ID}`],
+    queryKey: [`/api/progress/${user?.id}`],
+    enabled: !!user?.id,
   });
 
   const { data: sadhanaEntries } = useQuery<SadhanaEntry[]>({
-    queryKey: [`/api/sadhana/${DEFAULT_USER_ID}`],
+    queryKey: [`/api/sadhana/${user?.id}`],
+    enabled: !!user?.id,
   });
 
   const { data: journalEntries } = useQuery<JournalEntry[]>({
-    queryKey: [`/api/journal/${DEFAULT_USER_ID}`],
+    queryKey: [`/api/journal/${user?.id}`],
+    enabled: !!user?.id,
   });
 
   // Calculate statistics
@@ -108,16 +113,42 @@ export default function Profile() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center space-x-4">
-              <div className="w-16 h-16 bg-gradient-to-br from-sacred-orange to-saffron rounded-full flex items-center justify-center">
-                <User className="w-8 h-8 text-white" />
-              </div>
-              <div>
-                <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">Devotee</h2>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Aspiring Devotee</p>
+              {user?.profileImageUrl ? (
+                <img 
+                  src={user.profileImageUrl} 
+                  alt="Profile" 
+                  className="w-16 h-16 rounded-full object-cover"
+                />
+              ) : (
+                <div className="w-16 h-16 bg-gradient-to-br from-sacred-orange to-saffron rounded-full flex items-center justify-center">
+                  <User className="w-8 h-8 text-white" />
+                </div>
+              )}
+              <div className="flex-1">
+                <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
+                  {user?.firstName || user?.lastName ? 
+                    `${user.firstName || ''} ${user.lastName || ''}`.trim() : 
+                    'Devotee'
+                  }
+                </h2>
+                {user?.email && (
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{user.email}</p>
+                )}
                 <Badge variant="secondary" className="mt-1">
-                  Level 1
+                  Aspiring Devotee
                 </Badge>
               </div>
+            </div>
+            
+            <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+              <Button 
+                variant="outline" 
+                className="w-full"
+                onClick={() => window.location.href = '/api/logout'}
+              >
+                <LogOut className="w-4 h-4 mr-2" />
+                Sign Out
+              </Button>
             </div>
           </CardContent>
         </Card>
