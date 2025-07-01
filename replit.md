@@ -111,6 +111,11 @@ Preferred communication style: Simple, everyday language.
   - Added PWA manifest and mobile-optimized CSS
   - Created app icons and mobile UI improvements
   - Ready for App Store deployment
+- July 01, 2025: Integrated authentic Vaishnava calendar for event reminders
+  - Built calendar parser to extract 235+ festivals and observances from uploaded calendar
+  - Integrated Ekadasi fasting days, appearance/disappearance days, and sacred festivals
+  - Fixed text visibility issues in festival banner and daily verse components
+  - Festival reminders now show authentic ISKCON calendar events with proper dates
 
 ## Mobile App Deployment
 
