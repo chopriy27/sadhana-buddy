@@ -9,11 +9,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 import { apiRequest } from "@/lib/queryClient";
 import { formatDistanceToNow } from "date-fns";
 import type { JournalEntry } from "@shared/schema";
-
-const DEFAULT_USER_ID = 1; // For demo purposes
 
 const moods = [
   { value: "grateful", label: "Grateful", icon: "🙏" },
@@ -32,20 +31,22 @@ export default function Journal() {
 
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   const { data: journalEntries, isLoading } = useQuery<JournalEntry[]>({
-    queryKey: [`/api/journal/${DEFAULT_USER_ID}`],
+    queryKey: [`/api/journal/${user?.id}`],
+    enabled: !!user?.id,
   });
 
   const createEntryMutation = useMutation({
     mutationFn: async (data: { title: string; content: string; mood?: string }) => {
       return apiRequest('POST', '/api/journal', {
-        userId: DEFAULT_USER_ID,
+        userId: user?.id,
         ...data,
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`/api/journal/${DEFAULT_USER_ID}`] });
+      queryClient.invalidateQueries({ queryKey: [`/api/journal/${user?.id}`] });
       setIsDialogOpen(false);
       resetForm();
       toast({ title: "Journal entry created successfully!" });
@@ -63,7 +64,7 @@ export default function Journal() {
       return apiRequest('PUT', `/api/journal/${id}`, data);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`/api/journal/${DEFAULT_USER_ID}`] });
+      queryClient.invalidateQueries({ queryKey: [`/api/journal/${user?.id}`] });
       setIsDialogOpen(false);
       setEditingEntry(null);
       resetForm();
@@ -82,7 +83,7 @@ export default function Journal() {
       return apiRequest('DELETE', `/api/journal/${id}`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`/api/journal/${DEFAULT_USER_ID}`] });
+      queryClient.invalidateQueries({ queryKey: [`/api/journal/${user?.id}`] });
       toast({ title: "Journal entry deleted successfully!" });
     },
     onError: () => {
