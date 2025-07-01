@@ -140,6 +140,13 @@ Preferred communication style: Simple, everyday language.
   - Updated Songs page with heart icon functionality and favorites-only filter
   - Users can now mark songs as favorites and filter to view only favorite songs
   - Visual feedback with filled red hearts for favorited songs
+- July 01, 2025: Enhanced sadhana tracker with detailed book reading features
+  - Added book title input field for tracking specific books being read
+  - Implemented daily page count tracking with increment/decrement buttons
+  - Created conditional form display - book details only appear when reading checkbox is checked
+  - Removed "kirtans" from hearing lectures section label for clarity
+  - Updated database schema with bookTitle and pagesRead fields
+  - Integrated with authenticated user system for personalized tracking
 
 ## Mobile App Deployment
 
