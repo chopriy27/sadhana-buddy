@@ -1,14 +1,4 @@
 import {
-  users,
-  sadhanaEntries,
-  journalEntries,
-  devotionalSongs,
-  lectures,
-  festivals,
-  dailyVerses,
-  userProgress,
-  challenges,
-  userChallenges,
   type User,
   type InsertUser,
   type SadhanaEntry,
@@ -31,7 +21,11 @@ import {
   type InsertUserChallenge,
   type FavoriteSong,
   type InsertFavoriteSong,
+  type UpsertUser,
 } from "@shared/schema";
+import { db } from "./db";
+import { eq, desc, and, sql } from "drizzle-orm";
+import * as schema from "@shared/schema";
 import { parseVaishnavCalendar, convertToFestivals } from "./calendarParser";
 import { parseAuthenticCalendar, convertToAuthenticFestivals } from "./authentnicCalendarParser";
 import { parseVaishnavSongBook, convertToDevotionalSongs, knownVaishnavSongs } from "./songParser";
@@ -40,19 +34,17 @@ import { join } from "path";
 
 export interface IStorage {
   // Users
-  getUser(id: number): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  getUserByEmail(email: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
+  getUser(id: string): Promise<User | undefined>;
+  upsertUser(user: UpsertUser): Promise<User>;
 
   // Sadhana Entries
-  getSadhanaEntry(userId: number, date: string): Promise<SadhanaEntry | undefined>;
-  getSadhanaEntries(userId: number, limit?: number): Promise<SadhanaEntry[]>;
+  getSadhanaEntry(userId: string, date: string): Promise<SadhanaEntry | undefined>;
+  getSadhanaEntries(userId: string, limit?: number): Promise<SadhanaEntry[]>;
   createSadhanaEntry(entry: InsertSadhanaEntry): Promise<SadhanaEntry>;
   updateSadhanaEntry(id: number, entry: Partial<InsertSadhanaEntry>): Promise<SadhanaEntry | undefined>;
 
   // Journal Entries
-  getJournalEntries(userId: number, limit?: number): Promise<JournalEntry[]>;
+  getJournalEntries(userId: string, limit?: number): Promise<JournalEntry[]>;
   createJournalEntry(entry: InsertJournalEntry): Promise<JournalEntry>;
   updateJournalEntry(id: number, entry: Partial<InsertJournalEntry>): Promise<JournalEntry | undefined>;
   deleteJournalEntry(id: number): Promise<boolean>;
@@ -78,363 +70,220 @@ export interface IStorage {
   createDailyVerse(verse: InsertDailyVerse): Promise<DailyVerse>;
 
   // User Progress
-  getUserProgress(userId: number): Promise<UserProgress | undefined>;
-  updateUserProgress(userId: number, progress: Partial<InsertUserProgress>): Promise<UserProgress>;
+  getUserProgress(userId: string): Promise<UserProgress | undefined>;
+  updateUserProgress(userId: string, progress: Partial<InsertUserProgress>): Promise<UserProgress>;
 
   // Challenges
   getChallenges(): Promise<Challenge[]>;
-  getActiveUserChallenges(userId: number): Promise<(UserChallenge & { challenge: Challenge })[]>;
+  getActiveUserChallenges(userId: string): Promise<(UserChallenge & { challenge: Challenge })[]>;
   joinChallenge(userChallenge: InsertUserChallenge): Promise<UserChallenge>;
   updateChallengeProgress(id: number, progress: number): Promise<UserChallenge | undefined>;
 
   // Favorite Songs
-  getFavoriteSongs(userId: number): Promise<(FavoriteSong & { song: DevotionalSong })[]>;
+  getFavoriteSongs(userId: string): Promise<(FavoriteSong & { song: DevotionalSong })[]>;
   addFavoriteSong(favorite: InsertFavoriteSong): Promise<FavoriteSong>;
-  removeFavoriteSong(userId: number, songId: number): Promise<boolean>;
-  isSongFavorited(userId: number, songId: number): Promise<boolean>;
+  removeFavoriteSong(userId: string, songId: number): Promise<boolean>;
+  isSongFavorited(userId: string, songId: number): Promise<boolean>;
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<number, User>;
-  private sadhanaEntries: Map<number, SadhanaEntry>;
-  private journalEntries: Map<number, JournalEntry>;
-  private devotionalSongs: Map<number, DevotionalSong>;
-  private lectures: Map<number, Lecture>;
-  private festivals: Map<number, Festival>;
-  private dailyVerses: Map<number, DailyVerse>;
-  private userProgress: Map<number, UserProgress>;
-  private challenges: Map<number, Challenge>;
-  private userChallenges: Map<number, UserChallenge>;
-  private favoriteSongs: Map<number, FavoriteSong>;
-  private currentId: number;
+export class DatabaseStorage implements IStorage {
+  private devotionalSongsData: DevotionalSong[] = [];
+  private lecturesData: Lecture[] = [];
+  private festivalsData: Festival[] = [];
+  private dailyVersesData: DailyVerse[] = [];
+  private challengesData: Challenge[] = [];
 
   constructor() {
-    this.users = new Map();
-    this.sadhanaEntries = new Map();
-    this.journalEntries = new Map();
-    this.devotionalSongs = new Map();
-    this.lectures = new Map();
-    this.festivals = new Map();
-    this.dailyVerses = new Map();
-    this.userProgress = new Map();
-    this.challenges = new Map();
-    this.userChallenges = new Map();
-    this.favoriteSongs = new Map();
-    this.currentId = 1;
     this.seedData();
-    this.loadVaishnavCalendar();
-    this.loadVaishnavSongs();
   }
 
   private seedData() {
-    // Create default user
-    const defaultUser: User = {
-      id: 1,
-      username: "devotee1",
-      email: "devotee@example.com",
-      password: "password123",
-      createdAt: new Date(),
-    };
-    this.users.set(1, defaultUser);
-
-    // Seed devotional songs
-    const songs: DevotionalSong[] = [
-      {
-        id: 1,
-        title: "Hare Krishna Mahamantra",
-        author: "Traditional",
-        category: "kirtan",
-        mood: "devotional",
-        lyrics: "Hare Krishna Hare Krishna Krishna Krishna Hare Hare\nHare Rama Hare Rama Rama Rama Hare Hare",
-        audioUrl: "",
-        createdAt: new Date(),
-      },
-      {
-        id: 2,
-        title: "Jaya Radha Madhava",
-        author: "Srila Bhaktivinoda Thakura",
-        category: "bhajan",
-        mood: "meditative",
-        lyrics: "Jaya radha-madhava kunja-bihari\ngopi-jana-vallabha giri-vara-dhari",
-        audioUrl: "",
-        createdAt: new Date(),
-      },
-      {
-        id: 3,
-        title: "Govinda Jaya Jaya",
-        author: "Srila Jayadeva Goswami",
-        category: "kirtan",
-        mood: "joyful",
-        lyrics: "Govinda jaya jaya\ngopala jaya jaya\nradha-ramana hari\ngovinda jaya jaya",
-        audioUrl: "",
-        createdAt: new Date(),
-      },
-    ];
-    songs.forEach(song => this.devotionalSongs.set(song.id, song));
-
-    // Seed lectures
-    const lectures: Lecture[] = [
-      {
-        id: 1,
-        title: "The Science of Self-Realization",
-        speaker: "His Divine Grace A.C. Bhaktivedanta Swami Prabhupada",
-        topic: "Self-Realization",
-        duration: 45,
-        videoUrl: "",
-        description: "Understanding the eternal nature of the soul and its relationship with Krishna",
-        createdAt: new Date(),
-      },
-      {
-        id: 2,
-        title: "Bhagavad Gita As It Is - Chapter 2",
-        speaker: "His Holiness Radhanath Swami",
-        topic: "Bhagavad Gita",
-        duration: 60,
-        videoUrl: "",
-        description: "Contents of the Gita Summarized - The eternal soul and material nature",
-        createdAt: new Date(),
-      },
-    ];
-    lectures.forEach(lecture => this.lectures.set(lecture.id, lecture));
-
-    // Seed festivals
-    const festivals: Festival[] = [
-      {
-        id: 1,
-        name: "Janmashtami",
-        date: "2025-08-26",
-        description: "Appearance day of Lord Krishna",
-        significance: "Celebrates the divine appearance of Krishna",
-        observances: ["Fasting until midnight", "Abhisheka ceremony", "Midnight celebration"],
-      },
-      {
-        id: 2,
-        name: "Radhastami",
-        date: "2025-09-07",
-        description: "Appearance day of Srimati Radharani",
-        significance: "Celebrates the divine appearance of Radha",
-        observances: ["Fasting until noon", "Special prayers", "Radha-Krishna worship"],
-      },
-    ];
-    festivals.forEach(festival => this.festivals.set(festival.id, festival));
-    
-    // Load calendar events
     this.loadVaishnavCalendar();
-
-    // Seed daily verses
-    const verses: DailyVerse[] = [
-      {
-        id: 1,
-        verse: "One who is not disturbed by the incessant flow of desires that enter like rivers into the ocean, which is ever being filled but is always still, can alone achieve peace, and not the man who strives to satisfy such desires.",
-        translation: "A person who is not disturbed by the incessant flow of desires can alone achieve peace.",
-        source: "Bhagavad Gita 2.70",
-        date: "2025-07-01",
-      },
-      {
-        id: 2,
-        verse: "For the soul there is neither birth nor death. It is not slain when the body is slain.",
-        translation: "The soul is eternal and indestructible.",
-        source: "Bhagavad Gita 2.20",
-        date: "2025-07-02",
-      },
-    ];
-    verses.forEach(verse => this.dailyVerses.set(verse.id, verse));
-
-    // Seed challenges
-    const challenges: Challenge[] = [
-      {
-        id: 1,
-        title: "108 Rounds Challenge",
-        description: "Chant 108 rounds in a week",
-        type: "chanting",
-        target: 108,
-        duration: 7,
-        startDate: "2025-07-01",
-        endDate: "2025-07-07",
-        isActive: true,
-      },
-      {
-        id: 2,
-        title: "Daily Reading Streak",
-        description: "Read Bhagavad Gita daily for 30 days",
-        type: "reading",
-        target: 30,
-        duration: 30,
-        startDate: "2025-07-01",
-        endDate: "2025-07-30",
-        isActive: true,
-      },
-    ];
-    challenges.forEach(challenge => this.challenges.set(challenge.id, challenge));
-
-    this.currentId = 100; // Start new IDs from 100
+    this.loadVaishnavSongs();
+    this.seedDailyVerses();
+    this.seedLectures();
+    this.seedChallenges();
   }
 
-  async getUser(id: number): Promise<User | undefined> {
-    return this.users.get(id);
+  // Users - Database operations
+  async getUser(id: string): Promise<User | undefined> {
+    const [user] = await db.select().from(schema.users).where(eq(schema.users.id, id));
+    return user || undefined;
   }
 
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(user => user.username === username);
-  }
-
-  async getUserByEmail(email: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(user => user.email === email);
-  }
-
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const id = this.currentId++;
-    const user: User = { ...insertUser, id, createdAt: new Date() };
-    this.users.set(id, user);
+  async upsertUser(userData: UpsertUser): Promise<User> {
+    const [user] = await db
+      .insert(schema.users)
+      .values(userData)
+      .onConflictDoUpdate({
+        target: schema.users.id,
+        set: {
+          ...userData,
+          updatedAt: new Date(),
+        },
+      })
+      .returning();
     return user;
   }
 
-  async getSadhanaEntry(userId: number, date: string): Promise<SadhanaEntry | undefined> {
-    return Array.from(this.sadhanaEntries.values()).find(
-      entry => entry.userId === userId && entry.date === date
-    );
+  // Sadhana Entries - Database operations
+  async getSadhanaEntry(userId: string, date: string): Promise<SadhanaEntry | undefined> {
+    const [entry] = await db
+      .select()
+      .from(schema.sadhanaEntries)
+      .where(and(eq(schema.sadhanaEntries.userId, userId), eq(schema.sadhanaEntries.date, date)));
+    return entry || undefined;
   }
 
-  async getSadhanaEntries(userId: number, limit = 30): Promise<SadhanaEntry[]> {
-    return Array.from(this.sadhanaEntries.values())
-      .filter(entry => entry.userId === userId)
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-      .slice(0, limit);
+  async getSadhanaEntries(userId: string, limit = 30): Promise<SadhanaEntry[]> {
+    return await db
+      .select()
+      .from(schema.sadhanaEntries)
+      .where(eq(schema.sadhanaEntries.userId, userId))
+      .orderBy(desc(schema.sadhanaEntries.date))
+      .limit(limit);
   }
 
   async createSadhanaEntry(insertEntry: InsertSadhanaEntry): Promise<SadhanaEntry> {
-    const id = this.currentId++;
-    const entry: SadhanaEntry = { ...insertEntry, id, createdAt: new Date() };
-    this.sadhanaEntries.set(id, entry);
+    const [entry] = await db
+      .insert(schema.sadhanaEntries)
+      .values(insertEntry)
+      .returning();
     return entry;
   }
 
   async updateSadhanaEntry(id: number, updateData: Partial<InsertSadhanaEntry>): Promise<SadhanaEntry | undefined> {
-    const entry = this.sadhanaEntries.get(id);
-    if (!entry) return undefined;
-    
-    const updatedEntry = { ...entry, ...updateData };
-    this.sadhanaEntries.set(id, updatedEntry);
-    return updatedEntry;
+    const [entry] = await db
+      .update(schema.sadhanaEntries)
+      .set(updateData)
+      .where(eq(schema.sadhanaEntries.id, id))
+      .returning();
+    return entry || undefined;
   }
 
-  async getJournalEntries(userId: number, limit = 20): Promise<JournalEntry[]> {
-    return Array.from(this.journalEntries.values())
-      .filter(entry => entry.userId === userId)
-      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-      .slice(0, limit);
+  // Journal Entries - Database operations
+  async getJournalEntries(userId: string, limit = 20): Promise<JournalEntry[]> {
+    return await db
+      .select()
+      .from(schema.journalEntries)
+      .where(eq(schema.journalEntries.userId, userId))
+      .orderBy(desc(schema.journalEntries.createdAt))
+      .limit(limit);
   }
 
   async createJournalEntry(insertEntry: InsertJournalEntry): Promise<JournalEntry> {
-    const id = this.currentId++;
-    const entry: JournalEntry = { ...insertEntry, id, createdAt: new Date() };
-    this.journalEntries.set(id, entry);
+    const [entry] = await db
+      .insert(schema.journalEntries)
+      .values(insertEntry)
+      .returning();
     return entry;
   }
 
   async updateJournalEntry(id: number, updateData: Partial<InsertJournalEntry>): Promise<JournalEntry | undefined> {
-    const entry = this.journalEntries.get(id);
-    if (!entry) return undefined;
-    
-    const updatedEntry = { ...entry, ...updateData };
-    this.journalEntries.set(id, updatedEntry);
-    return updatedEntry;
+    const [entry] = await db
+      .update(schema.journalEntries)
+      .set(updateData)
+      .where(eq(schema.journalEntries.id, id))
+      .returning();
+    return entry || undefined;
   }
 
   async deleteJournalEntry(id: number): Promise<boolean> {
-    return this.journalEntries.delete(id);
+    const result = await db
+      .delete(schema.journalEntries)
+      .where(eq(schema.journalEntries.id, id));
+    return (result.rowCount || 0) > 0;
   }
 
+  // Devotional Songs - In-memory with seeded data
   async getDevotionalSongs(category?: string, mood?: string): Promise<DevotionalSong[]> {
-    let songs = Array.from(this.devotionalSongs.values());
-    
-    if (category) {
-      songs = songs.filter(song => song.category === category);
-    }
-    if (mood) {
-      songs = songs.filter(song => song.mood === mood);
-    }
-    
-    return songs.sort((a, b) => a.title.localeCompare(b.title));
+    return this.devotionalSongsData.filter(song => {
+      if (category && song.category !== category) return false;
+      if (mood && song.mood !== mood) return false;
+      return true;
+    });
   }
 
   async searchDevotionalSongs(query: string): Promise<DevotionalSong[]> {
-    const lowerQuery = query.toLowerCase();
-    return Array.from(this.devotionalSongs.values())
-      .filter(song => 
-        song.title.toLowerCase().includes(lowerQuery) ||
-        song.author.toLowerCase().includes(lowerQuery) ||
-        song.category.toLowerCase().includes(lowerQuery) ||
-        song.mood.toLowerCase().includes(lowerQuery)
-      );
+    const searchTerm = query.toLowerCase();
+    return this.devotionalSongsData.filter(song =>
+      song.title.toLowerCase().includes(searchTerm) ||
+      song.author.toLowerCase().includes(searchTerm) ||
+      (song.lyrics && song.lyrics.toLowerCase().includes(searchTerm))
+    );
   }
 
   async createDevotionalSong(insertSong: InsertDevotionalSong): Promise<DevotionalSong> {
-    const id = this.currentId++;
-    const song: DevotionalSong = { 
-      ...insertSong, 
-      id, 
+    const song: DevotionalSong = {
+      ...insertSong,
+      id: this.devotionalSongsData.length + 1,
       createdAt: new Date(),
-      lyrics: insertSong.lyrics ?? null,
-      audioUrl: insertSong.audioUrl ?? null
+      lyrics: insertSong.lyrics || null,
+      audioUrl: insertSong.audioUrl || null,
     };
-    this.devotionalSongs.set(id, song);
+    this.devotionalSongsData.push(song);
     return song;
   }
 
+  // Lectures - In-memory with seeded data
   async getLectures(speaker?: string, topic?: string): Promise<Lecture[]> {
-    let lectures = Array.from(this.lectures.values());
-    
-    if (speaker) {
-      lectures = lectures.filter(lecture => lecture.speaker.toLowerCase().includes(speaker.toLowerCase()));
-    }
-    if (topic) {
-      lectures = lectures.filter(lecture => lecture.topic.toLowerCase().includes(topic.toLowerCase()));
-    }
-    
-    return lectures.sort((a, b) => a.title.localeCompare(b.title));
+    return this.lecturesData.filter(lecture => {
+      if (speaker && !lecture.speaker.toLowerCase().includes(speaker.toLowerCase())) return false;
+      if (topic && !lecture.topic.toLowerCase().includes(topic.toLowerCase())) return false;
+      return true;
+    });
   }
 
   async searchLectures(query: string): Promise<Lecture[]> {
-    const lowerQuery = query.toLowerCase();
-    return Array.from(this.lectures.values())
-      .filter(lecture => 
-        lecture.title.toLowerCase().includes(lowerQuery) ||
-        lecture.speaker.toLowerCase().includes(lowerQuery) ||
-        lecture.topic.toLowerCase().includes(lowerQuery) ||
-        (lecture.description && lecture.description.toLowerCase().includes(lowerQuery))
-      );
+    const searchTerm = query.toLowerCase();
+    return this.lecturesData.filter(lecture =>
+      lecture.title.toLowerCase().includes(searchTerm) ||
+      lecture.speaker.toLowerCase().includes(searchTerm) ||
+      lecture.topic.toLowerCase().includes(searchTerm)
+    );
   }
 
   async createLecture(insertLecture: InsertLecture): Promise<Lecture> {
-    const id = this.currentId++;
-    const lecture: Lecture = { ...insertLecture, id, createdAt: new Date() };
-    this.lectures.set(id, lecture);
+    const lecture: Lecture = { 
+      ...insertLecture, 
+      id: this.lecturesData.length + 1, 
+      createdAt: new Date(),
+      duration: insertLecture.duration || null,
+      videoUrl: insertLecture.videoUrl || null,
+      description: insertLecture.description || null,
+    };
+    this.lecturesData.push(lecture);
     return lecture;
   }
 
+  // Festivals - In-memory with seeded data
   async getFestivals(): Promise<Festival[]> {
-    return Array.from(this.festivals.values())
-      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    return [...this.festivalsData];
   }
 
   async getUpcomingFestivals(limit = 5): Promise<Festival[]> {
     const today = new Date().toISOString().split('T')[0];
-    return Array.from(this.festivals.values())
+    return this.festivalsData
       .filter(festival => festival.date >= today)
-      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+      .sort((a, b) => a.date.localeCompare(b.date))
       .slice(0, limit);
   }
 
   async createFestival(insertFestival: InsertFestival): Promise<Festival> {
-    const id = this.currentId++;
-    const festival: Festival = { ...insertFestival, id };
-    this.festivals.set(id, festival);
+    const festival: Festival = { 
+      ...insertFestival, 
+      id: this.festivalsData.length + 1,
+      description: insertFestival.description || null,
+      significance: insertFestival.significance || null,
+      observances: insertFestival.observances || null,
+    };
+    this.festivalsData.push(festival);
     return festival;
   }
 
+  // Daily Verses - In-memory with seeded data
   async getDailyVerse(date: string): Promise<DailyVerse | undefined> {
-    return Array.from(this.dailyVerses.values()).find(verse => verse.date === date);
+    return this.dailyVersesData.find(verse => verse.date === date);
   }
 
   async getTodaysVerse(): Promise<DailyVerse | undefined> {
@@ -443,27 +292,31 @@ export class MemStorage implements IStorage {
   }
 
   async createDailyVerse(insertVerse: InsertDailyVerse): Promise<DailyVerse> {
-    const id = this.currentId++;
-    const verse: DailyVerse = { ...insertVerse, id };
-    this.dailyVerses.set(id, verse);
+    const verse: DailyVerse = { ...insertVerse, id: this.dailyVersesData.length + 1 };
+    this.dailyVersesData.push(verse);
     return verse;
   }
 
-  async getUserProgress(userId: number): Promise<UserProgress | undefined> {
-    return Array.from(this.userProgress.values()).find(progress => progress.userId === userId);
+  // User Progress - Database operations
+  async getUserProgress(userId: string): Promise<UserProgress | undefined> {
+    const [progress] = await db
+      .select()
+      .from(schema.userProgress)
+      .where(eq(schema.userProgress.userId, userId));
+    return progress || undefined;
   }
 
-  async updateUserProgress(userId: number, updateData: Partial<InsertUserProgress>): Promise<UserProgress> {
+  async updateUserProgress(userId: string, updateData: Partial<InsertUserProgress>): Promise<UserProgress> {
     const existing = await this.getUserProgress(userId);
-    
     if (existing) {
-      const updated = { ...existing, ...updateData, updatedAt: new Date() };
-      this.userProgress.set(existing.id, updated);
-      return updated;
+      const [progress] = await db
+        .update(schema.userProgress)
+        .set(updateData)
+        .where(eq(schema.userProgress.userId, userId))
+        .returning();
+      return progress;
     } else {
-      const id = this.currentId++;
-      const progress: UserProgress = {
-        id,
+      const newProgress = {
         userId,
         booksRead: [],
         lecturesHeard: [],
@@ -471,186 +324,207 @@ export class MemStorage implements IStorage {
         currentStreak: 0,
         longestStreak: 0,
         ...updateData,
-        updatedAt: new Date(),
       };
-      this.userProgress.set(id, progress);
-      return progress;
+      const [created] = await db
+        .insert(schema.userProgress)
+        .values(newProgress)
+        .returning();
+      return created;
     }
   }
 
+  // Challenges - In-memory with seeded data
   async getChallenges(): Promise<Challenge[]> {
-    return Array.from(this.challenges.values())
-      .filter(challenge => challenge.isActive)
-      .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
+    return [...this.challengesData];
   }
 
-  async getActiveUserChallenges(userId: number): Promise<(UserChallenge & { challenge: Challenge })[]> {
-    const userChallenges = Array.from(this.userChallenges.values())
-      .filter(uc => uc.userId === userId && !uc.completed);
-    
-    return userChallenges.map(uc => {
-      const challenge = this.challenges.get(uc.challengeId);
-      return { ...uc, challenge: challenge! };
-    });
+  async getActiveUserChallenges(userId: string): Promise<(UserChallenge & { challenge: Challenge })[]> {
+    const userChallenges = await db
+      .select()
+      .from(schema.userChallenges)
+      .where(eq(schema.userChallenges.userId, userId));
+
+    return userChallenges.map(uc => ({
+      ...uc,
+      challenge: this.challengesData.find(c => c.id === uc.challengeId)!
+    }));
   }
 
   async joinChallenge(insertUserChallenge: InsertUserChallenge): Promise<UserChallenge> {
-    const id = this.currentId++;
-    const userChallenge: UserChallenge = { ...insertUserChallenge, id, joinedAt: new Date() };
-    this.userChallenges.set(id, userChallenge);
+    const [userChallenge] = await db
+      .insert(schema.userChallenges)
+      .values(insertUserChallenge)
+      .returning();
     return userChallenge;
   }
 
   async updateChallengeProgress(id: number, progress: number): Promise<UserChallenge | undefined> {
-    const userChallenge = this.userChallenges.get(id);
-    if (!userChallenge) return undefined;
-    
-    const challenge = this.challenges.get(userChallenge.challengeId);
-    const completed = challenge ? progress >= challenge.target : false;
-    
-    const updated = { ...userChallenge, progress, completed };
-    this.userChallenges.set(id, updated);
-    return updated;
+    const [userChallenge] = await db
+      .update(schema.userChallenges)
+      .set({ progress })
+      .where(eq(schema.userChallenges.id, id))
+      .returning();
+    return userChallenge || undefined;
   }
 
+  // Favorites - Database operations
+  async getFavoriteSongs(userId: string): Promise<(FavoriteSong & { song: DevotionalSong })[]> {
+    const favorites = await db
+      .select()
+      .from(schema.favoriteSongs)
+      .where(eq(schema.favoriteSongs.userId, userId));
+
+    return favorites.map(fav => ({
+      ...fav,
+      song: this.devotionalSongsData.find(song => song.id === fav.songId)!
+    }));
+  }
+
+  async addFavoriteSong(insertFavoriteSong: InsertFavoriteSong): Promise<FavoriteSong> {
+    const [favoriteSong] = await db
+      .insert(schema.favoriteSongs)
+      .values(insertFavoriteSong)
+      .returning();
+    return favoriteSong;
+  }
+
+  async removeFavoriteSong(userId: string, songId: number): Promise<boolean> {
+    const result = await db
+      .delete(schema.favoriteSongs)
+      .where(and(
+        eq(schema.favoriteSongs.userId, userId),
+        eq(schema.favoriteSongs.songId, songId)
+      ));
+    return (result.rowCount || 0) > 0;
+  }
+
+  async isSongFavorited(userId: string, songId: number): Promise<boolean> {
+    const [favorite] = await db
+      .select()
+      .from(schema.favoriteSongs)
+      .where(and(
+        eq(schema.favoriteSongs.userId, userId),
+        eq(schema.favoriteSongs.songId, songId)
+      ));
+    return !!favorite;
+  }
+
+  // Seed data methods
   private loadVaishnavCalendar(): void {
     try {
-      const calendarPath = join(process.cwd(), 'attached_assets', 'Pasted--January-02-Jan-2025-Disappearance-Day-of-Sri-Jiva-Goswami-02-Jan-2025-Disappearance-Day-of-S-1751383253600_1751383253601.txt');
-      const events = parseAuthenticCalendar(calendarPath);
-      const festivals = convertToAuthenticFestivals(events);
+      console.log("Loading 131 authentic ISKCON festivals...");
+      const calendarPath = join(process.cwd(), "attached_assets", "Pasted--January-02-Jan-2025-Disappearance-Day-of-Sri-Jiva-Goswami-02-Jan-2025-Disappearance-Day-of-S-1751383253600_1751383253601.txt");
+      const calendarEvents = parseAuthenticCalendar(calendarPath);
+      const festivals = convertToAuthenticFestivals(calendarEvents);
       
-      console.log(`Loading ${festivals.length} authentic ISKCON festivals...`);
-      
-      // Clear existing sample festivals first
-      this.festivals.clear();
-      
-      // Add calendar festivals
-      festivals.forEach((festival, index) => {
+      festivals.forEach(festival => {
         const festivalWithId: Festival = {
-          id: this.currentId++,
-          name: festival.name,
-          date: festival.date,
-          description: festival.description || '',
-          significance: festival.significance || '',
-          observances: festival.observances || null,
+          ...festival,
+          id: this.festivalsData.length + 1,
         };
-        this.festivals.set(festivalWithId.id, festivalWithId);
+        this.festivalsData.push(festivalWithId);
       });
       
-      console.log(`Successfully loaded ${this.festivals.size} authentic ISKCON festivals`);
+      console.log(`Successfully loaded ${this.festivalsData.length} authentic ISKCON festivals`);
     } catch (error) {
-      console.error('Error loading authentic ISKCON calendar:', error);
-      console.log('Using default festival data instead');
+      console.error("Error loading calendar:", error);
     }
   }
 
   private loadVaishnavSongs(): void {
     try {
-      const songBookPath = join(process.cwd(), 'attached_assets', 'Vaishnava song book_1751340349202.pdf');
-      console.log(`Loading songs from Vaishnava song book...`);
+      console.log("Loading songs from Vaishnava song book...");
+      console.log("Building comprehensive Vaishnava song database from known sources...");
       
-      // Parse songs from the PDF
+      const songBookPath = join(process.cwd(), "attached_assets", "Vaishnava song book_1751340349202.pdf");
       const parsedSongs = parseVaishnavSongBook(songBookPath);
-      const devotionalSongs = convertToDevotionalSongs(parsedSongs);
+      console.log(`Parsed ${parsedSongs.length} songs from song book`);
       
-      console.log(`Parsed ${devotionalSongs.length} songs from song book`);
+      const allSongs = [...parsedSongs, ...knownVaishnavSongs];
+      const devotionalSongs = convertToDevotionalSongs(allSongs);
       
-      // Clear existing sample songs first
-      this.devotionalSongs.clear();
-      
-      // Add parsed songs to storage
       devotionalSongs.forEach(song => {
         const songWithId: DevotionalSong = {
           ...song,
-          id: this.currentId++,
+          id: this.devotionalSongsData.length + 1,
           createdAt: new Date(),
-          lyrics: song.lyrics ?? null,
-          audioUrl: song.audioUrl ?? null
         };
-        this.devotionalSongs.set(songWithId.id, songWithId);
+        this.devotionalSongsData.push(songWithId);
       });
       
-      // Also add known traditional songs that might not be in the PDF
-      knownVaishnavSongs.forEach(knownSong => {
-        // Check if this song already exists to avoid duplicates
-        const existingSong = Array.from(this.devotionalSongs.values()).find(
-          s => s.title === knownSong.title && s.author === knownSong.author
-        );
-        
-        if (!existingSong) {
-          const traditionalSong: DevotionalSong = {
-            id: this.currentId++,
-            title: knownSong.title,
-            author: knownSong.author,
-            category: 'traditional',
-            mood: 'devotional',
-            lyrics: null,
-            audioUrl: null,
-            createdAt: new Date()
-          };
-          this.devotionalSongs.set(traditionalSong.id, traditionalSong);
-        }
-      });
-      
-      const totalSongs = this.devotionalSongs.size;
-      console.log(`Successfully loaded ${totalSongs} devotional songs`);
-      
+      console.log(`Successfully loaded ${this.devotionalSongsData.length} devotional songs`);
     } catch (error) {
-      console.error('Failed to load Vaishnava songs:', error);
-      
-      // Fallback to known songs only
-      this.devotionalSongs.clear();
-      knownVaishnavSongs.forEach(knownSong => {
-        const traditionalSong: DevotionalSong = {
-          id: this.currentId++,
-          title: knownSong.title,
-          author: knownSong.author,
-          category: 'traditional', 
-          mood: 'devotional',
-          lyrics: null,
-          audioUrl: null,
-          createdAt: new Date()
-        };
-        this.devotionalSongs.set(traditionalSong.id, traditionalSong);
-      });
-      
-      console.log(`Loaded ${knownVaishnavSongs.length} traditional songs as fallback`);
+      console.error("Error loading songs:", error);
     }
   }
 
-  // Favorite Songs methods
-  async getFavoriteSongs(userId: number): Promise<(FavoriteSong & { song: DevotionalSong })[]> {
-    const favorites = Array.from(this.favoriteSongs.values())
-      .filter(fav => fav.userId === userId);
+  private seedDailyVerses(): void {
+    const verses = [
+      {
+        id: 1,
+        date: "2025-01-01",
+        verse: "One who is not disturbed by the incessant flow of desires that enter like rivers into the ocean, which is ever being filled but is always still, can alone achieve peace, and not the person who strives to satisfy such desires.",
+        reference: "Bhagavad Gita 2.70",
+        explanation: "True peace comes from detachment from material desires, not from trying to fulfill them all."
+      }
+    ];
     
-    return favorites.map(fav => ({
-      ...fav,
-      song: this.devotionalSongs.get(fav.songId)!
-    })).filter(item => item.song); // Filter out any favorites for deleted songs
+    this.dailyVersesData.push(...verses);
   }
 
-  async addFavoriteSong(insertFavoriteSong: InsertFavoriteSong): Promise<FavoriteSong> {
-    const id = this.currentId++;
-    const favoriteSong: FavoriteSong = { ...insertFavoriteSong, id, createdAt: new Date() };
-    this.favoriteSongs.set(id, favoriteSong);
-    return favoriteSong;
-  }
-
-  async removeFavoriteSong(userId: number, songId: number): Promise<boolean> {
-    const favorite = Array.from(this.favoriteSongs.values())
-      .find(fav => fav.userId === userId && fav.songId === songId);
+  private seedLectures(): void {
+    const lectures = [
+      {
+        id: 1,
+        title: "Introduction to Krishna Consciousness",
+        speaker: "A.C. Bhaktivedanta Swami Prabhupada",
+        topic: "Philosophy",
+        duration: 2400,
+        videoUrl: "https://example.com/lecture1",
+        description: "Foundational lecture on the principles of Krishna consciousness and devotional service.",
+        createdAt: new Date()
+      },
+      {
+        id: 2,
+        title: "Bhagavad Gita As It Is - Chapter 1",
+        speaker: "A.C. Bhaktivedanta Swami Prabhupada", 
+        topic: "Bhagavad Gita",
+        duration: 3600,
+        videoUrl: "https://example.com/lecture2",
+        description: "Commentary on the first chapter of Bhagavad Gita dealing with Arjuna's dilemma.",
+        createdAt: new Date()
+      }
+    ];
     
-    if (favorite) {
-      this.favoriteSongs.delete(favorite.id);
-      return true;
-    }
-    return false;
+    this.lecturesData.push(...lectures);
   }
 
-  async isSongFavorited(userId: number, songId: number): Promise<boolean> {
-    return Array.from(this.favoriteSongs.values())
-      .some(fav => fav.userId === userId && fav.songId === songId);
+  private seedChallenges(): void {
+    const challenges = [
+      {
+        id: 1,
+        type: "chanting",
+        title: "16 Round Challenge",
+        description: "Complete 16 rounds of chanting daily for 30 days",
+        targetValue: 30,
+        duration: 30,
+        points: 100,
+        isActive: true
+      },
+      {
+        id: 2,
+        type: "reading",
+        title: "Daily Reading Challenge", 
+        description: "Read Srila Prabhupada's books for at least 30 minutes daily",
+        targetValue: 30,
+        duration: 30,
+        points: 75,
+        isActive: true
+      }
+    ];
+    
+    this.challengesData.push(...challenges);
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();
