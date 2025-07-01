@@ -16,9 +16,9 @@ export const sadhanaEntries = pgTable("sadhana_entries", {
   date: text("date").notNull(), // YYYY-MM-DD format
   chantingRounds: integer("chanting_rounds").default(0),
   chantingTarget: integer("chanting_target").default(16),
-  reading: boolean("reading").default(false),
+  readingPrabhupada: boolean("reading_prabhupada").default(false), // Reading Srila Prabhupada's books
   mangalaArati: boolean("mangala_arati").default(false),
-  eveningProgram: boolean("evening_program").default(false),
+  hearing: boolean("hearing").default(false), // Hearing lectures/kirtans
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
