@@ -122,6 +122,18 @@ Preferred communication style: Simple, everyday language.
   - Integrated songs by major Vaishnava acharyas (Bhaktivinoda Thakura, Narottama Das Thakura, etc.)
   - Each song tagged with author, category (bhajan/kirtan/prayer), and mood classification
   - Replaced sample song data with authentic devotional content library
+- July 01, 2025: Updated sadhana tracking with specific spiritual practices
+  - Added "Reading Srila Prabhupada's Books" checkbox
+  - Added "Mangala Arati" checkbox  
+  - Added "Hearing Lectures/Kirtans" checkbox
+  - Replaced on/off switches with checkboxes for better user experience
+  - Updated database schema to support new spiritual practice fields
+- July 01, 2025: Replaced festival calendar with curated ISKCON events
+  - Implemented authentic calendar parser for user-provided ISKCON event list
+  - Successfully loaded 131 authentic ISKCON festivals and observances
+  - Proper categorization of appearance days, disappearance days, and Ekadasi fasting days
+  - Each event includes proper significance, observances, and fasting instructions
+  - Replaced previous calendar data with officially curated ISKCON events
 
 ## Mobile App Deployment
 
