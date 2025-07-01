@@ -31,6 +31,7 @@ import {
   type InsertUserChallenge,
 } from "@shared/schema";
 import { parseVaishnavCalendar, convertToFestivals } from "./calendarParser";
+import { parseAuthenticCalendar, convertToAuthenticFestivals } from "./authentnicCalendarParser";
 import { parseVaishnavSongBook, convertToDevotionalSongs, knownVaishnavSongs } from "./songParser";
 import { readFileSync } from "fs";
 import { join } from "path";
@@ -504,12 +505,11 @@ export class MemStorage implements IStorage {
 
   private loadVaishnavCalendar(): void {
     try {
-      const calendarPath = join(process.cwd(), 'attached_assets', 'Seattle [United States of America]_1751340084063.txt');
-      const calendarContent = readFileSync(calendarPath, 'utf-8');
-      const events = parseVaishnavCalendar(calendarContent);
-      const festivals = convertToFestivals(events);
+      const calendarPath = join(process.cwd(), 'attached_assets', 'Pasted--January-02-Jan-2025-Disappearance-Day-of-Sri-Jiva-Goswami-02-Jan-2025-Disappearance-Day-of-S-1751383253600_1751383253601.txt');
+      const events = parseAuthenticCalendar(calendarPath);
+      const festivals = convertToAuthenticFestivals(events);
       
-      console.log(`Loading ${festivals.length} festivals from Vaishnava calendar...`);
+      console.log(`Loading ${festivals.length} authentic ISKCON festivals...`);
       
       // Clear existing sample festivals first
       this.festivals.clear();
@@ -527,9 +527,9 @@ export class MemStorage implements IStorage {
         this.festivals.set(festivalWithId.id, festivalWithId);
       });
       
-      console.log(`Successfully loaded ${this.festivals.size} festivals`);
+      console.log(`Successfully loaded ${this.festivals.size} authentic ISKCON festivals`);
     } catch (error) {
-      console.error('Error loading Vaishnava calendar:', error);
+      console.error('Error loading authentic ISKCON calendar:', error);
       console.log('Using default festival data instead');
     }
   }
