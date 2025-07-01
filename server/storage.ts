@@ -29,6 +29,8 @@ import {
   type InsertChallenge,
   type UserChallenge,
   type InsertUserChallenge,
+  type FavoriteSong,
+  type InsertFavoriteSong,
 } from "@shared/schema";
 import { parseVaishnavCalendar, convertToFestivals } from "./calendarParser";
 import { parseAuthenticCalendar, convertToAuthenticFestivals } from "./authentnicCalendarParser";
@@ -84,6 +86,12 @@ export interface IStorage {
   getActiveUserChallenges(userId: number): Promise<(UserChallenge & { challenge: Challenge })[]>;
   joinChallenge(userChallenge: InsertUserChallenge): Promise<UserChallenge>;
   updateChallengeProgress(id: number, progress: number): Promise<UserChallenge | undefined>;
+
+  // Favorite Songs
+  getFavoriteSongs(userId: number): Promise<(FavoriteSong & { song: DevotionalSong })[]>;
+  addFavoriteSong(favorite: InsertFavoriteSong): Promise<FavoriteSong>;
+  removeFavoriteSong(userId: number, songId: number): Promise<boolean>;
+  isSongFavorited(userId: number, songId: number): Promise<boolean>;
 }
 
 export class MemStorage implements IStorage {
@@ -97,6 +105,7 @@ export class MemStorage implements IStorage {
   private userProgress: Map<number, UserProgress>;
   private challenges: Map<number, Challenge>;
   private userChallenges: Map<number, UserChallenge>;
+  private favoriteSongs: Map<number, FavoriteSong>;
   private currentId: number;
 
   constructor() {
@@ -110,6 +119,7 @@ export class MemStorage implements IStorage {
     this.userProgress = new Map();
     this.challenges = new Map();
     this.userChallenges = new Map();
+    this.favoriteSongs = new Map();
     this.currentId = 1;
     this.seedData();
     this.loadVaishnavCalendar();
@@ -606,6 +616,40 @@ export class MemStorage implements IStorage {
       
       console.log(`Loaded ${knownVaishnavSongs.length} traditional songs as fallback`);
     }
+  }
+
+  // Favorite Songs methods
+  async getFavoriteSongs(userId: number): Promise<(FavoriteSong & { song: DevotionalSong })[]> {
+    const favorites = Array.from(this.favoriteSongs.values())
+      .filter(fav => fav.userId === userId);
+    
+    return favorites.map(fav => ({
+      ...fav,
+      song: this.devotionalSongs.get(fav.songId)!
+    })).filter(item => item.song); // Filter out any favorites for deleted songs
+  }
+
+  async addFavoriteSong(insertFavoriteSong: InsertFavoriteSong): Promise<FavoriteSong> {
+    const id = this.currentId++;
+    const favoriteSong: FavoriteSong = { ...insertFavoriteSong, id, createdAt: new Date() };
+    this.favoriteSongs.set(id, favoriteSong);
+    return favoriteSong;
+  }
+
+  async removeFavoriteSong(userId: number, songId: number): Promise<boolean> {
+    const favorite = Array.from(this.favoriteSongs.values())
+      .find(fav => fav.userId === userId && fav.songId === songId);
+    
+    if (favorite) {
+      this.favoriteSongs.delete(favorite.id);
+      return true;
+    }
+    return false;
+  }
+
+  async isSongFavorited(userId: number, songId: number): Promise<boolean> {
+    return Array.from(this.favoriteSongs.values())
+      .some(fav => fav.userId === userId && fav.songId === songId);
   }
 }
 

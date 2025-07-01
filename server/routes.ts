@@ -5,6 +5,7 @@ import {
   insertSadhanaEntrySchema,
   insertJournalEntrySchema,
   insertUserChallengeSchema,
+  insertFavoriteSongSchema,
 } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -245,6 +246,52 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(userChallenge);
     } catch (error) {
       res.status(400).json({ message: "Failed to update challenge progress" });
+    }
+  });
+
+  // Favorite Songs endpoints
+  app.get("/api/favorites/:userId", async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const favorites = await storage.getFavoriteSongs(userId);
+      res.json(favorites);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch favorite songs" });
+    }
+  });
+
+  app.post("/api/favorites", async (req, res) => {
+    try {
+      const validatedData = insertFavoriteSongSchema.parse(req.body);
+      const favorite = await storage.addFavoriteSong(validatedData);
+      res.json(favorite);
+    } catch (error) {
+      res.status(400).json({ message: "Failed to add favorite song" });
+    }
+  });
+
+  app.delete("/api/favorites/:userId/:songId", async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const songId = parseInt(req.params.songId);
+      const removed = await storage.removeFavoriteSong(userId, songId);
+      if (!removed) {
+        return res.status(404).json({ message: "Favorite not found" });
+      }
+      res.json({ success: true });
+    } catch (error) {
+      res.status(400).json({ message: "Failed to remove favorite song" });
+    }
+  });
+
+  app.get("/api/favorites/:userId/:songId/check", async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const songId = parseInt(req.params.songId);
+      const isFavorited = await storage.isSongFavorited(userId, songId);
+      res.json({ isFavorited });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to check favorite status" });
     }
   });
 
