@@ -1,0 +1,284 @@
+import { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Calendar, Plus, CheckCircle, Circle, Target } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
+import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
+import type { SadhanaEntry, Challenge, UserChallenge } from "@shared/schema";
+
+const DEFAULT_USER_ID = 1; // For demo purposes
+
+export default function Tracker() {
+  const [chantingRounds, setChantingRounds] = useState(0);
+  const [reading, setReading] = useState(false);
+  const [mangalaArati, setMangalaArati] = useState(false);
+  const [eveningProgram, setEveningProgram] = useState(false);
+  
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  const today = new Date().toISOString().split('T')[0];
+
+  const { data: todaysSadhana } = useQuery<SadhanaEntry | null>({
+    queryKey: [`/api/sadhana/${DEFAULT_USER_ID}/today`],
+    refetchOnMount: true,
+  });
+
+  const { data: sadhanaHistory } = useQuery<SadhanaEntry[]>({
+    queryKey: [`/api/sadhana/${DEFAULT_USER_ID}`],
+  });
+
+  const { data: challenges } = useQuery<Challenge[]>({
+    queryKey: ["/api/challenges"],
+  });
+
+  const { data: userChallenges } = useQuery<(UserChallenge & { challenge: Challenge })[]>({
+    queryKey: [`/api/challenges/user/${DEFAULT_USER_ID}`],
+  });
+
+  // Set initial values when data loads
+  useState(() => {
+    if (todaysSadhana) {
+      setChantingRounds(todaysSadhana.chantingRounds);
+      setReading(todaysSadhana.reading);
+      setMangalaArati(todaysSadhana.mangalaArati);
+      setEveningProgram(todaysSadhana.eveningProgram || false);
+    }
+  });
+
+  const updateSadhanaMutation = useMutation({
+    mutationFn: async (data: Partial<SadhanaEntry>) => {
+      if (todaysSadhana) {
+        return apiRequest('PUT', `/api/sadhana/${todaysSadhana.id}`, data);
+      } else {
+        return apiRequest('POST', '/api/sadhana', {
+          userId: DEFAULT_USER_ID,
+          date: today,
+          ...data,
+        });
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`/api/sadhana/${DEFAULT_USER_ID}/today`] });
+      queryClient.invalidateQueries({ queryKey: [`/api/sadhana/${DEFAULT_USER_ID}`] });
+      toast({ title: "Sadhana updated successfully!" });
+    },
+    onError: () => {
+      toast({ 
+        title: "Failed to update sadhana", 
+        variant: "destructive" 
+      });
+    },
+  });
+
+  const joinChallengeMutation = useMutation({
+    mutationFn: async (challengeId: number) => {
+      return apiRequest('POST', '/api/challenges/join', {
+        userId: DEFAULT_USER_ID,
+        challengeId,
+        progress: 0,
+        completed: false,
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`/api/challenges/user/${DEFAULT_USER_ID}`] });
+      toast({ title: "Challenge joined successfully!" });
+    },
+    onError: () => {
+      toast({ 
+        title: "Failed to join challenge", 
+        variant: "destructive" 
+      });
+    },
+  });
+
+  const handleUpdateSadhana = () => {
+    updateSadhanaMutation.mutate({
+      chantingRounds,
+      chantingTarget: 16,
+      reading,
+      mangalaArati,
+      eveningProgram,
+    });
+  };
+
+  const getStreakCount = () => {
+    if (!sadhanaHistory) return 0;
+    
+    let streak = 0;
+    const sortedHistory = [...sadhanaHistory].sort((a, b) => 
+      new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
+    
+    for (const entry of sortedHistory) {
+      if (entry.chantingRounds >= entry.chantingTarget && entry.reading && entry.mangalaArati) {
+        streak++;
+      } else {
+        break;
+      }
+    }
+    return streak;
+  };
+
+  const availableChallenges = challenges?.filter(challenge => 
+    !userChallenges?.some(uc => uc.challengeId === challenge.id)
+  ) || [];
+
+  return (
+    <div className="min-h-screen bg-warm-white dark:bg-gray-900">
+      {/* Header */}
+      <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-soft-gray dark:border-gray-700 sticky top-0 z-50">
+        <div className="max-w-md mx-auto px-4 py-3">
+          <h1 className="text-lg font-semibold text-gray-800 dark:text-gray-200">Sadhana Tracker</h1>
+        </div>
+      </header>
+
+      <div className="max-w-md mx-auto px-4 py-4 space-y-6">
+        {/* Today's Sadhana */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <Calendar className="w-5 h-5" />
+              <span>Today's Practice</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {/* Chanting Rounds */}
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium">Chanting Rounds</label>
+              <div className="flex items-center space-x-2">
+                <Button 
+                  variant="outline" 
+                  size="icon"
+                  onClick={() => setChantingRounds(Math.max(0, chantingRounds - 1))}
+                >
+                  -
+                </Button>
+                <Input 
+                  type="number" 
+                  value={chantingRounds} 
+                  onChange={(e) => setChantingRounds(parseInt(e.target.value) || 0)}
+                  className="w-16 text-center"
+                />
+                <Button 
+                  variant="outline" 
+                  size="icon"
+                  onClick={() => setChantingRounds(chantingRounds + 1)}
+                >
+                  +
+                </Button>
+              </div>
+            </div>
+
+            {/* Reading */}
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium">Spiritual Reading</label>
+              <Switch 
+                checked={reading} 
+                onCheckedChange={setReading}
+              />
+            </div>
+
+            {/* Mangala Arati */}
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium">Mangala Arati</label>
+              <Switch 
+                checked={mangalaArati} 
+                onCheckedChange={setMangalaArati}
+              />
+            </div>
+
+            {/* Evening Program */}
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium">Evening Program</label>
+              <Switch 
+                checked={eveningProgram} 
+                onCheckedChange={setEveningProgram}
+              />
+            </div>
+
+            <Button 
+              onClick={handleUpdateSadhana} 
+              className="w-full"
+              disabled={updateSadhanaMutation.isPending}
+            >
+              {updateSadhanaMutation.isPending ? "Updating..." : "Update Sadhana"}
+            </Button>
+          </CardContent>
+        </Card>
+
+        {/* Current Streak */}
+        <Card>
+          <CardContent className="pt-6">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-sacred-orange/10 rounded-full flex items-center justify-center mx-auto mb-3">
+                <Target className="w-8 h-8 text-sacred-orange" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-200">{getStreakCount()}</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Day streak</p>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Active Challenges */}
+        {userChallenges && userChallenges.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Active Challenges</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {userChallenges.map(uc => (
+                <div key={uc.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                  <div>
+                    <p className="font-medium text-sm">{uc.challenge.title}</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400">
+                      {uc.progress}/{uc.challenge.target} completed
+                    </p>
+                  </div>
+                  <Badge variant={uc.completed ? "default" : "secondary"}>
+                    {uc.completed ? "Completed" : `${Math.round((uc.progress / uc.challenge.target) * 100)}%`}
+                  </Badge>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Available Challenges */}
+        {availableChallenges.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Join Challenges</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {availableChallenges.map(challenge => (
+                <div key={challenge.id} className="p-3 border border-gray-200 dark:border-gray-600 rounded-lg">
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <p className="font-medium text-sm">{challenge.title}</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400">{challenge.description}</p>
+                    </div>
+                    <Button 
+                      size="sm" 
+                      onClick={() => joinChallengeMutation.mutate(challenge.id)}
+                      disabled={joinChallengeMutation.isPending}
+                    >
+                      Join
+                    </Button>
+                  </div>
+                  <Badge variant="outline" className="text-xs">
+                    {challenge.duration} days • Target: {challenge.target}
+                  </Badge>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        )}
+      </div>
+    </div>
+  );
+}

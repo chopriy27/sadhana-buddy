@@ -1,0 +1,253 @@
+import type { Express } from "express";
+import { createServer, type Server } from "http";
+import { storage } from "./storage";
+import { 
+  insertSadhanaEntrySchema,
+  insertJournalEntrySchema,
+  insertUserChallengeSchema,
+} from "@shared/schema";
+
+export async function registerRoutes(app: Express): Promise<Server> {
+  
+  // Sadhana endpoints
+  app.get("/api/sadhana/:userId", async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const entries = await storage.getSadhanaEntries(userId, 30);
+      res.json(entries);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch sadhana entries" });
+    }
+  });
+
+  app.get("/api/sadhana/:userId/today", async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const today = new Date().toISOString().split('T')[0];
+      const entry = await storage.getSadhanaEntry(userId, today);
+      res.json(entry || null);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch today's sadhana entry" });
+    }
+  });
+
+  app.post("/api/sadhana", async (req, res) => {
+    try {
+      const validatedData = insertSadhanaEntrySchema.parse(req.body);
+      const entry = await storage.createSadhanaEntry(validatedData);
+      res.json(entry);
+    } catch (error) {
+      res.status(400).json({ message: "Invalid sadhana entry data" });
+    }
+  });
+
+  app.put("/api/sadhana/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const validatedData = insertSadhanaEntrySchema.partial().parse(req.body);
+      const entry = await storage.updateSadhanaEntry(id, validatedData);
+      if (!entry) {
+        return res.status(404).json({ message: "Sadhana entry not found" });
+      }
+      res.json(entry);
+    } catch (error) {
+      res.status(400).json({ message: "Invalid sadhana entry data" });
+    }
+  });
+
+  // Journal endpoints
+  app.get("/api/journal/:userId", async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const entries = await storage.getJournalEntries(userId, 20);
+      res.json(entries);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch journal entries" });
+    }
+  });
+
+  app.post("/api/journal", async (req, res) => {
+    try {
+      const validatedData = insertJournalEntrySchema.parse(req.body);
+      const entry = await storage.createJournalEntry(validatedData);
+      res.json(entry);
+    } catch (error) {
+      res.status(400).json({ message: "Invalid journal entry data" });
+    }
+  });
+
+  app.put("/api/journal/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const validatedData = insertJournalEntrySchema.partial().parse(req.body);
+      const entry = await storage.updateJournalEntry(id, validatedData);
+      if (!entry) {
+        return res.status(404).json({ message: "Journal entry not found" });
+      }
+      res.json(entry);
+    } catch (error) {
+      res.status(400).json({ message: "Invalid journal entry data" });
+    }
+  });
+
+  app.delete("/api/journal/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const deleted = await storage.deleteJournalEntry(id);
+      if (!deleted) {
+        return res.status(404).json({ message: "Journal entry not found" });
+      }
+      res.json({ message: "Journal entry deleted successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete journal entry" });
+    }
+  });
+
+  // Devotional songs endpoints
+  app.get("/api/songs", async (req, res) => {
+    try {
+      const { category, mood, search } = req.query;
+      
+      let songs;
+      if (search) {
+        songs = await storage.searchDevotionalSongs(search as string);
+      } else {
+        songs = await storage.getDevotionalSongs(
+          category as string, 
+          mood as string
+        );
+      }
+      res.json(songs);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch devotional songs" });
+    }
+  });
+
+  // Lectures endpoints
+  app.get("/api/lectures", async (req, res) => {
+    try {
+      const { speaker, topic, search } = req.query;
+      
+      let lectures;
+      if (search) {
+        lectures = await storage.searchLectures(search as string);
+      } else {
+        lectures = await storage.getLectures(
+          speaker as string, 
+          topic as string
+        );
+      }
+      res.json(lectures);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch lectures" });
+    }
+  });
+
+  // Festivals endpoints
+  app.get("/api/festivals", async (req, res) => {
+    try {
+      const festivals = await storage.getFestivals();
+      res.json(festivals);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch festivals" });
+    }
+  });
+
+  app.get("/api/festivals/upcoming", async (req, res) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 5;
+      const festivals = await storage.getUpcomingFestivals(limit);
+      res.json(festivals);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch upcoming festivals" });
+    }
+  });
+
+  // Daily verse endpoints
+  app.get("/api/verse/today", async (req, res) => {
+    try {
+      const verse = await storage.getTodaysVerse();
+      res.json(verse || null);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch today's verse" });
+    }
+  });
+
+  app.get("/api/verse/:date", async (req, res) => {
+    try {
+      const date = req.params.date;
+      const verse = await storage.getDailyVerse(date);
+      res.json(verse || null);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch verse for date" });
+    }
+  });
+
+  // User progress endpoints
+  app.get("/api/progress/:userId", async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const progress = await storage.getUserProgress(userId);
+      res.json(progress || null);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch user progress" });
+    }
+  });
+
+  app.put("/api/progress/:userId", async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const progress = await storage.updateUserProgress(userId, req.body);
+      res.json(progress);
+    } catch (error) {
+      res.status(400).json({ message: "Failed to update user progress" });
+    }
+  });
+
+  // Challenges endpoints
+  app.get("/api/challenges", async (req, res) => {
+    try {
+      const challenges = await storage.getChallenges();
+      res.json(challenges);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch challenges" });
+    }
+  });
+
+  app.get("/api/challenges/user/:userId", async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const userChallenges = await storage.getActiveUserChallenges(userId);
+      res.json(userChallenges);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch user challenges" });
+    }
+  });
+
+  app.post("/api/challenges/join", async (req, res) => {
+    try {
+      const validatedData = insertUserChallengeSchema.parse(req.body);
+      const userChallenge = await storage.joinChallenge(validatedData);
+      res.json(userChallenge);
+    } catch (error) {
+      res.status(400).json({ message: "Failed to join challenge" });
+    }
+  });
+
+  app.put("/api/challenges/progress/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const { progress } = req.body;
+      const userChallenge = await storage.updateChallengeProgress(id, progress);
+      if (!userChallenge) {
+        return res.status(404).json({ message: "User challenge not found" });
+      }
+      res.json(userChallenge);
+    } catch (error) {
+      res.status(400).json({ message: "Failed to update challenge progress" });
+    }
+  });
+
+  const httpServer = createServer(app);
+  return httpServer;
+}
