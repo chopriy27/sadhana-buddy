@@ -10,7 +10,7 @@ export default function DailyVerse() {
   if (!verse) {
     return (
       <div className="max-w-md mx-auto px-4 mt-6">
-        <div className="bg-gradient-to-br from-peaceful-blue to-deep-blue rounded-2xl p-6 text-white">
+        <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl p-6 text-white shadow-lg">
           <div className="flex items-center mb-3">
             <Quote className="w-5 h-5 text-white/70 mr-3" />
             <h3 className="font-semibold">Daily Verse</h3>
@@ -23,7 +23,7 @@ export default function DailyVerse() {
 
   return (
     <div className="max-w-md mx-auto px-4 mt-6">
-      <div className="bg-gradient-to-br from-peaceful-blue to-deep-blue rounded-2xl p-6 text-white">
+      <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl p-6 text-white shadow-lg">
         <div className="flex items-center mb-3">
           <Quote className="w-5 h-5 text-white/70 mr-3" />
           <h3 className="font-semibold">Daily Verse</h3>

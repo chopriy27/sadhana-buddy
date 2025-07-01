@@ -30,6 +30,9 @@ import {
   type UserChallenge,
   type InsertUserChallenge,
 } from "@shared/schema";
+import { parseVaishnavCalendar, convertToFestivals } from "./calendarParser";
+import { readFileSync } from "fs";
+import { join } from "path";
 
 export interface IStorage {
   // Users
@@ -200,6 +203,9 @@ export class MemStorage implements IStorage {
       },
     ];
     festivals.forEach(festival => this.festivals.set(festival.id, festival));
+    
+    // Load calendar events
+    this.loadVaishnavCalendar();
 
     // Seed daily verses
     const verses: DailyVerse[] = [
@@ -485,6 +491,38 @@ export class MemStorage implements IStorage {
     const updated = { ...userChallenge, progress, completed };
     this.userChallenges.set(id, updated);
     return updated;
+  }
+
+  private loadVaishnavCalendar(): void {
+    try {
+      const calendarPath = join(process.cwd(), 'attached_assets', 'Seattle [United States of America]_1751340084063.txt');
+      const calendarContent = readFileSync(calendarPath, 'utf-8');
+      const events = parseVaishnavCalendar(calendarContent);
+      const festivals = convertToFestivals(events);
+      
+      console.log(`Loading ${festivals.length} festivals from Vaishnava calendar...`);
+      
+      // Clear existing sample festivals first
+      this.festivals.clear();
+      
+      // Add calendar festivals
+      festivals.forEach((festival, index) => {
+        const festivalWithId: Festival = {
+          id: this.currentId++,
+          name: festival.name,
+          date: festival.date,
+          description: festival.description || '',
+          significance: festival.significance || '',
+          observances: festival.observances || null,
+        };
+        this.festivals.set(festivalWithId.id, festivalWithId);
+      });
+      
+      console.log(`Successfully loaded ${this.festivals.size} festivals`);
+    } catch (error) {
+      console.error('Error loading Vaishnava calendar:', error);
+      console.log('Using default festival data instead');
+    }
   }
 }
 
