@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Search, Filter, Play, Heart } from "lucide-react";
+import { Search, Filter, Play, Heart, X, Book, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { DevotionalSong } from "@shared/schema";
 
@@ -12,6 +13,7 @@ export default function Songs() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState<string>("");
   const [mood, setMood] = useState<string>("");
+  const [selectedSong, setSelectedSong] = useState<DevotionalSong | null>(null);
 
   const { data: songs, isLoading } = useQuery<DevotionalSong[]>({
     queryKey: ["/api/songs", { category, mood, search }],
@@ -102,7 +104,11 @@ export default function Songs() {
         ) : (
           <div className="space-y-3">
             {filteredSongs.map(song => (
-              <Card key={song.id} className="hover:shadow-md transition-shadow">
+              <Card 
+                key={song.id} 
+                className="hover:shadow-md transition-shadow cursor-pointer"
+                onClick={() => setSelectedSong(song)}
+              >
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex-1">
@@ -110,11 +116,25 @@ export default function Songs() {
                       <p className="text-sm text-gray-600 dark:text-gray-400">by {song.author}</p>
                     </div>
                     <div className="flex space-x-2">
-                      <Button variant="ghost" size="icon">
+                      <Button 
+                        variant="ghost" 
+                        size="icon"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          // Handle favorite functionality
+                        }}
+                      >
                         <Heart className="w-4 h-4" />
                       </Button>
-                      <Button variant="ghost" size="icon">
-                        <Play className="w-4 h-4" />
+                      <Button 
+                        variant="ghost" 
+                        size="icon"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedSong(song);
+                        }}
+                      >
+                        <Book className="w-4 h-4" />
                       </Button>
                     </div>
                   </div>
@@ -133,12 +153,68 @@ export default function Songs() {
                       {song.lyrics.split('\n')[0]}...
                     </p>
                   )}
+                  
+                  <p className="text-xs text-saffron-600 dark:text-saffron-400 mt-2">
+                    Click to view lyrics
+                  </p>
                 </CardContent>
               </Card>
             ))}
           </div>
         )}
       </div>
+
+      {/* Lyrics Modal */}
+      <Dialog open={!!selectedSong} onOpenChange={() => setSelectedSong(null)}>
+        <DialogContent className="max-w-md mx-auto max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-left">
+              <div className="mb-2">
+                <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+                  {selectedSong?.title}
+                </h2>
+                <div className="flex items-center gap-2 mt-1">
+                  <User className="w-4 h-4 text-gray-500" />
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    {selectedSong?.author}
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <Badge variant="secondary" className="text-xs">
+                  {selectedSong?.category}
+                </Badge>
+                <Badge variant="outline" className="text-xs">
+                  {selectedSong?.mood}
+                </Badge>
+              </div>
+            </DialogTitle>
+          </DialogHeader>
+          
+          <div className="mt-4">
+            {selectedSong?.lyrics ? (
+              <div className="space-y-4">
+                <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                  <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                    <Book className="w-4 h-4" />
+                    Lyrics
+                  </h3>
+                  <div className="text-sm text-gray-600 dark:text-gray-400 font-spiritual leading-relaxed whitespace-pre-line">
+                    {selectedSong.lyrics}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="text-center py-8">
+                <Book className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
+                <p className="text-gray-500 dark:text-gray-400">
+                  Lyrics not available for this song
+                </p>
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
