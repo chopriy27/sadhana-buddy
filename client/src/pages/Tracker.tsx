@@ -8,7 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import type { SadhanaEntry, Challenge, UserChallenge } from "@shared/schema";
+import type { SadhanaEntry, Challenge, UserChallenge, UserGoals } from "@shared/schema";
 import { useAuth } from "@/hooks/useAuth";
 
 export default function Tracker() {
@@ -42,6 +42,11 @@ export default function Tracker() {
 
   const { data: userChallenges } = useQuery<(UserChallenge & { challenge: Challenge })[]>({
     queryKey: [`/api/challenges/user/${user?.id}`],
+    enabled: !!user?.id,
+  });
+
+  const { data: userGoals } = useQuery<UserGoals>({
+    queryKey: [`/api/goals/${user?.id}`],
     enabled: !!user?.id,
   });
 
