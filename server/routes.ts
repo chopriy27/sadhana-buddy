@@ -203,6 +203,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get("/api/lectures/prabhupada", async (req, res) => {
+    try {
+      const lectures = await storage.getLectures("A.C. Bhaktivedanta Swami Prabhupada");
+      res.json(lectures);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch Prabhupada's lectures" });
+    }
+  });
+
   // Festivals endpoints
   app.get("/api/festivals", async (req, res) => {
     try {

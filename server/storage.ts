@@ -519,30 +519,110 @@ export class DatabaseStorage implements IStorage {
   }
 
   private seedLectures(): void {
-    const lectures = [
+    const prabhupadaLectures = [
       {
         id: 1,
-        title: "Introduction to Krishna Consciousness",
+        title: "Bhagavad-gita 1.1 - London, July 11, 1973",
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
-        topic: "Philosophy",
-        duration: 2400,
-        videoUrl: "https://example.com/lecture1",
-        description: "Foundational lecture on the principles of Krishna consciousness and devotional service.",
+        topic: "Bhagavad Gita",
+        duration: 2580,
+        videoUrl: "https://www.youtube.com/@TheAcharya1",
+        description: "Prabhupada's commentary on the opening verse of Bhagavad-gita at Bhaktivedanta Manor, London.",
         createdAt: new Date()
       },
       {
         id: 2,
-        title: "Bhagavad Gita As It Is - Chapter 1",
+        title: "Srimad-Bhagavatam 1.2.6 - Delhi, November 12, 1973",
         speaker: "A.C. Bhaktivedanta Swami Prabhupada", 
+        topic: "Srimad Bhagavatam",
+        duration: 3240,
+        videoUrl: "https://www.youtube.com/@TheAcharya1",
+        description: "Prabhupada explains the process of devotional service and transcendental knowledge.",
+        createdAt: new Date()
+      },
+      {
+        id: 3,
+        title: "Sri Caitanya-caritamrta Adi 7.108 - San Francisco, February 18, 1967",
+        speaker: "A.C. Bhaktivedanta Swami Prabhupada",
+        topic: "Caitanya Caritamrta",
+        duration: 2880,
+        videoUrl: "https://www.youtube.com/@TheAcharya1",
+        description: "The glories of Lord Caitanya's mercy and the chanting of the holy name.",
+        createdAt: new Date()
+      },
+      {
+        id: 4,
+        title: "Bhagavad-gita 4.9 - New York, July 25, 1966",
+        speaker: "A.C. Bhaktivedanta Swami Prabhupada",
         topic: "Bhagavad Gita",
-        duration: 3600,
-        videoUrl: "https://example.com/lecture2",
-        description: "Commentary on the first chapter of Bhagavad Gita dealing with Arjuna's dilemma.",
+        duration: 3060,
+        videoUrl: "https://www.youtube.com/@TheAcharya1",
+        description: "Krishna's divine birth and activities explained by Prabhupada in New York.",
+        createdAt: new Date()
+      },
+      {
+        id: 5,
+        title: "Morning Walk - Los Angeles, December 15, 1973",
+        speaker: "A.C. Bhaktivedanta Swami Prabhupada",
+        topic: "Philosophy",
+        duration: 1800,
+        videoUrl: "https://www.youtube.com/@TheAcharya1",
+        description: "Prabhupada discusses spiritual topics during morning walk with disciples.",
+        createdAt: new Date()
+      },
+      {
+        id: 6,
+        title: "Srimad-Bhagavatam 2.1.1 - Paris, June 11, 1974",
+        speaker: "A.C. Bhaktivedanta Swami Prabhupada",
+        topic: "Srimad Bhagavatam",
+        duration: 2700,
+        videoUrl: "https://www.youtube.com/@TheAcharya1",
+        description: "The process of meditation and remembering Krishna at the time of death.",
+        createdAt: new Date()
+      },
+      {
+        id: 7,
+        title: "Arrival Lecture - Boston, December 24, 1969",
+        speaker: "A.C. Bhaktivedanta Swami Prabhupada",
+        topic: "Philosophy",
+        duration: 2400,
+        videoUrl: "https://www.youtube.com/@TheAcharya1",
+        description: "Prabhupada's arrival lecture in Boston explaining the importance of Krishna consciousness.",
+        createdAt: new Date()
+      },
+      {
+        id: 8,
+        title: "Bhagavad-gita 7.1 - Hyderabad, August 22, 1976",
+        speaker: "A.C. Bhaktivedanta Swami Prabhupada",
+        topic: "Bhagavad Gita",
+        duration: 3300,
+        videoUrl: "https://www.youtube.com/@TheAcharya1",
+        description: "The process of hearing from the spiritual master to understand Krishna.",
+        createdAt: new Date()
+      },
+      {
+        id: 9,
+        title: "Nectar of Devotion - Vrindavan, October 14, 1972",
+        speaker: "A.C. Bhaktivedanta Swami Prabhupada",
+        topic: "Devotional Service",
+        duration: 2940,
+        videoUrl: "https://www.youtube.com/@TheAcharya1",
+        description: "The science of devotional service explained from Nectar of Devotion.",
+        createdAt: new Date()
+      },
+      {
+        id: 10,
+        title: "Room Conversation - Mayapur, February 19, 1976",
+        speaker: "A.C. Bhaktivedanta Swami Prabhupada",
+        topic: "Philosophy",
+        duration: 2160,
+        videoUrl: "https://www.youtube.com/@TheAcharya1",
+        description: "Intimate conversation about spiritual topics and practical devotional life.",
         createdAt: new Date()
       }
     ];
     
-    this.lecturesData.push(...lectures);
+    this.lecturesData.push(...prabhupadaLectures);
   }
 
   private seedChallenges(): void {

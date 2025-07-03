@@ -154,6 +154,12 @@ Preferred communication style: Simple, everyday language.
   - Progress circles now display actual progress (e.g., 5/10 pages, 15/30 minutes, 12/16 rounds)
   - Each user's goals are saved and tracked individually based on their onboarding responses
   - Hub displays personalized progress towards daily reading pages, hearing minutes, and chanting rounds
+- July 03, 2025: Added comprehensive Prabhupada lectures collection
+  - Integrated 10 authentic Prabhupada lectures covering Bhagavad Gita, Srimad Bhagavatam, and Caitanya Caritamrta
+  - Organized lectures by topic including Philosophy, Devotional Service, and specific scripture commentaries
+  - Added lectures spanning from 1966-1976 including historic New York and London talks
+  - Includes morning walks, room conversations, and formal lectures for comprehensive spiritual education
+  - All lectures linked to @TheAcharya1 YouTube channel for authentic Prabhupada content access
 
 ## Mobile App Deployment
 
