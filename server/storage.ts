@@ -526,7 +526,7 @@ export class DatabaseStorage implements IStorage {
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
         topic: "Bhagavad Gita",
         duration: 2580,
-        videoUrl: "https://www.youtube.com/@TheAcharya1",
+        videoUrl: "https://www.youtube.com/playlist?list=PLKawJJKm0lmF9VO2AJFGV1_QZZQDpKz_F",
         description: "Prabhupada's commentary on the opening verse of Bhagavad-gita at Bhaktivedanta Manor, London.",
         createdAt: new Date()
       },
@@ -536,7 +536,7 @@ export class DatabaseStorage implements IStorage {
         speaker: "A.C. Bhaktivedanta Swami Prabhupada", 
         topic: "Srimad Bhagavatam",
         duration: 3240,
-        videoUrl: "https://www.youtube.com/@TheAcharya1",
+        videoUrl: "https://www.youtube.com/playlist?list=PLKawJJKm0lmH5rBMktWHMdPPbNnj8AIsf",
         description: "Prabhupada explains the process of devotional service and transcendental knowledge.",
         createdAt: new Date()
       },
@@ -546,7 +546,7 @@ export class DatabaseStorage implements IStorage {
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
         topic: "Caitanya Caritamrta",
         duration: 2880,
-        videoUrl: "https://www.youtube.com/@TheAcharya1",
+        videoUrl: "https://www.youtube.com/playlist?list=PLKawJJKm0lmHM5aeSyKRxTQ4h5J_wL1vF",
         description: "The glories of Lord Caitanya's mercy and the chanting of the holy name.",
         createdAt: new Date()
       },
