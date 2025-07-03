@@ -44,12 +44,11 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
       
       // Invalidate cache and navigate immediately
       queryClient.invalidateQueries({ queryKey: ['/api/goals', user?.id] });
-      queryClient.refetchQueries({ queryKey: ['/api/goals', user?.id] });
       onComplete();
       
-      // Navigate to Hub after a short delay to show the success message
+      // Force a page reload to ensure the Hub loads properly
       setTimeout(() => {
-        setLocation('/');
+        window.location.href = '/';
       }, 1000);
     },
     onError: () => {
