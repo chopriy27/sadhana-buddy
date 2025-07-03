@@ -66,7 +66,7 @@ function Router() {
 
   // Check if user has completed onboarding
   const { data: userGoals, isLoading: goalsLoading } = useQuery({
-    queryKey: ['/api/goals', user?.id],
+    queryKey: [`/api/goals/${user?.id}`],
     enabled: !!user?.id && isAuthenticated,
     retry: false,
   });

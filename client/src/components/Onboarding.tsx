@@ -43,7 +43,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
       });
       
       // Invalidate cache and navigate immediately
-      queryClient.invalidateQueries({ queryKey: ['/api/goals', user?.id] });
+      queryClient.invalidateQueries({ queryKey: [`/api/goals/${user?.id}`] });
       onComplete();
       
       // Force a page reload to ensure the Hub loads properly
