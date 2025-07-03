@@ -36,18 +36,20 @@ export default function QuickActions() {
         </Link>
         
         {/* Classes & Lectures */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow cursor-pointer">
-          <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 bg-peaceful-blue/10 rounded-full flex items-center justify-center">
-              <Play className="w-5 h-5 text-peaceful-blue" />
+        <Link href="/lectures">
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow cursor-pointer">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 bg-peaceful-blue/10 rounded-full flex items-center justify-center">
+                <Play className="w-5 h-5 text-peaceful-blue" />
+              </div>
+              <span className="text-xs text-gray-500 dark:text-gray-400">
+                {lectureCount}+ lectures
+              </span>
             </div>
-            <span className="text-xs text-gray-500 dark:text-gray-400">
-              {lectureCount}+ lectures
-            </span>
+            <h4 className="font-medium text-gray-800 dark:text-gray-200 text-sm">Classes & Lectures</h4>
+            <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">By Prabhupada</p>
           </div>
-          <h4 className="font-medium text-gray-800 dark:text-gray-200 text-sm">Classes & Lectures</h4>
-          <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">By Acharyas</p>
-        </div>
+        </Link>
       </div>
     </div>
   );

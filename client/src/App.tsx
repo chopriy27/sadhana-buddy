@@ -7,6 +7,7 @@ import { useMobileFeatures } from "@/hooks/use-mobile-features";
 import { useAuth } from "@/hooks/useAuth";
 import Hub from "@/pages/Hub";
 import Songs from "@/pages/Songs";
+import Lectures from "@/pages/Lectures";
 import Tracker from "@/pages/Tracker";
 import Journal from "@/pages/Journal";
 import Profile from "@/pages/Profile";
@@ -108,6 +109,7 @@ function Router() {
             <>
               <Route path="/" component={Hub} />
               <Route path="/songs" component={Songs} />
+              <Route path="/lectures" component={Lectures} />
               <Route path="/tracker" component={Tracker} />
               <Route path="/journal" component={Journal} />
               <Route path="/profile" component={Profile} />
