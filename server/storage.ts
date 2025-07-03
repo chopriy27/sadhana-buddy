@@ -526,7 +526,7 @@ export class DatabaseStorage implements IStorage {
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
         topic: "Bhagavad Gita",
         duration: 2580,
-        videoUrl: "https://www.youtube.com/playlist?list=PLKawJJKm0lmF9VO2AJFGV1_QZZQDpKz_F",
+        videoUrl: "https://www.youtube.com/@TheAcharya1/playlists/playlists",
         description: "Prabhupada's commentary on the opening verse of Bhagavad-gita at Bhaktivedanta Manor, London.",
         createdAt: new Date()
       },
@@ -536,7 +536,7 @@ export class DatabaseStorage implements IStorage {
         speaker: "A.C. Bhaktivedanta Swami Prabhupada", 
         topic: "Srimad Bhagavatam",
         duration: 3240,
-        videoUrl: "https://www.youtube.com/playlist?list=PLKawJJKm0lmH5rBMktWHMdPPbNnj8AIsf",
+        videoUrl: "https://www.youtube.com/@TheAcharya1/playlists/playlists",
         description: "Prabhupada explains the process of devotional service and transcendental knowledge.",
         createdAt: new Date()
       },
@@ -546,7 +546,7 @@ export class DatabaseStorage implements IStorage {
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
         topic: "Caitanya Caritamrta",
         duration: 2880,
-        videoUrl: "https://www.youtube.com/playlist?list=PLKawJJKm0lmHM5aeSyKRxTQ4h5J_wL1vF",
+        videoUrl: "https://www.youtube.com/@TheAcharya1/playlists/playlists",
         description: "The glories of Lord Caitanya's mercy and the chanting of the holy name.",
         createdAt: new Date()
       },
@@ -556,7 +556,7 @@ export class DatabaseStorage implements IStorage {
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
         topic: "Bhagavad Gita",
         duration: 3060,
-        videoUrl: "https://www.youtube.com/@TheAcharya1",
+        videoUrl: "https://www.youtube.com/@TheAcharya1/playlists",
         description: "Krishna's divine birth and activities explained by Prabhupada in New York.",
         createdAt: new Date()
       },
@@ -566,7 +566,7 @@ export class DatabaseStorage implements IStorage {
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
         topic: "Philosophy",
         duration: 1800,
-        videoUrl: "https://www.youtube.com/@TheAcharya1",
+        videoUrl: "https://www.youtube.com/@TheAcharya1/playlists",
         description: "Prabhupada discusses spiritual topics during morning walk with disciples.",
         createdAt: new Date()
       },
@@ -576,7 +576,7 @@ export class DatabaseStorage implements IStorage {
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
         topic: "Srimad Bhagavatam",
         duration: 2700,
-        videoUrl: "https://www.youtube.com/@TheAcharya1",
+        videoUrl: "https://www.youtube.com/@TheAcharya1/playlists",
         description: "The process of meditation and remembering Krishna at the time of death.",
         createdAt: new Date()
       },
@@ -586,7 +586,7 @@ export class DatabaseStorage implements IStorage {
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
         topic: "Philosophy",
         duration: 2400,
-        videoUrl: "https://www.youtube.com/@TheAcharya1",
+        videoUrl: "https://www.youtube.com/@TheAcharya1/playlists",
         description: "Prabhupada's arrival lecture in Boston explaining the importance of Krishna consciousness.",
         createdAt: new Date()
       },
@@ -596,7 +596,7 @@ export class DatabaseStorage implements IStorage {
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
         topic: "Bhagavad Gita",
         duration: 3300,
-        videoUrl: "https://www.youtube.com/@TheAcharya1",
+        videoUrl: "https://www.youtube.com/@TheAcharya1/playlists",
         description: "The process of hearing from the spiritual master to understand Krishna.",
         createdAt: new Date()
       },
@@ -606,7 +606,7 @@ export class DatabaseStorage implements IStorage {
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
         topic: "Devotional Service",
         duration: 2940,
-        videoUrl: "https://www.youtube.com/@TheAcharya1",
+        videoUrl: "https://www.youtube.com/@TheAcharya1/playlists",
         description: "The science of devotional service explained from Nectar of Devotion.",
         createdAt: new Date()
       },
@@ -616,7 +616,7 @@ export class DatabaseStorage implements IStorage {
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
         topic: "Philosophy",
         duration: 2160,
-        videoUrl: "https://www.youtube.com/@TheAcharya1",
+        videoUrl: "https://www.youtube.com/@TheAcharya1/playlists",
         description: "Intimate conversation about spiritual topics and practical devotional life.",
         createdAt: new Date()
       }
