@@ -37,16 +37,20 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/goals', user?.id] });
       toast({
         title: "Goals set successfully!",
         description: "Welcome to your spiritual journey! Redirecting to Hub...",
       });
+      
+      // Invalidate cache and navigate immediately
+      queryClient.invalidateQueries({ queryKey: ['/api/goals', user?.id] });
+      queryClient.refetchQueries({ queryKey: ['/api/goals', user?.id] });
       onComplete();
+      
       // Navigate to Hub after a short delay to show the success message
       setTimeout(() => {
         setLocation('/');
-      }, 1500);
+      }, 1000);
     },
     onError: () => {
       toast({
