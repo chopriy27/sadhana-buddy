@@ -411,6 +411,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.patch("/api/goals/:userId", async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const updateData = req.body;
+      const goals = await storage.updateUserGoals(userId, updateData);
+      res.json(goals);
+    } catch (error) {
+      console.error("Error updating user goals:", error);
+      res.status(500).json({ message: "Failed to update user goals" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
