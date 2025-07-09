@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { Home, Music, TrendingUp, BookOpen, User } from "lucide-react";
+import { Home, Music, TrendingUp, BookOpen, Target } from "lucide-react";
 import { useMobileFeatures } from "@/hooks/use-mobile-features";
 import { ImpactStyle } from "@capacitor/haptics";
 
@@ -8,7 +8,7 @@ const navigationItems = [
   { path: "/songs", label: "Songs", icon: Music },
   { path: "/tracker", label: "Tracker", icon: TrendingUp },
   { path: "/journal", label: "Journal", icon: BookOpen },
-  { path: "/profile", label: "Profile", icon: User },
+  { path: "/goals", label: "Goals", icon: Target },
 ];
 
 export default function BottomNavigation() {
