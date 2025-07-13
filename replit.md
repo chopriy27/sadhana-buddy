@@ -167,6 +167,12 @@ Preferred communication style: Simple, everyday language.
   - Added comprehensive goal editing interface with input validation for chanting rounds, reading pages, and hearing minutes
   - Implemented PATCH API endpoint for seamless goal updates with proper authentication
   - Goals page features colorful progress cards and intuitive edit mode with save/cancel functionality
+- July 13, 2025: Integrated Goals feature into Profile page and implemented direct video links
+  - Moved Goals functionality from separate tab into Profile page section
+  - Restored 5-tab navigation with Songs, Tracker, Journal, and Profile tabs
+  - Updated all lecture URLs to point to specific authentic Prabhupada videos from official Bhaktivedanta Video Ministry
+  - Each "Watch Lecture" button now opens actual video content instead of general YouTube channel
+  - Lectures include documentaries like "The Acharya", "Your Ever Well-Wisher", and "Chanting Japa with Srila Prabhupada"
 
 ## Mobile App Deployment
 
