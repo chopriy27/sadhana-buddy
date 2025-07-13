@@ -1,20 +1,25 @@
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { User, BookOpen, Play, Target, Award, Calendar, TrendingUp, LogOut, Camera, Upload } from "lucide-react";
+import { User, BookOpen, Play, Target, Award, Calendar, TrendingUp, LogOut, Camera, Upload, Edit3, Save, X } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/useAuth";
-import type { UserProgress, SadhanaEntry, JournalEntry } from "@shared/schema";
+import { isUnauthorizedError } from "@/lib/authUtils";
+import type { UserProgress, SadhanaEntry, JournalEntry, UserGoals, InsertUserGoals } from "@shared/schema";
 
 export default function Profile() {
-  const { user } = useAuth();
+  const { user, isAuthenticated, isLoading: authLoading } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isEditingGoals, setIsEditingGoals] = useState(false);
+  const [editedGoals, setEditedGoals] = useState<Partial<InsertUserGoals>>({});
   
   const { data: userProgress } = useQuery<UserProgress | null>({
     queryKey: [`/api/progress/${user?.id}`],
@@ -29,6 +34,24 @@ export default function Profile() {
   const { data: journalEntries } = useQuery<JournalEntry[]>({
     queryKey: [`/api/journal/${user?.id}`],
     enabled: !!user?.id,
+  });
+
+  const { data: userGoals } = useQuery<UserGoals>({
+    queryKey: ["/api/goals", user?.id],
+    enabled: !!user?.id,
+    onError: (error: Error) => {
+      if (isUnauthorizedError(error)) {
+        toast({
+          title: "Unauthorized", 
+          description: "You are logged out. Logging in again...",
+          variant: "destructive",
+        });
+        setTimeout(() => {
+          window.location.href = "/api/login";
+        }, 500);
+        return;
+      }
+    },
   });
 
   // Calculate statistics
@@ -102,6 +125,44 @@ export default function Profile() {
     },
   ];
 
+  const updateGoalsMutation = useMutation({
+    mutationFn: async (updatedGoals: Partial<InsertUserGoals>) => {
+      if (!user?.id) throw new Error("User not found");
+      return await apiRequest(`/api/goals/${user.id}`, {
+        method: "PATCH",
+        body: JSON.stringify(updatedGoals),
+        headers: { "Content-Type": "application/json" },
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/goals", user?.id] });
+      toast({
+        title: "Goals Updated",
+        description: "Your spiritual practice goals have been updated successfully!",
+      });
+      setIsEditingGoals(false);
+      setEditedGoals({});
+    },
+    onError: (error: Error) => {
+      if (isUnauthorizedError(error)) {
+        toast({
+          title: "Unauthorized",
+          description: "You are logged out. Logging in again...",
+          variant: "destructive",
+        });
+        setTimeout(() => {
+          window.location.href = "/api/login";
+        }, 500);
+        return;
+      }
+      toast({
+        title: "Update Failed",
+        description: "Failed to update your goals. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
   // Profile picture upload mutation
   const uploadProfilePictureMutation = useMutation({
     mutationFn: async (file: File) => {
@@ -154,6 +215,30 @@ export default function Profile() {
       
       uploadProfilePictureMutation.mutate(file);
     }
+  };
+
+  const handleEditGoals = () => {
+    if (userGoals) {
+      setEditedGoals({
+        dailyChantingRounds: userGoals.dailyChantingRounds,
+        dailyReadingPages: userGoals.dailyReadingPages,
+        dailyHearingMinutes: userGoals.dailyHearingMinutes,
+      });
+      setIsEditingGoals(true);
+    }
+  };
+
+  const handleSaveGoals = () => {
+    updateGoalsMutation.mutate(editedGoals);
+  };
+
+  const handleCancelGoals = () => {
+    setIsEditingGoals(false);
+    setEditedGoals({});
+  };
+
+  const handleGoalInputChange = (field: keyof InsertUserGoals, value: number) => {
+    setEditedGoals(prev => ({ ...prev, [field]: value }));
   };
 
   const booksRead = userProgress?.booksRead || [];
@@ -268,6 +353,131 @@ export default function Profile() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Goals Section */}
+        {userGoals && (
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle className="flex items-center">
+                  <Target className="h-5 w-5 text-orange-500 mr-2" />
+                  My Spiritual Goals
+                </CardTitle>
+                {!isEditingGoals && (
+                  <Button onClick={handleEditGoals} variant="outline" size="sm">
+                    <Edit3 className="h-4 w-4 mr-2" />
+                    Edit
+                  </Button>
+                )}
+              </div>
+            </CardHeader>
+            <CardContent>
+              {isEditingGoals ? (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="chanting">Daily Chanting Rounds</Label>
+                      <Input
+                        id="chanting"
+                        type="number"
+                        min="1"
+                        max="64"
+                        value={editedGoals.dailyChantingRounds || 16}
+                        onChange={(e) => handleGoalInputChange('dailyChantingRounds', parseInt(e.target.value) || 16)}
+                        className="text-center"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="reading">Daily Reading Pages</Label>
+                      <Input
+                        id="reading"
+                        type="number"
+                        min="1"
+                        max="50"
+                        value={editedGoals.dailyReadingPages || 5}
+                        onChange={(e) => handleGoalInputChange('dailyReadingPages', parseInt(e.target.value) || 5)}
+                        className="text-center"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="hearing">Daily Hearing (Minutes)</Label>
+                      <Input
+                        id="hearing"
+                        type="number"
+                        min="5"
+                        max="240"
+                        value={editedGoals.dailyHearingMinutes || 30}
+                        onChange={(e) => handleGoalInputChange('dailyHearingMinutes', parseInt(e.target.value) || 30)}
+                        className="text-center"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2 pt-2">
+                    <Button 
+                      onClick={handleSaveGoals}
+                      disabled={updateGoalsMutation.isPending}
+                      className="flex-1"
+                      size="sm"
+                    >
+                      {updateGoalsMutation.isPending ? (
+                        <>
+                          <div className="w-3 h-3 border border-white border-t-transparent rounded-full animate-spin mr-2" />
+                          Saving...
+                        </>
+                      ) : (
+                        <>
+                          <Save className="h-3 w-3 mr-2" />
+                          Save
+                        </>
+                      )}
+                    </Button>
+                    <Button 
+                      onClick={handleCancelGoals}
+                      variant="outline"
+                      disabled={updateGoalsMutation.isPending}
+                      size="sm"
+                    >
+                      <X className="h-3 w-3 mr-2" />
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-3 gap-3">
+                  <div className="text-center p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
+                    <div className="text-2xl font-bold text-orange-600 dark:text-orange-400 mb-1">
+                      {userGoals.dailyChantingRounds}
+                    </div>
+                    <div className="text-xs font-medium text-gray-700 dark:text-gray-300">
+                      Chanting Rounds
+                    </div>
+                  </div>
+
+                  <div className="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                    <div className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-1">
+                      {userGoals.dailyReadingPages}
+                    </div>
+                    <div className="text-xs font-medium text-gray-700 dark:text-gray-300">
+                      Reading Pages
+                    </div>
+                  </div>
+
+                  <div className="text-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                    <div className="text-2xl font-bold text-green-600 dark:text-green-400 mb-1">
+                      {userGoals.dailyHearingMinutes}
+                    </div>
+                    <div className="text-xs font-medium text-gray-700 dark:text-gray-300">
+                      Hearing (Min)
+                    </div>
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        )}
 
         {/* Achievements */}
         <Card>
