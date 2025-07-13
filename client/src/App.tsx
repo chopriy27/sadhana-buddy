@@ -11,7 +11,7 @@ import Lectures from "@/pages/Lectures";
 import Tracker from "@/pages/Tracker";
 import Journal from "@/pages/Journal";
 import Profile from "@/pages/Profile";
-import Goals from "@/pages/Goals";
+
 import NotFound from "@/pages/not-found";
 import BottomNavigation from "@/components/BottomNavigation";
 import Onboarding from "@/components/Onboarding";
@@ -114,7 +114,6 @@ function Router() {
               <Route path="/tracker" component={Tracker} />
               <Route path="/journal" component={Journal} />
               <Route path="/profile" component={Profile} />
-              <Route path="/goals" component={Goals} />
             </>
           )}
           <Route component={NotFound} />
