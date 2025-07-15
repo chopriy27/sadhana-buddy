@@ -167,13 +167,12 @@ Preferred communication style: Simple, everyday language.
   - Added comprehensive goal editing interface with input validation for chanting rounds, reading pages, and hearing minutes
   - Implemented PATCH API endpoint for seamless goal updates with proper authentication
   - Goals page features colorful progress cards and intuitive edit mode with save/cancel functionality
-- July 13, 2025: Integrated Goals feature into Profile page and implemented authentic lecture collection
-  - Moved Goals functionality from separate tab into Profile page section with edit/save functionality
-  - Restored 5-tab navigation with Songs, Tracker, Journal, and Profile tabs
-  - Replaced lecture collection with authentic Prabhupada lectures from official archives (1966-1976)
-  - Added real historical lectures: Bhagavad-gita 2.13 (Hamburg 1969), Srimad-Bhagavatam 1.2.6 (Delhi 1973), etc.
-  - Each lecture includes accurate dates, locations, and descriptions from Prabhupadavani.org archives
-  - Links direct users to The Acharya YouTube channel with specific search queries for authentic content
+- July 15, 2025: Updated lecture collection with verified YouTube video URLs
+  - Replaced lecture collection with authentic Prabhupada documentaries from causelessmercy.com archive
+  - Added complete "The Acharya" documentary series (Parts 1-5) with actual YouTube URLs
+  - Included classic documentaries: "Your Ever Well-Wisher", "The Science of God", "Chanting Japa with Srila Prabhupada"
+  - All video links verified and working, sourced from official Bhaktivedanta Video Ministry collection
+  - Users can now directly watch authentic Prabhupada footage instead of searching for content
 
 ## Mobile App Deployment
 

@@ -522,102 +522,102 @@ export class DatabaseStorage implements IStorage {
     const prabhupadaLectures = [
       {
         id: 1,
-        title: "Bhagavad-gita 2.13 - Hamburg, September 10, 1969",
+        title: "The Acharya Part 1",
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
-        topic: "Bhagavad Gita",
-        duration: 3240,
-        videoUrl: "https://www.youtube.com/@TheAcharya1/search?query=Prabhupada+Hamburg+1969+Bhagavad+Gita+2.13",
-        description: "The soul's eternality and transmigration of the body. Public lecture with German translation explaining consciousness as evidence of the soul.",
+        topic: "Biography",
+        duration: 1859, // 30:59
+        videoUrl: "https://www.youtube.com/watch?v=a6PaVkPhPiU",
+        description: "Rare 16mm footage showing Prabhupada's daily activities, morning walks, and teachings about consciousness and spiritual realization.",
         createdAt: new Date()
       },
       {
         id: 2,
-        title: "Bhagavad-gita 2.13-17 - Los Angeles, November 29, 1968", 
+        title: "The Acharya Part 2", 
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
-        topic: "Bhagavad Gita",
-        duration: 2880,
-        videoUrl: "https://www.youtube.com/@TheAcharya1/search?query=Prabhupada+Los+Angeles+1968+Bhagavad+Gita+2.13",
-        description: "Detailed explanation of soul vs. body, consciousness, and spiritual realization. The wise are not bewildered by bodily changes.",
+        topic: "Biography",
+        duration: 1757, // 29:17
+        videoUrl: "https://www.youtube.com/watch?v=yj19F6xXRB4",
+        description: "Intimate glimpses of Prabhupada's afternoon darshans and philosophical discussions with professors and guests.",
         createdAt: new Date()
       },
       {
         id: 3,
-        title: "Srimad-Bhagavatam 1.2.6 - Delhi, November 12, 1973",
+        title: "The Acharya Part 3",
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
-        topic: "Srimad Bhagavatam",
-        duration: 3120,
-        videoUrl: "https://www.youtube.com/@TheAcharya1/search?query=Prabhupada+Delhi+1973+Bhagavatam+1.2.6",
-        description: "The process of devotional service and transcendental knowledge. How to achieve self-realization through hearing and chanting.",
+        topic: "Biography",
+        duration: 1882, // 31:22
+        videoUrl: "https://www.youtube.com/watch?v=VaYzJExqB6M",
+        description: "Prabhupada's Venice Beach morning walks with disciples discussing Vedic philosophy and practical spiritual life.",
         createdAt: new Date()
       },
       {
         id: 4,
-        title: "Bhagavad-gita 4.9 - New York, July 25, 1966",
+        title: "The Acharya Part 4",
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
-        topic: "Bhagavad Gita",
-        duration: 2700,
-        videoUrl: "https://www.youtube.com/@TheAcharya1/search?query=Prabhupada+New+York+1966+Bhagavad+Gita+4.9",
-        description: "Krishna's divine birth and activities. Historic early lecture from Prabhupada's mission in America explaining transcendental knowledge.",
+        topic: "Biography",
+        duration: 2261, // 37:41
+        videoUrl: "https://www.youtube.com/watch?v=wcuXy4oEyE8",
+        description: "Teachings on the soul vs. body, species of life, and devotional service. Shows how Prabhupada taught by example.",
         createdAt: new Date()
       },
       {
         id: 5,
-        title: "Bhagavad-gita 7.1 - Hyderabad, August 22, 1976",
+        title: "The Acharya Part 5",
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
-        topic: "Bhagavad Gita",
-        duration: 3300,
-        videoUrl: "https://www.youtube.com/@TheAcharya1/search?query=Prabhupada+Hyderabad+1976+Bhagavad+Gita+7.1",
-        description: "The process of hearing from the spiritual master to understand Krishna. How to practice yoga in full knowledge.",
+        topic: "Biography",
+        duration: 2854, // 47:34
+        videoUrl: "https://www.youtube.com/watch?v=yFvPY4lnynM",
+        description: "Final episode of The Acharya series showcasing Prabhupada's mission and spiritual teachings in his final years.",
         createdAt: new Date()
       },
       {
         id: 6,
-        title: "Sri Caitanya-caritamrta Adi 7.108 - San Francisco, February 18, 1967",
+        title: "Your Ever Well-Wisher",
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
-        topic: "Caitanya Caritamrta",
-        duration: 2640,
-        videoUrl: "https://www.youtube.com/@TheAcharya1/search?query=Prabhupada+San+Francisco+1967+Caitanya+Caritamrta",
-        description: "The glories of Lord Caitanya's mercy and the chanting of the holy name. The most merciful incarnation of Krishna.",
+        topic: "Biography",
+        duration: 3303, // 55:03
+        videoUrl: "https://www.youtube.com/watch?v=8hh6s_wlWdM",
+        description: "Comprehensive documentary about Prabhupada's compassionate mission to spread Krishna consciousness worldwide.",
         createdAt: new Date()
       },
       {
         id: 7,
-        title: "Srimad-Bhagavatam 2.1.1 - Paris, June 11, 1974",
+        title: "The Science of God",
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
-        topic: "Srimad Bhagavatam",
-        duration: 2520,
-        videoUrl: "https://www.youtube.com/@TheAcharya1/search?query=Prabhupada+Paris+1974+Bhagavatam+2.1.1",
-        description: "The process of meditation and remembering Krishna at the time of death. How to fix the mind on the Supreme.",
+        topic: "Philosophy",
+        duration: 1900, // 31:40
+        videoUrl: "https://www.youtube.com/watch?v=6b-BMxsIpBg",
+        description: "Prabhupada explains the scientific approach to understanding God and spiritual realization through Krishna consciousness.",
         createdAt: new Date()
       },
       {
         id: 8,
-        title: "Arrival Lecture - Boston, December 24, 1969",
+        title: "The Hare Krishna People",
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
-        topic: "Philosophy",
-        duration: 2400,
-        videoUrl: "https://www.youtube.com/@TheAcharya1/search?query=Prabhupada+Boston+1969+arrival+lecture",
-        description: "Prabhupada's Christmas Eve arrival lecture in Boston explaining the importance of Krishna consciousness for human society.",
+        topic: "Krishna Consciousness",
+        duration: 1835, // 30:35
+        videoUrl: "https://www.youtube.com/watch?v=Q3qE0qm6Gq0",
+        description: "Documentary exploring the early Krishna consciousness movement and its transformative philosophy.",
         createdAt: new Date()
       },
       {
         id: 9,
-        title: "Nectar of Devotion - Vrindavan, October 14, 1972",
+        title: "Chanting Japa with Srila Prabhupada",
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
-        topic: "Devotional Service",
-        duration: 2940,
-        videoUrl: "https://www.youtube.com/@TheAcharya1/search?query=Prabhupada+Vrindavan+1972+Nectar+Devotion",
-        description: "The science of devotional service explained from Nectar of Devotion. The complete science of bhakti-yoga practice.",
+        topic: "Chanting",
+        duration: 2930, // 48:50
+        videoUrl: "https://www.youtube.com/watch?v=4hzsqjjFMK4",
+        description: "Learn the proper method of chanting japa meditation directly from Srila Prabhupada's personal guidance.",
         createdAt: new Date()
       },
       {
         id: 10,
-        title: "Morning Walk Conversation - Los Angeles, December 15, 1973",
+        title: "Matchless Gifts",
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
-        topic: "Philosophy",
-        duration: 1800,
-        videoUrl: "https://www.youtube.com/@TheAcharya1/search?query=Prabhupada+Los+Angeles+1973+morning+walk",
-        description: "Intimate morning walk conversation about spiritual topics and practical devotional life with disciples.",
+        topic: "Devotional Service",
+        duration: 1322, // 22:02
+        videoUrl: "https://www.youtube.com/watch?v=RrusnxynJs0",
+        description: "Prabhupada explains the invaluable spiritual gifts of Krishna consciousness and pure devotional service.",
         createdAt: new Date()
       }
     ];
