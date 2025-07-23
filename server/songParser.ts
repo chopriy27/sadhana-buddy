@@ -272,36 +272,36 @@ export function convertToDevotionalSongs(songs: ParsedSong[]): InsertDevotionalS
 }
 
 // Pre-defined list of well-known Vaishnava songs for better parsing
-export const knownVaishnavSongs = [
+export const knownVaishnavSongs: ParsedSong[] = [
   // Bhaktivinoda Thakura songs
-  { title: "Amar Jivana", author: "Bhaktivinoda Thakura" },
-  { title: "Ami Jamuna Puline", author: "Bhaktivinoda Thakura" },
-  { title: "Bhaja Bhakata Vatsala", author: "Bhaktivinoda Thakura" },
-  { title: "Bolo Hari Bolo", author: "Bhaktivinoda Thakura" },
-  { title: "Jiv Jago Jiv Jago", author: "Bhaktivinoda Thakura" },
-  { title: "Kabe Gaura Vane", author: "Bhaktivinoda Thakura" },
-  { title: "Yasomati Nandana", author: "Bhaktivinoda Thakura" },
+  { title: "Amar Jivana", author: "Bhaktivinoda Thakura", category: "bhajan", mood: "devotional" },
+  { title: "Ami Jamuna Puline", author: "Bhaktivinoda Thakura", category: "bhajan", mood: "devotional" },
+  { title: "Bhaja Bhakata Vatsala", author: "Bhaktivinoda Thakura", category: "bhajan", mood: "devotional" },
+  { title: "Bolo Hari Bolo", author: "Bhaktivinoda Thakura", category: "kirtan", mood: "joyful" },
+  { title: "Jiv Jago Jiv Jago", author: "Bhaktivinoda Thakura", category: "kirtan", mood: "joyful" },
+  { title: "Kabe Gaura Vane", author: "Bhaktivinoda Thakura", category: "bhajan", mood: "devotional" },
+  { title: "Yasomati Nandana", author: "Bhaktivinoda Thakura", category: "kirtan", mood: "joyful" },
   
   // Narottama Das Thakura songs  
-  { title: "Gauranga Bolite Habe", author: "Narottama Das Thakura" },
-  { title: "Hari Hari Biphale Janama", author: "Narottama Das Thakura" },
-  { title: "Nitai Pada Kamala", author: "Narottama Das Thakura" },
-  { title: "Sri Rupa Manjari Pada", author: "Narottama Das Thakura" },
+  { title: "Gauranga Bolite Habe", author: "Narottama Das Thakura", category: "bhajan", mood: "devotional" },
+  { title: "Hari Hari Biphale Janama", author: "Narottama Das Thakura", category: "bhajan", mood: "devotional" },
+  { title: "Nitai Pada Kamala", author: "Narottama Das Thakura", category: "bhajan", mood: "devotional" },
+  { title: "Sri Rupa Manjari Pada", author: "Narottama Das Thakura", category: "prayer", mood: "meditative" },
   
   // Traditional prayers
-  { title: "Jaya Radha Madhava", author: "Traditional" },
-  { title: "Sri Guru Carana Padma", author: "Narottama Das Thakura" },
-  { title: "Samsara Davanala Lidha", author: "Visvanatha Cakravarti Thakura" },
+  { title: "Jaya Radha Madhava", author: "Traditional", category: "kirtan", mood: "joyful" },
+  { title: "Sri Guru Carana Padma", author: "Narottama Das Thakura", category: "prayer", mood: "devotional" },
+  { title: "Samsara Davanala Lidha", author: "Visvanatha Cakravarti Thakura", category: "prayer", mood: "meditative" },
   
   // Jayadeva Goswami
-  { title: "He Govinda He Gopal", author: "Jayadeva Goswami" },
-  { title: "Pralaya Payodhi Jale", author: "Jayadeva Goswami" },
+  { title: "He Govinda He Gopal", author: "Jayadeva Goswami", category: "kirtan", mood: "joyful" },
+  { title: "Pralaya Payodhi Jale", author: "Jayadeva Goswami", category: "kirtan", mood: "devotional" },
   
   // Rupa Goswami
-  { title: "Radhe Jaya Jaya Madhava Dayite", author: "Rupa Goswami" },
+  { title: "Radhe Jaya Jaya Madhava Dayite", author: "Rupa Goswami", category: "prayer", mood: "devotional" },
   
   // Other well-known songs
-  { title: "Hare Krishna Maha Mantra", author: "Traditional" },
-  { title: "Govinda Jaya Jaya", author: "Traditional" },
-  { title: "Tulasi Arati", author: "Traditional" }
+  { title: "Hare Krishna Maha Mantra", author: "Traditional", category: "mantra", mood: "meditative" },
+  { title: "Govinda Jaya Jaya", author: "Traditional", category: "kirtan", mood: "joyful" },
+  { title: "Tulasi Arati", author: "Traditional", category: "arati", mood: "devotional" }
 ];
