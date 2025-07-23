@@ -467,6 +467,9 @@ export class DatabaseStorage implements IStorage {
         const festivalWithId: Festival = {
           ...festival,
           id: this.festivalsData.length + 1,
+          description: festival.description || null,
+          significance: festival.significance || null,
+          observances: festival.observances || null,
         };
         this.festivalsData.push(festivalWithId);
       });
@@ -494,6 +497,8 @@ export class DatabaseStorage implements IStorage {
           ...song,
           id: this.devotionalSongsData.length + 1,
           createdAt: new Date(),
+          lyrics: song.lyrics || null,
+          audioUrl: song.audioUrl || null,
         };
         this.devotionalSongsData.push(songWithId);
       });
@@ -510,8 +515,8 @@ export class DatabaseStorage implements IStorage {
         id: 1,
         date: "2025-01-01",
         verse: "One who is not disturbed by the incessant flow of desires that enter like rivers into the ocean, which is ever being filled but is always still, can alone achieve peace, and not the person who strives to satisfy such desires.",
-        reference: "Bhagavad Gita 2.70",
-        explanation: "True peace comes from detachment from material desires, not from trying to fulfill them all."
+        translation: "One who is not disturbed by the incessant flow of desires that enter like rivers into the ocean, which is ever being filled but is always still, can alone achieve peace, and not the person who strives to satisfy such desires.",
+        source: "Bhagavad Gita 2.70"
       }
     ];
     
@@ -522,102 +527,102 @@ export class DatabaseStorage implements IStorage {
     const prabhupadaLectures = [
       {
         id: 1,
-        title: "The Acharya Part 1",
+        title: "Bhagavad-gita 2.13 - The Soul Changes Bodies",
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
-        topic: "Biography",
-        duration: 1859, // 30:59
-        videoUrl: "https://www.youtube.com/watch?v=a6PaVkPhPiU",
-        description: "Rare 16mm footage showing Prabhupada's daily activities, morning walks, and teachings about consciousness and spiritual realization.",
+        topic: "Bhagavad Gita",
+        duration: 3240,
+        videoUrl: "https://prabhupadavani.org/audio/681129bgla/",
+        description: "Los Angeles, November 29, 1968. The eternality of the soul and transmigration. Consciousness as evidence of the soul's presence.",
         createdAt: new Date()
       },
       {
         id: 2,
-        title: "The Acharya Part 2", 
+        title: "Bhagavad-gita 4.9 - Krishna's Divine Birth", 
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
-        topic: "Biography",
-        duration: 1757, // 29:17
-        videoUrl: "https://www.youtube.com/watch?v=yj19F6xXRB4",
-        description: "Intimate glimpses of Prabhupada's afternoon darshans and philosophical discussions with professors and guests.",
+        topic: "Bhagavad Gita",
+        duration: 2880,
+        videoUrl: "https://prabhupadavani.org/audio/660725bgny/",
+        description: "New York, July 25, 1966. Historic early lecture explaining Krishna's transcendental appearance and activities.",
         createdAt: new Date()
       },
       {
         id: 3,
-        title: "The Acharya Part 3",
+        title: "Bhagavad-gita 7.1 - Knowing Krishna Completely",
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
-        topic: "Biography",
-        duration: 1882, // 31:22
-        videoUrl: "https://www.youtube.com/watch?v=VaYzJExqB6M",
-        description: "Prabhupada's Venice Beach morning walks with disciples discussing Vedic philosophy and practical spiritual life.",
+        topic: "Bhagavad Gita",
+        duration: 3120,
+        videoUrl: "https://prabhupadavani.org/audio/760822bghy/",
+        description: "Hyderabad, August 22, 1976. The process of hearing from spiritual master to understand Krishna in full knowledge.",
         createdAt: new Date()
       },
       {
         id: 4,
-        title: "The Acharya Part 4",
+        title: "Srimad-Bhagavatam 1.2.6 - The Process of Devotional Service",
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
-        topic: "Biography",
-        duration: 2261, // 37:41
-        videoUrl: "https://www.youtube.com/watch?v=wcuXy4oEyE8",
-        description: "Teachings on the soul vs. body, species of life, and devotional service. Shows how Prabhupada taught by example.",
+        topic: "Srimad Bhagavatam",
+        duration: 2700,
+        videoUrl: "https://prabhupadavani.org/audio/731112sbde/",
+        description: "Delhi, November 12, 1973. How to achieve self-realization through hearing and chanting about Krishna.",
         createdAt: new Date()
       },
       {
         id: 5,
-        title: "The Acharya Part 5",
+        title: "Srimad-Bhagavatam 2.1.1 - Remembering Krishna at Death",
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
-        topic: "Biography",
-        duration: 2854, // 47:34
-        videoUrl: "https://www.youtube.com/watch?v=yFvPY4lnynM",
-        description: "Final episode of The Acharya series showcasing Prabhupada's mission and spiritual teachings in his final years.",
+        topic: "Srimad Bhagavatam",
+        duration: 3300,
+        videoUrl: "https://prabhupadavani.org/audio/740611sbpa/",
+        description: "Paris, June 11, 1974. The process of meditation and remembering Krishna at the time of death.",
         createdAt: new Date()
       },
       {
         id: 6,
-        title: "Your Ever Well-Wisher",
+        title: "Sri Caitanya-caritamrta Adi 7.108 - Lord Caitanya's Mercy",
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
-        topic: "Biography",
-        duration: 3303, // 55:03
-        videoUrl: "https://www.youtube.com/watch?v=8hh6s_wlWdM",
-        description: "Comprehensive documentary about Prabhupada's compassionate mission to spread Krishna consciousness worldwide.",
+        topic: "Caitanya Caritamrta",
+        duration: 2640,
+        videoUrl: "https://prabhupadavani.org/audio/670218ccsf/",
+        description: "San Francisco, February 18, 1967. The glories of Lord Caitanya's mercy and the chanting of the holy name.",
         createdAt: new Date()
       },
       {
         id: 7,
-        title: "The Science of God",
+        title: "Arrival Lecture - Krishna Consciousness for Human Society",
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
         topic: "Philosophy",
-        duration: 1900, // 31:40
-        videoUrl: "https://www.youtube.com/watch?v=6b-BMxsIpBg",
-        description: "Prabhupada explains the scientific approach to understanding God and spiritual realization through Krishna consciousness.",
+        duration: 2520,
+        videoUrl: "https://prabhupadavani.org/audio/691224arbo/",
+        description: "Boston, December 24, 1969. Christmas Eve arrival lecture explaining Krishna consciousness for human civilization.",
         createdAt: new Date()
       },
       {
         id: 8,
-        title: "The Hare Krishna People",
+        title: "Nectar of Devotion - The Science of Bhakti-yoga",
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
-        topic: "Krishna Consciousness",
-        duration: 1835, // 30:35
-        videoUrl: "https://www.youtube.com/watch?v=Q3qE0qm6Gq0",
-        description: "Documentary exploring the early Krishna consciousness movement and its transformative philosophy.",
+        topic: "Devotional Service",
+        duration: 2400,
+        videoUrl: "https://prabhupadavani.org/audio/721014nodvr/",
+        description: "Vrindavan, October 14, 1972. The complete science of devotional service explained from Nectar of Devotion.",
         createdAt: new Date()
       },
       {
         id: 9,
-        title: "Chanting Japa with Srila Prabhupada",
+        title: "Morning Walk - Spiritual Topics and Practical Life",
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
-        topic: "Chanting",
-        duration: 2930, // 48:50
-        videoUrl: "https://www.youtube.com/watch?v=4hzsqjjFMK4",
-        description: "Learn the proper method of chanting japa meditation directly from Srila Prabhupada's personal guidance.",
+        topic: "Philosophy",
+        duration: 2940,
+        videoUrl: "https://prabhupadavani.org/audio/731215mwla/",
+        description: "Los Angeles, December 15, 1973. Intimate morning walk conversation about devotional life with disciples.",
         createdAt: new Date()
       },
       {
         id: 10,
-        title: "Matchless Gifts",
+        title: "Room Conversation - Questions and Answers",
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
-        topic: "Devotional Service",
-        duration: 1322, // 22:02
-        videoUrl: "https://www.youtube.com/watch?v=RrusnxynJs0",
-        description: "Prabhupada explains the invaluable spiritual gifts of Krishna consciousness and pure devotional service.",
+        topic: "Philosophy",
+        duration: 1800,
+        videoUrl: "https://prabhupadavani.org/audio/750502rcpe/",
+        description: "Perth, May 2, 1975. Personal discussion about spiritual practice and Krishna consciousness philosophy.",
         createdAt: new Date()
       }
     ];
@@ -632,9 +637,10 @@ export class DatabaseStorage implements IStorage {
         type: "chanting",
         title: "16 Round Challenge",
         description: "Complete 16 rounds of chanting daily for 30 days",
-        targetValue: 30,
+        target: 30,
         duration: 30,
-        points: 100,
+        startDate: "2025-01-01",
+        endDate: "2025-01-31",
         isActive: true
       },
       {
@@ -642,9 +648,10 @@ export class DatabaseStorage implements IStorage {
         type: "reading",
         title: "Daily Reading Challenge", 
         description: "Read Srila Prabhupada's books for at least 30 minutes daily",
-        targetValue: 30,
+        target: 30,
         duration: 30,
-        points: 75,
+        startDate: "2025-01-01",
+        endDate: "2025-01-31",
         isActive: true
       }
     ];
