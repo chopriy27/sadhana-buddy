@@ -15,16 +15,19 @@ import Profile from "@/pages/Profile";
 import NotFound from "@/pages/not-found";
 import BottomNavigation from "@/components/BottomNavigation";
 import Onboarding from "@/components/Onboarding";
+import logoImage from "@assets/image_1751395782344.png";
 
 function Landing() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-8 text-center bg-gradient-to-br from-orange-50 via-yellow-50 to-orange-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+    <div className="flex flex-col items-center justify-center min-h-screen p-8 text-center bg-warm-white dark:bg-gray-900">
       <div className="max-w-md space-y-8">
-        {/* Logo/Icon */}
-        <div className="w-20 h-20 mx-auto bg-gradient-to-br from-sacred-orange to-orange-600 rounded-2xl flex items-center justify-center shadow-lg">
-          <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center">
-            <div className="w-8 h-8 bg-gradient-to-br from-sacred-orange to-orange-600 rounded-lg"></div>
-          </div>
+        {/* Logo */}
+        <div className="flex justify-center mb-8">
+          <img 
+            src={logoImage} 
+            alt="Sadhana Buddy Logo" 
+            className="w-32 h-32 object-contain"
+          />
         </div>
         
         {/* Title */}
@@ -38,24 +41,44 @@ function Landing() {
         </div>
         
         {/* Features */}
-        <div className="space-y-4">
-          <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 dark:border-gray-700/50">
-            <p className="text-gray-700 dark:text-gray-300">
-              Track daily sadhana, explore devotional songs, and grow in your spiritual journey with Krishna consciousness
+        <div className="space-y-6">
+          <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl p-6 border border-orange-200/50 dark:border-gray-700/50 shadow-lg">
+            <p className="text-gray-700 dark:text-gray-300 text-base leading-relaxed">
+              Track daily sadhana, explore devotional songs, listen to authentic Prabhupada lectures, and grow in your spiritual journey with Krishna consciousness
             </p>
           </div>
           
           {/* Sign In Button */}
           <button
             onClick={() => window.location.href = '/api/login'}
-            className="w-full bg-gradient-to-r from-sacred-orange to-orange-600 hover:from-orange-600 hover:to-sacred-orange text-white font-semibold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+            className="w-full bg-gradient-to-r from-sacred-orange to-orange-500 hover:from-orange-500 hover:to-sacred-orange text-white font-bold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] border-2 border-orange-400"
           >
-            Begin Your Journey
+            Begin Your Spiritual Journey
           </button>
           
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            Sign in to access your personal spiritual practice dashboard
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            Sign in with your Replit account to access your personal spiritual practice dashboard
           </p>
+        </div>
+        
+        {/* Features List */}
+        <div className="grid grid-cols-2 gap-4 mt-8">
+          <div className="bg-white/60 dark:bg-gray-800/60 rounded-lg p-4 text-center">
+            <div className="text-2xl mb-2">📿</div>
+            <div className="text-sm font-medium text-gray-700 dark:text-gray-300">Daily Sadhana</div>
+          </div>
+          <div className="bg-white/60 dark:bg-gray-800/60 rounded-lg p-4 text-center">
+            <div className="text-2xl mb-2">🎵</div>
+            <div className="text-sm font-medium text-gray-700 dark:text-gray-300">Devotional Songs</div>
+          </div>
+          <div className="bg-white/60 dark:bg-gray-800/60 rounded-lg p-4 text-center">
+            <div className="text-2xl mb-2">📚</div>
+            <div className="text-sm font-medium text-gray-700 dark:text-gray-300">Prabhupada Lectures</div>
+          </div>
+          <div className="bg-white/60 dark:bg-gray-800/60 rounded-lg p-4 text-center">
+            <div className="text-2xl mb-2">📝</div>
+            <div className="text-sm font-medium text-gray-700 dark:text-gray-300">Spiritual Journal</div>
+          </div>
         </div>
       </div>
     </div>
