@@ -16,7 +16,7 @@ interface OnboardingProps {
 
 export default function Onboarding({ onComplete }: OnboardingProps) {
   const [dailyReadingPages, setDailyReadingPages] = useState("5");
-  const [dailyHearingMinutes, setDailyHearingMinutes] = useState("30");
+  const [dailyHearingLectures, setDailyHearingLectures] = useState("1");
   const [dailyChantingRounds, setDailyChantingRounds] = useState("16");
 
   const { toast } = useToast();
@@ -27,7 +27,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
   const setGoalsMutation = useMutation({
     mutationFn: async (goals: {
       dailyReadingPages: number;
-      dailyHearingMinutes: number;
+      dailyHearingLectures: number;
       dailyChantingRounds: number;
     }) => {
       return apiRequest('POST', '/api/goals', {
@@ -64,10 +64,10 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
     e.preventDefault();
     
     const readingPages = parseInt(dailyReadingPages);
-    const hearingMinutes = parseInt(dailyHearingMinutes);
+    const hearingLectures = parseInt(dailyHearingLectures);
     const chantingRounds = parseInt(dailyChantingRounds);
 
-    if (readingPages < 1 || hearingMinutes < 1 || chantingRounds < 1) {
+    if (readingPages < 1 || hearingLectures < 1 || chantingRounds < 1) {
       toast({
         title: "Invalid values",
         description: "All goals must be at least 1.",
@@ -78,7 +78,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
 
     setGoalsMutation.mutate({
       dailyReadingPages: readingPages,
-      dailyHearingMinutes: hearingMinutes,
+      dailyHearingLectures: hearingLectures,
       dailyChantingRounds: chantingRounds,
     });
   };
@@ -99,7 +99,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
             <div className="space-y-2">
               <Label htmlFor="reading" className="flex items-center gap-2">
                 <BookOpen className="w-4 h-4 text-saffron" />
-                How many pages do you want to read every day?
+                How many pages of Srila Prabhupada's books would you like to read everyday?
               </Label>
               <Input
                 id="reading"
@@ -111,35 +111,32 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                 placeholder="5"
                 className="text-center"
               />
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                Reading Srila Prabhupada's books
-              </p>
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="hearing" className="flex items-center gap-2">
                 <Headphones className="w-4 h-4 text-saffron" />
-                How many minutes do you want to hear every day?
+                How many lectures do you want to hear everyday?
               </Label>
               <Input
                 id="hearing"
                 type="number"
                 min="1"
-                max="480"
-                value={dailyHearingMinutes}
-                onChange={(e) => setDailyHearingMinutes(e.target.value)}
-                placeholder="30"
+                max="10"
+                value={dailyHearingLectures}
+                onChange={(e) => setDailyHearingLectures(e.target.value)}
+                placeholder="1"
                 className="text-center"
               />
               <p className="text-xs text-gray-500 dark:text-gray-400">
-                Spiritual lectures and kirtans
+                Number of Prabhupada lectures to listen to daily
               </p>
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="chanting" className="flex items-center gap-2">
                 <Circle className="w-4 h-4 text-saffron" />
-                How many rounds do you want to chant every day?
+                How many rounds of Japa would you like to chant everyday?
               </Label>
               <Input
                 id="chanting"
@@ -152,7 +149,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                 className="text-center"
               />
               <p className="text-xs text-gray-500 dark:text-gray-400">
-                Hare Krishna Mahamantra rounds
+                Rounds of Hare Krishna Mahamantra
               </p>
             </div>
 

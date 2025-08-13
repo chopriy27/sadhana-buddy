@@ -42,7 +42,7 @@ export const sadhanaEntries = pgTable("sadhana_entries", {
   readingPrabhupada: boolean("reading_prabhupada").default(false), // Reading Srila Prabhupada's books
   bookTitle: text("book_title"), // Title of book being read
   pagesRead: integer("pages_read").default(0), // Pages read that day
-  hearingMinutes: integer("hearing_minutes").default(0), // Minutes spent hearing lectures/kirtans
+  hearingLectures: integer("hearing_lectures").default(0), // Number of lectures heard that day
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -110,7 +110,7 @@ export const userGoals = pgTable("user_goals", {
   userId: varchar("user_id").notNull().unique(),
   dailyChantingRounds: integer("daily_chanting_rounds").notNull().default(16),
   dailyReadingPages: integer("daily_reading_pages").notNull().default(5),
-  dailyHearingMinutes: integer("daily_hearing_minutes").notNull().default(30),
+  dailyHearingLectures: integer("daily_hearing_lectures").notNull().default(1),
   isOnboardingComplete: boolean("is_onboarding_complete").default(false),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
