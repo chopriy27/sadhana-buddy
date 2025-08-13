@@ -15,7 +15,7 @@ import Profile from "@/pages/Profile";
 import NotFound from "@/pages/not-found";
 import BottomNavigation from "@/components/BottomNavigation";
 import Onboarding from "@/components/Onboarding";
-import logoImage from "@assets/image_1751395782344.png";
+import logoImage from "@assets/ChatGPT Image Aug 13, 2025, 10_03_33 AM_1755104655512.png";
 
 function Landing() {
   return (
