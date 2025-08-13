@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Calendar, Plus, CheckCircle, Circle, Target, Book, Music, Sun, Headphones } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -17,7 +17,7 @@ export default function Tracker() {
   const [readingPrabhupada, setReadingPrabhupada] = useState(false);
   const [bookTitle, setBookTitle] = useState("");
   const [pagesRead, setPagesRead] = useState(0);
-  const [mangalaArati, setMangalaArati] = useState(false);
+
   const [hearing, setHearing] = useState(false);
   
   const { toast } = useToast();
@@ -51,16 +51,15 @@ export default function Tracker() {
   });
 
   // Set initial values when data loads
-  useState(() => {
+  useEffect(() => {
     if (todaysSadhana) {
       setChantingRounds(todaysSadhana.chantingRounds || 0);
       setReadingPrabhupada(todaysSadhana.readingPrabhupada || false);
       setBookTitle(todaysSadhana.bookTitle || "");
       setPagesRead(todaysSadhana.pagesRead || 0);
-      setMangalaArati(todaysSadhana.mangalaArati || false);
       setHearing(todaysSadhana.hearing || false);
     }
-  });
+  }, [todaysSadhana]);
 
   const updateSadhanaMutation = useMutation({
     mutationFn: async (data: Partial<SadhanaEntry>) => {
@@ -115,7 +114,6 @@ export default function Tracker() {
       readingPrabhupada,
       bookTitle: readingPrabhupada ? bookTitle : null,
       pagesRead: readingPrabhupada ? pagesRead : 0,
-      mangalaArati,
       hearing,
     });
   };
@@ -129,7 +127,7 @@ export default function Tracker() {
     );
     
     for (const entry of sortedHistory) {
-      if ((entry.chantingRounds || 0) >= (entry.chantingTarget || 16) && entry.readingPrabhupada && entry.mangalaArati) {
+      if ((entry.chantingRounds || 0) >= (entry.chantingTarget || 16) && entry.readingPrabhupada) {
         streak++;
       } else {
         break;
@@ -157,7 +155,7 @@ export default function Tracker() {
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
               <Calendar className="w-5 h-5" />
-              <span>Today's Practice</span>
+              <span>Today's Sadhana</span>
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -250,21 +248,6 @@ export default function Tracker() {
                   </div>
                 </div>
               )}
-            </div>
-
-            {/* Mangala Arati */}
-            <div className="flex items-center space-x-3 p-3 rounded-lg border">
-              <Checkbox 
-                id="mangala-arati"
-                checked={mangalaArati} 
-                onCheckedChange={(checked) => setMangalaArati(checked === true)}
-              />
-              <div className="flex items-center space-x-2">
-                <Sun className="h-4 w-4 text-orange-600" />
-                <label htmlFor="mangala-arati" className="text-sm font-medium cursor-pointer">
-                  Mangala Arati
-                </label>
-              </div>
             </div>
 
             {/* Hearing */}
