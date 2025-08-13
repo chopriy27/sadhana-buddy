@@ -51,7 +51,7 @@ function Landing() {
           {/* Sign In Button */}
           <button
             onClick={() => window.location.href = '/api/login'}
-            className="w-full bg-gradient-to-r from-sacred-orange to-orange-500 hover:from-orange-500 hover:to-sacred-orange text-white font-bold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] border-2 border-orange-400"
+            className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold text-lg py-5 px-8 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] border border-orange-600"
           >
             Begin Your Spiritual Journey
           </button>
