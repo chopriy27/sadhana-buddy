@@ -51,10 +51,16 @@ function Landing() {
           {/* Sign In Button */}
           <button
             onClick={() => window.location.href = '/api/login'}
-            className="w-full bg-orange-500 hover:bg-orange-600 font-bold text-lg py-5 px-8 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] border border-orange-600"
-            style={{ color: '#ffffff' }}
+            className="w-full font-bold text-lg py-5 px-8 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
+            style={{ 
+              backgroundColor: '#f97316',
+              color: '#ffffff',
+              border: '2px solid #ea580c'
+            }}
           >
-            Begin Your Spiritual Journey
+            <span style={{ color: '#ffffff', fontWeight: 'bold' }}>
+              Begin Your Spiritual Journey
+            </span>
           </button>
           
           <p className="text-sm text-gray-600 dark:text-gray-400">
