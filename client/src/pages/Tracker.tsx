@@ -163,7 +163,7 @@ export default function Tracker() {
           <CardContent className="space-y-4">
             {/* Chanting Rounds */}
             <div className="flex items-center justify-between">
-              <label className="text-sm font-medium">Chanting Rounds</label>
+              <label className="text-sm font-medium">Rounds Chanted</label>
               <div className="flex items-center space-x-2">
                 <Button 
                   variant="outline" 
