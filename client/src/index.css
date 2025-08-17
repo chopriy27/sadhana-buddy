@@ -3,75 +3,69 @@
 @tailwind utilities;
 
 :root {
-  --background: hsl(55, 60%, 99%);
-  --foreground: hsl(225, 25%, 35%);
-  --muted: hsl(50, 40%, 97%);
-  --muted-foreground: hsl(225, 15%, 55%);
+  --background: hsl(45, 29%, 98%);
+  --foreground: hsl(20, 14.3%, 4.1%);
+  --muted: hsl(60, 4.8%, 95.9%);
+  --muted-foreground: hsl(25, 5.3%, 44.7%);
   --popover: hsl(0, 0%, 100%);
-  --popover-foreground: hsl(225, 25%, 35%);
+  --popover-foreground: hsl(20, 14.3%, 4.1%);
   --card: hsl(0, 0%, 100%);
-  --card-foreground: hsl(225, 25%, 35%);
-  --border: hsl(50, 30%, 92%);
-  --input: hsl(50, 30%, 95%);
-  --primary: hsl(30, 85%, 75%);
-  --primary-foreground: hsl(225, 25%, 35%);
-  --secondary: hsl(320, 45%, 85%);
-  --secondary-foreground: hsl(225, 25%, 35%);
-  --accent: hsl(200, 40%, 90%);
-  --accent-foreground: hsl(225, 25%, 35%);
-  --destructive: hsl(0, 70%, 65%);
-  --destructive-foreground: hsl(0, 0%, 100%);
-  --ring: hsl(200, 40%, 75%);
-  --radius: 0.75rem;
+  --card-foreground: hsl(20, 14.3%, 4.1%);
+  --border: hsl(20, 5.9%, 90%);
+  --input: hsl(20, 5.9%, 90%);
+  --primary: hsl(19, 100%, 60%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(33, 100%, 64%);
+  --secondary-foreground: hsl(24, 9.8%, 10%);
+  --accent: hsl(60, 4.8%, 95.9%);
+  --accent-foreground: hsl(24, 9.8%, 10%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(60, 9.1%, 97.8%);
+  --ring: hsl(20, 14.3%, 4.1%);
+  --radius: 0.5rem;
   
-  /* Custom spiritual colors - lighter and more ethereal */
-  --sacred-orange: hsl(30, 85%, 75%);
-  --saffron: hsl(45, 80%, 80%);
-  --peaceful-blue: hsl(200, 65%, 85%);
-  --deep-blue: hsl(220, 60%, 75%);
-  --lotus-pink: hsl(320, 45%, 85%);
-  --sacred-gold: hsl(50, 90%, 85%);
-  --divine-purple: hsl(270, 50%, 85%);
-  --celestial-white: hsl(55, 60%, 99%);
-  --soft-lavender: hsl(250, 30%, 92%);
-  --warm-white: hsl(55, 60%, 99%);
-  --soft-gray: hsl(50, 20%, 95%);
+  /* Custom spiritual colors */
+  --sacred-orange: hsl(19, 100%, 60%);
+  --saffron: hsl(33, 100%, 64%);
+  --peaceful-blue: hsl(213, 78%, 58%);
+  --deep-blue: hsl(220, 74%, 46%);
+  --lotus-pink: hsl(340, 82%, 52%);
+  --sacred-gold: hsl(45, 100%, 50%);
+  --warm-white: hsl(45, 29%, 98%);
+  --soft-gray: hsl(24, 6%, 96%);
 }
 
 .dark {
-  --background: hsl(250, 20%, 8%);
-  --foreground: hsl(50, 30%, 92%);
-  --muted: hsl(250, 15%, 12%);
-  --muted-foreground: hsl(225, 15%, 70%);
-  --popover: hsl(250, 20%, 10%);
-  --popover-foreground: hsl(50, 30%, 92%);
-  --card: hsl(250, 20%, 10%);
-  --card-foreground: hsl(50, 30%, 92%);
-  --border: hsl(250, 15%, 20%);
-  --input: hsl(250, 15%, 18%);
-  --primary: hsl(30, 70%, 70%);
-  --primary-foreground: hsl(250, 20%, 8%);
-  --secondary: hsl(320, 35%, 75%);
-  --secondary-foreground: hsl(250, 20%, 8%);
-  --accent: hsl(200, 30%, 75%);
-  --accent-foreground: hsl(250, 20%, 8%);
-  --destructive: hsl(0, 60%, 65%);
-  --destructive-foreground: hsl(0, 0%, 100%);
-  --ring: hsl(200, 30%, 60%);
-  --radius: 0.75rem;
+  --background: hsl(240, 10%, 3.9%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(240, 3.7%, 15.9%);
+  --muted-foreground: hsl(240, 5%, 64.9%);
+  --popover: hsl(240, 10%, 3.9%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(240, 10%, 3.9%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(240, 3.7%, 15.9%);
+  --input: hsl(240, 3.7%, 15.9%);
+  --primary: hsl(19, 100%, 60%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(240, 3.7%, 15.9%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(240, 3.7%, 15.9%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(240, 4.9%, 83.9%);
+  --radius: 0.5rem;
   
-  /* Dark mode spiritual colors - maintaining ethereal quality */
-  --sacred-orange: hsl(30, 70%, 70%);
-  --saffron: hsl(45, 70%, 75%);
-  --peaceful-blue: hsl(200, 55%, 75%);
-  --deep-blue: hsl(220, 50%, 70%);
-  --lotus-pink: hsl(320, 35%, 75%);
-  --sacred-gold: hsl(50, 80%, 80%);
-  --divine-purple: hsl(270, 40%, 75%);
-  --celestial-white: hsl(50, 30%, 92%);
-  --soft-lavender: hsl(250, 25%, 80%);
-  --warm-white: hsl(250, 20%, 8%);
-  --soft-gray: hsl(250, 15%, 15%);
+  /* Dark mode spiritual colors */
+  --sacred-orange: hsl(19, 100%, 60%);
+  --saffron: hsl(33, 100%, 64%);
+  --peaceful-blue: hsl(213, 78%, 58%);
+  --deep-blue: hsl(220, 74%, 46%);
+  --lotus-pink: hsl(340, 82%, 52%);
+  --sacred-gold: hsl(45, 100%, 50%);
+  --warm-white: hsl(240, 10%, 3.9%);
+  --soft-gray: hsl(240, 3.7%, 15.9%);
 }
 
 @layer base {
