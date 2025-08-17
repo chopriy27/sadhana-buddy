@@ -19,7 +19,7 @@ import logoImage from "@assets/ChatGPT Image Aug 13, 2025, 10_03_33 AM_175510465
 
 function Landing() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-8 text-center bg-celestial-white dark:bg-background">
+    <div className="flex flex-col items-center justify-center min-h-screen p-8 text-center bg-warm-white dark:bg-gray-900">
       <div className="max-w-md space-y-8">
         {/* Logo */}
         <div className="flex justify-center mb-8">
@@ -32,18 +32,18 @@ function Landing() {
         
         {/* Title */}
         <div className="space-y-3">
-          <h1 className="text-4xl font-bold text-foreground">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
             Sadhana Buddy
           </h1>
-          <p className="text-lg text-muted-foreground font-medium">
+          <p className="text-lg text-gray-600 dark:text-gray-300 font-medium">
             Your spiritual practice companion
           </p>
         </div>
         
         {/* Features */}
         <div className="space-y-6">
-          <div className="bg-card/95 backdrop-blur-sm rounded-xl p-6 border border-border shadow-lg">
-            <p className="text-card-foreground text-base leading-relaxed">
+          <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl p-6 border border-orange-200/50 dark:border-gray-700/50 shadow-lg">
+            <p className="text-gray-700 dark:text-gray-300 text-base leading-relaxed">
               Track daily sadhana, explore devotional songs, listen to authentic Prabhupada lectures, and grow in your spiritual journey with Krishna consciousness
             </p>
           </div>
@@ -51,33 +51,40 @@ function Landing() {
           {/* Sign In Button */}
           <button
             onClick={() => window.location.href = '/api/login'}
-            className="w-full font-bold text-lg py-5 px-8 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] bg-sacred-orange text-primary-foreground border-2 border-saffron hover:bg-saffron"
+            className="w-full font-bold text-lg py-5 px-8 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
+            style={{ 
+              backgroundColor: '#f97316',
+              color: '#ffffff',
+              border: '2px solid #ea580c'
+            }}
           >
-            Begin Your Spiritual Journey
+            <span style={{ color: '#ffffff', fontWeight: 'bold' }}>
+              Begin Your Spiritual Journey
+            </span>
           </button>
           
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-gray-600 dark:text-gray-400">
             Sign in with your Replit account to access your personal spiritual practice dashboard
           </p>
         </div>
         
         {/* Features List */}
         <div className="grid grid-cols-2 gap-4 mt-8">
-          <div className="bg-card/70 backdrop-blur-sm rounded-lg p-4 text-center border border-border/50">
+          <div className="bg-white/60 dark:bg-gray-800/60 rounded-lg p-4 text-center">
             <div className="text-2xl mb-2">📿</div>
-            <div className="text-sm font-medium text-card-foreground">Daily Sadhana</div>
+            <div className="text-sm font-medium text-gray-700 dark:text-gray-300">Daily Sadhana</div>
           </div>
-          <div className="bg-card/70 backdrop-blur-sm rounded-lg p-4 text-center border border-border/50">
+          <div className="bg-white/60 dark:bg-gray-800/60 rounded-lg p-4 text-center">
             <div className="text-2xl mb-2">🎵</div>
-            <div className="text-sm font-medium text-card-foreground">Devotional Songs</div>
+            <div className="text-sm font-medium text-gray-700 dark:text-gray-300">Devotional Songs</div>
           </div>
-          <div className="bg-card/70 backdrop-blur-sm rounded-lg p-4 text-center border border-border/50">
+          <div className="bg-white/60 dark:bg-gray-800/60 rounded-lg p-4 text-center">
             <div className="text-2xl mb-2">📚</div>
-            <div className="text-sm font-medium text-card-foreground">Prabhupada Lectures</div>
+            <div className="text-sm font-medium text-gray-700 dark:text-gray-300">Prabhupada Lectures</div>
           </div>
-          <div className="bg-card/70 backdrop-blur-sm rounded-lg p-4 text-center border border-border/50">
+          <div className="bg-white/60 dark:bg-gray-800/60 rounded-lg p-4 text-center">
             <div className="text-2xl mb-2">📝</div>
-            <div className="text-sm font-medium text-card-foreground">Spiritual Journal</div>
+            <div className="text-sm font-medium text-gray-700 dark:text-gray-300">Spiritual Journal</div>
           </div>
         </div>
       </div>
