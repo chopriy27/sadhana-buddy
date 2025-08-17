@@ -1,4 +1,4 @@
-import logoImage from "@assets/image_1751395782344.png";
+import logoImage from "@assets/ChatGPT Image Aug 13, 2025, 10_03_33 AM_1755104655512.png";
 
 interface LogoProps {
   size?: number;
