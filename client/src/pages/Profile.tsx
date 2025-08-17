@@ -37,7 +37,7 @@ export default function Profile() {
   });
 
   const { data: userGoals } = useQuery<UserGoals>({
-    queryKey: ["/api/goals", user?.id],
+    queryKey: [`/api/goals/${user?.id}`],
     enabled: !!user?.id,
     onError: (error: Error) => {
       if (isUnauthorizedError(error)) {
@@ -135,7 +135,10 @@ export default function Profile() {
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/goals", user?.id] });
+      // Invalidate all goal-related queries to sync across pages
+      queryClient.invalidateQueries({ queryKey: [`/api/goals/${user?.id}`] });
+      queryClient.invalidateQueries({ queryKey: [`/api/sadhana/${user?.id}/today`] });
+      queryClient.invalidateQueries({ queryKey: [`/api/sadhana/${user?.id}`] });
       toast({
         title: "Goals Updated",
         description: "Your spiritual practice goals have been updated successfully!",

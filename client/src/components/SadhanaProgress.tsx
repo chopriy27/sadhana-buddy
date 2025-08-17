@@ -19,23 +19,23 @@ export default function SadhanaProgress() {
   // Get actual progress values
   const chantingRounds = todaysSadhana?.chantingRounds || 0;
   const pagesRead = todaysSadhana?.pagesRead || 0;
-  const hearingLectures = todaysSadhana?.hearingLectures || 0;
+  const hearingMinutes = todaysSadhana?.hearingMinutes || 0;
   const readingPrabhupada = todaysSadhana?.readingPrabhupada || false;
 
   // Get personalized goals from onboarding
   const chantingTarget = userGoals?.dailyChantingRounds || 16;
   const readingTarget = userGoals?.dailyReadingPages || 5;
-  const hearingTarget = userGoals?.dailyHearingLectures || 1;
+  const hearingTarget = userGoals?.dailyHearingMinutes || 30;
 
   // Calculate progress percentages
   const chantingProgress = Math.min((chantingRounds / chantingTarget) * 100, 100);
   const readingProgress = Math.min((pagesRead / readingTarget) * 100, 100);
-  const hearingProgress = Math.min((hearingLectures / hearingTarget) * 100, 100);
+  const hearingProgress = Math.min((hearingMinutes / hearingTarget) * 100, 100);
 
   const totalTasks = 3; // chanting, reading, hearing
   const completedTasks = (chantingRounds >= chantingTarget ? 1 : 0) + 
                         (pagesRead >= readingTarget ? 1 : 0) + 
-                        (hearingLectures >= hearingTarget ? 1 : 0);
+                        (hearingMinutes >= hearingTarget ? 1 : 0);
   const completionPercentage = Math.round((completedTasks / totalTasks) * 100);
 
   return (
@@ -91,11 +91,11 @@ export default function SadhanaProgress() {
             >
               <div className="w-12 h-12 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center">
                 <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
-                  {hearingLectures}/{hearingTarget}
+                  {hearingMinutes}/{hearingTarget}
                 </span>
               </div>
             </div>
-            <p className="text-xs text-gray-600 dark:text-gray-400">Lectures</p>
+            <p className="text-xs text-gray-600 dark:text-gray-400">Minutes</p>
           </div>
         </div>
       </div>
