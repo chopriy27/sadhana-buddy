@@ -19,18 +19,18 @@ export default function FestivalBanner() {
 
   return (
     <div className="max-w-md mx-auto">
-      <div className="mx-4 mt-4 bg-gradient-to-r from-amber-400 to-orange-500 rounded-2xl p-4 festival-glow shadow-lg">
+      <div className="mx-4 mt-4 bg-gradient-to-r from-sacred-orange to-saffron rounded-2xl p-4 festival-glow shadow-lg backdrop-blur-sm border border-border/30">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-gray-900 dark:text-white font-semibold text-sm">{nextFestival.name}</h3>
-            <p className="text-gray-800 dark:text-white/90 text-xs mt-1">
+            <h3 className="text-foreground font-semibold text-sm">{nextFestival.name}</h3>
+            <p className="text-foreground/80 text-xs mt-1">
               {daysRemaining === 0 ? "Today!" : 
                daysRemaining === 1 ? "Tomorrow" : 
                `${daysRemaining} days remaining`}
             </p>
           </div>
-          <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center spiritual-pulse">
-            <Star className="w-6 h-6 text-white" />
+          <div className="w-12 h-12 bg-white/30 rounded-full flex items-center justify-center spiritual-pulse backdrop-blur-sm">
+            <Star className="w-6 h-6 text-foreground" />
           </div>
         </div>
       </div>

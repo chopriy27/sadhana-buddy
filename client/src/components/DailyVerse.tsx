@@ -10,12 +10,12 @@ export default function DailyVerse() {
   if (!verse) {
     return (
       <div className="max-w-md mx-auto px-4 mt-6">
-        <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl p-6 text-white shadow-lg">
+        <div className="bg-gradient-to-br from-peaceful-blue to-deep-blue rounded-2xl p-6 text-white shadow-lg backdrop-blur-sm border border-border/20">
           <div className="flex items-center mb-3">
-            <Quote className="w-5 h-5 text-white/70 mr-3" />
-            <h3 className="font-semibold">Daily Verse</h3>
+            <Quote className="w-5 h-5 text-white/80 mr-3" />
+            <h3 className="font-semibold text-white">Daily Verse</h3>
           </div>
-          <p className="text-white/80 text-sm">No verse available for today</p>
+          <p className="text-white/90 text-sm">No verse available for today</p>
         </div>
       </div>
     );
@@ -23,15 +23,15 @@ export default function DailyVerse() {
 
   return (
     <div className="max-w-md mx-auto px-4 mt-6">
-      <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl p-6 text-white shadow-lg">
+      <div className="bg-gradient-to-br from-peaceful-blue to-deep-blue rounded-2xl p-6 text-white shadow-lg backdrop-blur-sm border border-border/20">
         <div className="flex items-center mb-3">
-          <Quote className="w-5 h-5 text-white/70 mr-3" />
-          <h3 className="font-semibold">Daily Verse</h3>
+          <Quote className="w-5 h-5 text-white/80 mr-3" />
+          <h3 className="font-semibold text-white">Daily Verse</h3>
         </div>
-        <blockquote className="font-spiritual text-sm leading-relaxed mb-3">
+        <blockquote className="font-spiritual text-sm leading-relaxed mb-3 text-white/95">
           "{verse.translation}"
         </blockquote>
-        <p className="text-white/80 text-xs">— {verse.source}</p>
+        <p className="text-white/90 text-xs">— {verse.source}</p>
       </div>
     </div>
   );
