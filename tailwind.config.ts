@@ -61,6 +61,18 @@ export default {
           border: "var(--sidebar-border)",
           ring: "var(--sidebar-ring)",
         },
+        // Spiritual color palette
+        "sacred-orange": "var(--sacred-orange)",
+        "saffron": "var(--saffron)",
+        "peaceful-blue": "var(--peaceful-blue)",
+        "deep-blue": "var(--deep-blue)",
+        "lotus-pink": "var(--lotus-pink)",
+        "sacred-gold": "var(--sacred-gold)",
+        "divine-purple": "var(--divine-purple)",
+        "celestial-white": "var(--celestial-white)",
+        "soft-lavender": "var(--soft-lavender)",
+        "warm-white": "var(--warm-white)",
+        "soft-gray": "var(--soft-gray)",
       },
       keyframes: {
         "accordion-down": {
