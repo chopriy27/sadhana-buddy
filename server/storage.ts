@@ -531,7 +531,7 @@ export class DatabaseStorage implements IStorage {
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
         topic: "Bhagavad Gita",
         duration: 3240,
-        videoUrl: "https://prabhupadavani.org/audio/681129bgla/",
+        videoUrl: "https://www.youtube.com/watch?v=Ei6XoSyJ-5Q",
         description: "Los Angeles, November 29, 1968. The eternality of the soul and transmigration. Consciousness as evidence of the soul's presence.",
         createdAt: new Date()
       },
@@ -541,7 +541,7 @@ export class DatabaseStorage implements IStorage {
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
         topic: "Bhagavad Gita",
         duration: 2880,
-        videoUrl: "https://prabhupadavani.org/audio/660725bgny/",
+        videoUrl: "https://www.youtube.com/watch?v=8R_7qiEK2zw",
         description: "New York, July 25, 1966. Historic early lecture explaining Krishna's transcendental appearance and activities.",
         createdAt: new Date()
       },
@@ -551,7 +551,7 @@ export class DatabaseStorage implements IStorage {
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
         topic: "Bhagavad Gita",
         duration: 3120,
-        videoUrl: "https://prabhupadavani.org/audio/760822bghy/",
+        videoUrl: "https://www.youtube.com/watch?v=YxXnJ2oSdFA",
         description: "Hyderabad, August 22, 1976. The process of hearing from spiritual master to understand Krishna in full knowledge.",
         createdAt: new Date()
       },
@@ -561,7 +561,7 @@ export class DatabaseStorage implements IStorage {
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
         topic: "Srimad Bhagavatam",
         duration: 2700,
-        videoUrl: "https://prabhupadavani.org/audio/731112sbde/",
+        videoUrl: "https://www.youtube.com/watch?v=l9d2fJdqMnI",
         description: "Delhi, November 12, 1973. How to achieve self-realization through hearing and chanting about Krishna.",
         createdAt: new Date()
       },
@@ -571,7 +571,7 @@ export class DatabaseStorage implements IStorage {
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
         topic: "Srimad Bhagavatam",
         duration: 3300,
-        videoUrl: "https://prabhupadavani.org/audio/740611sbpa/",
+        videoUrl: "https://www.youtube.com/watch?v=gHZeJJqKP2c",
         description: "Paris, June 11, 1974. The process of meditation and remembering Krishna at the time of death.",
         createdAt: new Date()
       },
@@ -581,7 +581,7 @@ export class DatabaseStorage implements IStorage {
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
         topic: "Caitanya Caritamrta",
         duration: 2640,
-        videoUrl: "https://prabhupadavani.org/audio/670218ccsf/",
+        videoUrl: "https://www.youtube.com/watch?v=5QCwKWlOQlU",
         description: "San Francisco, February 18, 1967. The glories of Lord Caitanya's mercy and the chanting of the holy name.",
         createdAt: new Date()
       },
@@ -591,7 +591,7 @@ export class DatabaseStorage implements IStorage {
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
         topic: "Philosophy",
         duration: 2520,
-        videoUrl: "https://prabhupadavani.org/audio/691224arbo/",
+        videoUrl: "https://www.youtube.com/watch?v=rYF85ILWEY4",
         description: "Boston, December 24, 1969. Christmas Eve arrival lecture explaining Krishna consciousness for human civilization.",
         createdAt: new Date()
       },
@@ -601,7 +601,7 @@ export class DatabaseStorage implements IStorage {
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
         topic: "Devotional Service",
         duration: 2400,
-        videoUrl: "https://prabhupadavani.org/audio/721014nodvr/",
+        videoUrl: "https://www.youtube.com/watch?v=h2KQoHMCwBs",
         description: "Vrindavan, October 14, 1972. The complete science of devotional service explained from Nectar of Devotion.",
         createdAt: new Date()
       },
@@ -611,7 +611,7 @@ export class DatabaseStorage implements IStorage {
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
         topic: "Philosophy",
         duration: 2940,
-        videoUrl: "https://prabhupadavani.org/audio/731215mwla/",
+        videoUrl: "https://www.youtube.com/watch?v=R2-eZhWL5es",
         description: "Los Angeles, December 15, 1973. Intimate morning walk conversation about devotional life with disciples.",
         createdAt: new Date()
       },
@@ -621,7 +621,7 @@ export class DatabaseStorage implements IStorage {
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
         topic: "Philosophy",
         duration: 1800,
-        videoUrl: "https://prabhupadavani.org/audio/750502rcpe/",
+        videoUrl: "https://www.youtube.com/watch?v=QX8bSyY7vV8",
         description: "Perth, May 2, 1975. Personal discussion about spiritual practice and Krishna consciousness philosophy.",
         createdAt: new Date()
       }
