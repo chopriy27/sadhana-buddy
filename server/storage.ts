@@ -531,7 +531,7 @@ export class DatabaseStorage implements IStorage {
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
         topic: "Bhagavad Gita",
         duration: 3240,
-        videoUrl: "https://bhagavadgitaclass.com/bhagavad-gita-chapter-02/verse-13",
+        videoUrl: "https://www.youtube.com/@TheAcharya1",
         description: "Understanding the eternal nature of the soul and transmigration through different bodies.",
         createdAt: new Date()
       },
@@ -541,7 +541,7 @@ export class DatabaseStorage implements IStorage {
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
         topic: "Bhagavad Gita",
         duration: 2880,
-        videoUrl: "https://bhagavadgitaclass.com/bhagavad-gita-chapter-04/verse-09",
+        videoUrl: "https://www.youtube.com/@TheAcharya1",
         description: "The transcendental nature of Krishna's birth and activities in the material world.",
         createdAt: new Date()
       },
@@ -551,7 +551,7 @@ export class DatabaseStorage implements IStorage {
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
         topic: "Bhagavad Gita",
         duration: 3120,
-        videoUrl: "https://bhagavadgitaclass.com/bhagavad-gita-chapter-07/verse-01",
+        videoUrl: "https://www.youtube.com/@TheAcharya1",
         description: "How to understand Krishna completely through yoga practice and knowledge.",
         createdAt: new Date()
       },
@@ -561,7 +561,7 @@ export class DatabaseStorage implements IStorage {
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
         topic: "Srimad Bhagavatam",
         duration: 2700,
-        videoUrl: "https://www.srimadbhagavatamclass.com/srimad-bhagavatam-canto-01/chapter-02/verse-06",
+        videoUrl: "https://www.youtube.com/@TheAcharya1",
         description: "The perfect process of self-realization through hearing and chanting about Krishna.",
         createdAt: new Date()
       },
@@ -571,7 +571,7 @@ export class DatabaseStorage implements IStorage {
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
         topic: "Bhagavad Gita",
         duration: 3300,
-        videoUrl: "https://bhagavadgitaclass.com/bhagavad-gita-chapter-09/verse-02",
+        videoUrl: "https://www.youtube.com/@TheAcharya1",
         description: "Krishna consciousness as the most confidential knowledge and purifying process.",
         createdAt: new Date()
       },
@@ -581,7 +581,7 @@ export class DatabaseStorage implements IStorage {
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
         topic: "Bhagavad Gita",
         duration: 2640,
-        videoUrl: "https://bhagavadgitaclass.com/bhagavad-gita-chapter-18/verse-66",
+        videoUrl: "https://www.youtube.com/@TheAcharya1",
         description: "The ultimate instruction of Bhagavad-gita: complete surrender to the Supreme Lord.",
         createdAt: new Date()
       },
@@ -591,7 +591,7 @@ export class DatabaseStorage implements IStorage {
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
         topic: "Srimad Bhagavatam",
         duration: 2520,
-        videoUrl: "https://www.srimadbhagavatamclass.com/srimad-bhagavatam-canto-02/chapter-01/verse-01",
+        videoUrl: "https://www.youtube.com/@TheAcharya1",
         description: "The importance of always remembering Krishna, especially at the time of death.",
         createdAt: new Date()
       },
@@ -601,7 +601,7 @@ export class DatabaseStorage implements IStorage {
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
         topic: "Bhagavad Gita",
         duration: 2400,
-        videoUrl: "https://bhagavadgitaclass.com/bhagavad-gita-chapter-15/verse-07",
+        videoUrl: "https://www.youtube.com/@TheAcharya1",
         description: "Understanding the eternal relationship between the soul and the Supreme Lord.",
         createdAt: new Date()
       },
@@ -611,7 +611,7 @@ export class DatabaseStorage implements IStorage {
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
         topic: "Devotional Service",
         duration: 2940,
-        videoUrl: "https://www.asitis.com/",
+        videoUrl: "https://www.youtube.com/@TheAcharya1",
         description: "Introduction to the science of pure devotional service to Krishna.",
         createdAt: new Date()
       },
@@ -621,7 +621,7 @@ export class DatabaseStorage implements IStorage {
         speaker: "A.C. Bhaktivedanta Swami Prabhupada",
         topic: "Bhagavad Gita",
         duration: 1800,
-        videoUrl: "https://bhagavadgitaclass.com/bhagavad-gita-chapter-10/verse-08",
+        videoUrl: "https://www.youtube.com/@TheAcharya1",
         description: "Krishna as the source of all spiritual and material worlds and devotion.",
         createdAt: new Date()
       }
