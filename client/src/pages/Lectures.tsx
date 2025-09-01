@@ -147,7 +147,7 @@ export default function Lectures() {
                     className="bg-peaceful-blue hover:bg-peaceful-blue/90 text-white"
                   >
                     <ExternalLink className="w-3 h-3 mr-1" />
-                    Watch Lecture
+                    Watch Lectures
                   </Button>
                 </div>
               </div>
