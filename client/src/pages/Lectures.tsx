@@ -36,6 +36,7 @@ export default function Lectures() {
   const topics = Array.from(new Set(lectures?.map(lecture => lecture.topic) || []));
 
   const formatDuration = (seconds: number) => {
+    if (seconds === 0) return "";
     const minutes = Math.floor(seconds / 60);
     return `${minutes} min`;
   };
@@ -125,7 +126,7 @@ export default function Lectures() {
                     <Badge variant="secondary" className="text-xs">
                       {lecture.topic}
                     </Badge>
-                    {lecture.duration && lecture.duration > 0 && (
+                    {lecture.duration && lecture.duration > 0 && formatDuration(lecture.duration) && (
                       <div className="flex items-center gap-1">
                         <Clock className="w-3 h-3 text-gray-400" />
                         <span className="text-xs text-gray-500">
