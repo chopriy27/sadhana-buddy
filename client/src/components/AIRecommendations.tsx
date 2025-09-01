@@ -17,12 +17,14 @@ interface SongRecommendation {
   reason: string;
   confidence: number;
   spiritualBenefit: string;
+  spiritualFocus?: 'radharani' | 'krishna' | 'caitanya' | 'guru' | 'general';
 }
 
 interface RecommendationRequest {
   currentMood?: string;
   timeOfDay?: 'morning' | 'afternoon' | 'evening' | 'night';
   practiceLevel?: 'beginner' | 'intermediate' | 'advanced';
+  spiritualFocus?: 'radharani' | 'krishna' | 'caitanya' | 'guru' | 'general' | 'any';
   count?: number;
 }
 
@@ -39,6 +41,47 @@ export function AIRecommendations() {
   const [filters, setFilters] = useState<RecommendationRequest>({
     count: 5
   });
+
+  // Helper function to categorize songs by spiritual focus
+  const categorizeSongBySpiritualFocus = (song: DevotionalSong): 'radharani' | 'krishna' | 'caitanya' | 'guru' | 'general' => {
+    const title = song.title.toLowerCase();
+    
+    if (title.includes('radha') || title.includes('radhika') || title.includes('radhe') || 
+        title.includes('vrindavan') || title.includes('gopi') || title.includes('lalita')) {
+      return 'radharani';
+    }
+    
+    if (title.includes('krishna') || title.includes('krsna') || title.includes('govind') || 
+        title.includes('gopal') || title.includes('madhav') || title.includes('hari') ||
+        title.includes('vasudeva') || title.includes('mukund') || title.includes('gokul')) {
+      return 'krishna';
+    }
+    
+    if (title.includes('caitanya') || title.includes('gaura') || title.includes('gauranga') || 
+        title.includes('mahaprabhu') || title.includes('nitai') || title.includes('nityananda') ||
+        title.includes('navadwip') || title.includes('sankirtan')) {
+      return 'caitanya';
+    }
+    
+    if (title.includes('guru') || title.includes('gurudev') || title.includes('prabhupada') ||
+        title.includes('spiritual master') || title.includes('acharya')) {
+      return 'guru';
+    }
+    
+    return 'general';
+  };
+
+  // Helper function to get spiritual focus display info
+  const getSpiritualFocusInfo = (focus: string) => {
+    const focusMap: Record<string, { emoji: string; name: string; color: string }> = {
+      'radharani': { emoji: '🌸', name: 'Radharani', color: 'text-pink-600 bg-pink-50' },
+      'krishna': { emoji: '🦚', name: 'Krishna', color: 'text-blue-600 bg-blue-50' },
+      'caitanya': { emoji: '✨', name: 'Caitanya', color: 'text-yellow-600 bg-yellow-50' },
+      'guru': { emoji: '🙏', name: 'Guru', color: 'text-purple-600 bg-purple-50' },
+      'general': { emoji: '🕉️', name: 'General', color: 'text-gray-600 bg-gray-50' }
+    };
+    return focusMap[focus] || focusMap['general'];
+  };
 
   // Get AI recommendations
   const recommendationsMutation = useMutation<SongRecommendation[], Error, RecommendationRequest>({
@@ -131,7 +174,7 @@ export function AIRecommendations() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
               <label className="text-sm font-medium mb-2 block">Current Mood</label>
               <Select 
@@ -185,6 +228,26 @@ export function AIRecommendations() {
                 </SelectContent>
               </Select>
             </div>
+
+            <div>
+              <label className="text-sm font-medium mb-2 block">Spiritual Focus</label>
+              <Select 
+                value={filters.spiritualFocus || 'any'}
+                onValueChange={(value) => setFilters(prev => ({ ...prev, spiritualFocus: value as any }))}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="any">Any Focus</SelectItem>
+                  <SelectItem value="krishna">🦚 Krishna</SelectItem>
+                  <SelectItem value="radharani">🌸 Radharani</SelectItem>
+                  <SelectItem value="caitanya">✨ Caitanya Mahaprabhu</SelectItem>
+                  <SelectItem value="guru">🙏 Guru & Spiritual Master</SelectItem>
+                  <SelectItem value="general">🕉️ General Devotional</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           <Button 
@@ -233,9 +296,21 @@ export function AIRecommendations() {
                   <div className="flex-1">
                     <h4 className="font-semibold text-lg">{recommendation.song.title}</h4>
                     <p className="text-gray-600 dark:text-gray-400">by {recommendation.song.author}</p>
-                    <div className="flex gap-2 mt-1">
+                    <div className="flex gap-2 mt-1 flex-wrap">
                       <Badge variant="outline">{recommendation.song.category}</Badge>
                       <Badge variant="secondary">{recommendation.song.mood}</Badge>
+                      {(() => {
+                        const focus = categorizeSongBySpiritualFocus(recommendation.song);
+                        const focusInfo = getSpiritualFocusInfo(focus);
+                        return (
+                          <Badge 
+                            variant="outline" 
+                            className={`${focusInfo.color} border-current`}
+                          >
+                            {focusInfo.emoji} {focusInfo.name}
+                          </Badge>
+                        );
+                      })()}
                     </div>
                   </div>
                   <div className="flex flex-col items-end gap-2">
