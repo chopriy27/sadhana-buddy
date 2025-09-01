@@ -62,6 +62,8 @@ export const devotionalSongs = pgTable("devotional_songs", {
   category: text("category").notNull(), // bhajan, kirtan, prayer
   mood: text("mood").notNull(), // devotional, meditative, joyful, etc.
   lyrics: text("lyrics"),
+  lyricsPreview: text("lyrics_preview"), // Brief excerpt or first line
+  pageReference: text("page_reference"), // Reference to songbook page
   audioUrl: text("audio_url"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });

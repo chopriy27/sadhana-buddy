@@ -224,7 +224,7 @@ export default function Songs() {
                   )}
                   
                   <p className="text-xs text-saffron-600 dark:text-saffron-400 mt-2">
-                    Click to view lyrics
+                    Click to view in ISKCON Vaishnava Songbook
                   </p>
                 </CardContent>
               </Card>
@@ -261,26 +261,42 @@ export default function Songs() {
           </DialogHeader>
           
           <div className="mt-4">
-            {selectedSong?.lyrics ? (
-              <div className="space-y-4">
-                <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                  <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
-                    <Book className="w-4 h-4" />
-                    Lyrics
-                  </h3>
-                  <div className="text-sm text-gray-600 dark:text-gray-400 font-spiritual leading-relaxed whitespace-pre-line">
-                    {selectedSong.lyrics}
+            <div className="space-y-4">
+              <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2">
+                  <Book className="w-4 h-4" />
+                  Song Information
+                </h3>
+                
+                <div className="space-y-3">
+                  <div>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Author</p>
+                    <p className="text-sm text-gray-700 dark:text-gray-300">{selectedSong?.author}</p>
+                  </div>
+                  
+                  <div>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Category</p>
+                    <p className="text-sm text-gray-700 dark:text-gray-300 capitalize">{selectedSong?.category}</p>
+                  </div>
+                  
+                  <div>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Mood</p>
+                    <p className="text-sm text-gray-700 dark:text-gray-300 capitalize">{selectedSong?.mood}</p>
                   </div>
                 </div>
               </div>
-            ) : (
-              <div className="text-center py-8">
-                <Book className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
-                <p className="text-gray-500 dark:text-gray-400">
-                  Lyrics not available for this song
+              
+              <div className="p-4 bg-saffron-50 dark:bg-saffron-900/20 rounded-lg border border-saffron-200 dark:border-saffron-800">
+                <h4 className="text-sm font-medium text-saffron-800 dark:text-saffron-200 mb-2">
+                  📖 Complete Lyrics Available
+                </h4>
+                <p className="text-xs text-saffron-700 dark:text-saffron-300 leading-relaxed">
+                  Full lyrics and proper pronunciation are available in the official <strong>ISKCON Vaishnava Songbook</strong> 
+                  compiled by ISKCON Chowpatty. This authentic source contains traditional devotional songs by Bhaktivinoda Thakura, 
+                  Narottama Das Thakura, and other great Vaishnava acharyas.
                 </p>
               </div>
-            )}
+            </div>
           </div>
         </DialogContent>
       </Dialog>
