@@ -125,7 +125,7 @@ export default function Lectures() {
                     <Badge variant="secondary" className="text-xs">
                       {lecture.topic}
                     </Badge>
-                    {lecture.duration && (
+                    {lecture.duration && lecture.duration > 0 && (
                       <div className="flex items-center gap-1">
                         <Clock className="w-3 h-3 text-gray-400" />
                         <span className="text-xs text-gray-500">
