@@ -4,6 +4,7 @@ import multer from "multer";
 import path from "path";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
+import { aiRecommendationEngine, type RecommendationContext } from "./ai-recommendations";
 import { 
   insertSadhanaEntrySchema,
   insertJournalEntrySchema,
@@ -420,6 +421,82 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error updating user goals:", error);
       res.status(500).json({ message: "Failed to update user goals" });
+    }
+  });
+
+  // AI Recommendation endpoints
+  app.post("/api/recommendations/:userId", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.params.userId;
+      const { currentMood, timeOfDay, practiceLevel, count = 5 } = req.body;
+      
+      // Get user's context data
+      const [
+        favoriteSongs,
+        recentSadhana,
+        recentJournal,
+        allSongs
+      ] = await Promise.all([
+        storage.getFavoriteSongs(userId),
+        storage.getSadhanaEntries(userId, 7), // Last 7 days
+        storage.getJournalEntries(userId, 5), // Last 5 entries
+        storage.getSongs()
+      ]);
+
+      // Calculate average sadhana progress
+      const avgProgress = recentSadhana.length > 0 ? {
+        chantingRounds: Math.round(recentSadhana.reduce((sum, entry) => sum + entry.chantingRounds, 0) / recentSadhana.length),
+        readingPages: Math.round(recentSadhana.reduce((sum, entry) => sum + (entry.pagesRead || 0), 0) / recentSadhana.length),
+        hearingMinutes: Math.round(recentSadhana.reduce((sum, entry) => sum + entry.hearingMinutes, 0) / recentSadhana.length)
+      } : undefined;
+
+      const context: RecommendationContext = {
+        userId,
+        currentMood,
+        timeOfDay,
+        practiceLevel,
+        recentSadhanaProgress: avgProgress,
+        recentJournalEntries: recentJournal.map(entry => ({
+          mood: entry.mood,
+          content: entry.content
+        })),
+        favoriteSongs
+      };
+
+      const recommendations = await aiRecommendationEngine.generateRecommendations(
+        allSongs,
+        context,
+        count
+      );
+
+      res.json(recommendations);
+    } catch (error) {
+      console.error("Error generating recommendations:", error);
+      res.status(500).json({ message: "Failed to generate recommendations" });
+    }
+  });
+
+  app.get("/api/recommendations/:userId/preferences", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.params.userId;
+      
+      const [favoriteSongs, journalEntries] = await Promise.all([
+        storage.getFavoriteSongs(userId),
+        storage.getJournalEntries(userId, 20) // Last 20 entries for better analysis
+      ]);
+
+      const preferences = await aiRecommendationEngine.analyzeUserPreferences(
+        favoriteSongs,
+        journalEntries.map(entry => ({
+          mood: entry.mood,
+          content: entry.content
+        }))
+      );
+
+      res.json(preferences);
+    } catch (error) {
+      console.error("Error analyzing preferences:", error);
+      res.status(500).json({ message: "Failed to analyze preferences" });
     }
   });
 
