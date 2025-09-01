@@ -428,7 +428,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/recommendations/:userId", isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.params.userId;
-      const { currentMood, timeOfDay, practiceLevel, count = 5 } = req.body;
+      const { currentMood, timeOfDay, practiceLevel, spiritualFocus, count = 5 } = req.body;
       
       // Get user's context data
       const [
@@ -455,6 +455,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         currentMood,
         timeOfDay,
         practiceLevel,
+        spiritualFocus,
         recentSadhanaProgress: avgProgress,
         recentJournalEntries: recentJournal.map(entry => ({
           mood: entry.mood,
