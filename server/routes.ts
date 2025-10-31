@@ -112,7 +112,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       res.json(entry);
     } catch (error) {
-      res.status(400).json({ message: "Invalid sadhana entry data" });
+      console.error("Sadhana update error:", error);
+      res.status(400).json({ 
+        message: "Invalid sadhana entry data",
+        error: error instanceof Error ? error.message : String(error)
+      });
     }
   });
 
