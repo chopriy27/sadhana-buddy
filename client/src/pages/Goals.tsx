@@ -94,7 +94,7 @@ export default function Goals() {
       setEditedGoals({
         dailyChantingRounds: goals.dailyChantingRounds,
         dailyReadingPages: goals.dailyReadingPages,
-        dailyHearingMinutes: goals.dailyHearingMinutes,
+        dailyHearingLectures: goals.dailyHearingLectures,
       });
       setIsEditing(true);
     }
@@ -202,18 +202,18 @@ export default function Goals() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="hearing">Daily Hearing (Minutes)</Label>
+                  <Label htmlFor="hearing">Daily Hearing (Lectures)</Label>
                   <Input
                     id="hearing"
                     type="number"
-                    min="5"
-                    max="240"
-                    value={editedGoals.dailyHearingMinutes || 30}
-                    onChange={(e) => handleInputChange('dailyHearingMinutes', parseInt(e.target.value) || 30)}
+                    min="1"
+                    max="10"
+                    value={editedGoals.dailyHearingLectures || 1}
+                    onChange={(e) => handleInputChange('dailyHearingLectures', parseInt(e.target.value) || 1)}
                     className="text-center"
                   />
                   <p className="text-sm text-gray-500 dark:text-gray-400">
-                    Minutes of lectures or kirtans
+                    Number of lectures or kirtans
                   </p>
                 </div>
               </div>
@@ -269,10 +269,10 @@ export default function Goals() {
 
               <div className="text-center p-6 bg-green-50 dark:bg-green-900/20 rounded-lg">
                 <div className="text-3xl font-bold text-green-600 dark:text-green-400 mb-2">
-                  {goals.dailyHearingMinutes}
+                  {goals.dailyHearingLectures}
                 </div>
                 <div className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Daily Hearing (Min)
+                  Daily Hearing
                 </div>
                 <div className="text-xs text-gray-500 dark:text-gray-400">
                   Lectures & kirtans
