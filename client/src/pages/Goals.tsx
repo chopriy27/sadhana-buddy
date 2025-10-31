@@ -5,11 +5,26 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Target, Edit3, Save, X } from "lucide-react";
+import { Loader2, Target, Edit3, Save, X, Globe } from "lucide-react";
 import { useState, useEffect } from "react";
-import type { UserGoals, InsertUserGoals } from "@shared/schema";
+import type { UserGoals, InsertUserGoals, User } from "@shared/schema";
 import { isUnauthorizedError } from "@/lib/authUtils";
+
+// Common timezone list for Vaishnava communities worldwide
+const COMMON_TIMEZONES = [
+  { value: 'Asia/Kolkata', label: 'India (Asia/Kolkata)' },
+  { value: 'America/New_York', label: 'Eastern Time (America/New_York)' },
+  { value: 'America/Los_Angeles', label: 'Pacific Time (America/Los_Angeles)' },
+  { value: 'America/Chicago', label: 'Central Time (America/Chicago)' },
+  { value: 'Europe/London', label: 'London (Europe/London)' },
+  { value: 'Europe/Moscow', label: 'Moscow (Europe/Moscow)' },
+  { value: 'Australia/Sydney', label: 'Sydney (Australia/Sydney)' },
+  { value: 'Asia/Tokyo', label: 'Tokyo (Asia/Tokyo)' },
+  { value: 'Asia/Dubai', label: 'Dubai (Asia/Dubai)' },
+  { value: 'America/Toronto', label: 'Toronto (America/Toronto)' },
+];
 
 export default function Goals() {
   const { user, isAuthenticated, isLoading: authLoading } = useAuth();
@@ -17,6 +32,7 @@ export default function Goals() {
   const queryClient = useQueryClient();
   const [isEditing, setIsEditing] = useState(false);
   const [editedGoals, setEditedGoals] = useState<Partial<InsertUserGoals>>({});
+  const [selectedTimezone, setSelectedTimezone] = useState<string>(user?.timezone || 'America/New_York');
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -32,6 +48,13 @@ export default function Goals() {
       return;
     }
   }, [isAuthenticated, authLoading, toast]);
+
+  // Sync timezone state with user data
+  useEffect(() => {
+    if (user?.timezone) {
+      setSelectedTimezone(user.timezone);
+    }
+  }, [user?.timezone]);
 
   const { data: goals, isLoading: goalsLoading } = useQuery<UserGoals>({
     queryKey: ["/api/goals", user?.id],
@@ -81,6 +104,28 @@ export default function Goals() {
       toast({
         title: "Update Failed",
         description: "Failed to update your goals. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const updateTimezoneMutation = useMutation({
+    mutationFn: async (timezone: string) => {
+      if (!user?.id) throw new Error("User not found");
+      const response = await apiRequest("PATCH", `/api/user/${user.id}/timezone`, { timezone });
+      return await response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+      toast({
+        title: "Timezone Updated",
+        description: "Festival reminders will now show in your local timezone!",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Update Failed",
+        description: "Failed to update timezone. Please try again.",
         variant: "destructive",
       });
     },
@@ -277,6 +322,46 @@ export default function Goals() {
               </div>
             </div>
           )}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center">
+            <Globe className="h-5 w-5 text-orange-500 mr-2" />
+            Festival Reminder Timezone
+          </CardTitle>
+          <CardDescription>
+            Set your timezone for accurate Vaishnava festival reminders
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="timezone">Your Timezone</Label>
+              <Select
+                value={selectedTimezone}
+                onValueChange={(value) => {
+                  setSelectedTimezone(value);
+                  updateTimezoneMutation.mutate(value);
+                }}
+              >
+                <SelectTrigger id="timezone" data-testid="select-timezone">
+                  <SelectValue placeholder="Select your timezone" />
+                </SelectTrigger>
+                <SelectContent>
+                  {COMMON_TIMEZONES.map((tz) => (
+                    <SelectItem key={tz.value} value={tz.value}>
+                      {tz.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                Current timezone: {selectedTimezone}
+              </p>
+            </div>
+          </div>
         </CardContent>
       </Card>
 
