@@ -54,11 +54,8 @@ export default function Goals() {
   const updateGoalsMutation = useMutation({
     mutationFn: async (updatedGoals: Partial<InsertUserGoals>) => {
       if (!user?.id) throw new Error("User not found");
-      return await apiRequest(`/api/goals/${user.id}`, {
-        method: "PATCH",
-        body: JSON.stringify(updatedGoals),
-        headers: { "Content-Type": "application/json" },
-      });
+      const response = await apiRequest("PATCH", `/api/goals/${user.id}`, updatedGoals);
+      return await response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/goals", user?.id] });
