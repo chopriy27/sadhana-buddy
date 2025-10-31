@@ -1,8 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { Star } from "lucide-react";
-import type { Festival } from "@shared/schema";
+import type { Festival, User } from "@shared/schema";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function FestivalBanner() {
+  const { user } = useAuth();
+  
   const { data: upcomingFestivals } = useQuery<Festival[]>({
     queryKey: ["/api/festivals/upcoming?limit=1"],
   });
@@ -12,9 +15,23 @@ export default function FestivalBanner() {
   }
 
   const nextFestival = upcomingFestivals[0];
-  const festivalDate = new Date(nextFestival.date);
-  const today = new Date();
-  const timeDiff = festivalDate.getTime() - today.getTime();
+  
+  // Get current time in user's timezone
+  const userTimezone = user?.timezone || 'America/New_York';
+  const now = new Date();
+  
+  // Parse festival date (YYYY-MM-DD format) in user's timezone at midnight
+  const festivalDate = new Date(nextFestival.date + 'T00:00:00');
+  
+  // Format dates in user's timezone for comparison
+  const todayInUserTz = new Date(now.toLocaleString('en-US', { timeZone: userTimezone }));
+  const festivalInUserTz = new Date(festivalDate.toLocaleString('en-US', { timeZone: userTimezone }));
+  
+  // Calculate days remaining based on user's timezone
+  const todayStart = new Date(todayInUserTz.getFullYear(), todayInUserTz.getMonth(), todayInUserTz.getDate());
+  const festivalStart = new Date(festivalInUserTz.getFullYear(), festivalInUserTz.getMonth(), festivalInUserTz.getDate());
+  
+  const timeDiff = festivalStart.getTime() - todayStart.getTime();
   const daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
   return (
