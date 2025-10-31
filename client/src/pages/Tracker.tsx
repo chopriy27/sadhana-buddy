@@ -17,8 +17,7 @@ export default function Tracker() {
   const [readingPrabhupada, setReadingPrabhupada] = useState(false);
   const [bookTitle, setBookTitle] = useState("");
   const [pagesRead, setPagesRead] = useState(0);
-
-  const [hearing, setHearing] = useState(false);
+  const [hearingLectures, setHearingLectures] = useState(0);
   
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -57,7 +56,7 @@ export default function Tracker() {
       setReadingPrabhupada(todaysSadhana.readingPrabhupada || false);
       setBookTitle(todaysSadhana.bookTitle || "");
       setPagesRead(todaysSadhana.pagesRead || 0);
-      setHearing(todaysSadhana.hearing || false);
+      setHearingLectures(todaysSadhana.hearingLectures || 0);
     }
   }, [todaysSadhana]);
 
@@ -110,11 +109,10 @@ export default function Tracker() {
   const handleUpdateSadhana = () => {
     updateSadhanaMutation.mutate({
       chantingRounds,
-      chantingTarget: 16,
       readingPrabhupada,
       bookTitle: readingPrabhupada ? bookTitle : null,
       pagesRead: readingPrabhupada ? pagesRead : 0,
-      hearing,
+      hearingLectures,
     });
   };
 
@@ -127,7 +125,7 @@ export default function Tracker() {
     );
     
     for (const entry of sortedHistory) {
-      if ((entry.chantingRounds || 0) >= (entry.chantingTarget || 16) && entry.readingPrabhupada) {
+      if ((entry.chantingRounds || 0) >= (userGoals?.dailyChantingRounds || 16) && entry.readingPrabhupada) {
         streak++;
       } else {
         break;
@@ -250,18 +248,38 @@ export default function Tracker() {
               )}
             </div>
 
-            {/* Hearing */}
-            <div className="flex items-center space-x-3 p-3 rounded-lg border">
-              <Checkbox 
-                id="hearing"
-                checked={hearing} 
-                onCheckedChange={(checked) => setHearing(checked === true)}
-              />
+            {/* Hearing Lectures */}
+            <div className="flex items-center justify-between p-3 rounded-lg border">
               <div className="flex items-center space-x-2">
                 <Headphones className="h-4 w-4 text-orange-600" />
-                <label htmlFor="hearing" className="text-sm font-medium cursor-pointer">
+                <label className="text-sm font-medium">
                   Hearing Lectures
                 </label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Button 
+                  variant="outline" 
+                  size="icon"
+                  onClick={() => setHearingLectures(Math.max(0, hearingLectures - 1))}
+                  data-testid="button-decrease-hearing"
+                >
+                  -
+                </Button>
+                <Input 
+                  type="number" 
+                  value={hearingLectures} 
+                  onChange={(e) => setHearingLectures(parseInt(e.target.value) || 0)}
+                  className="w-16 text-center"
+                  data-testid="input-hearing-lectures"
+                />
+                <Button 
+                  variant="outline" 
+                  size="icon"
+                  onClick={() => setHearingLectures(hearingLectures + 1)}
+                  data-testid="button-increase-hearing"
+                >
+                  +
+                </Button>
               </div>
             </div>
 
