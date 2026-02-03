@@ -1,21 +1,32 @@
 import { useQuery } from "@tanstack/react-query";
-import { BookOpen, Trophy, PenTool } from "lucide-react";
+import { BookOpen, Trophy, PenTool, Sparkles } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
+import { useAuth } from "@/hooks/useAuth";
 import type { JournalEntry, SadhanaEntry } from "@shared/schema";
 
-const DEFAULT_USER_ID = 1; // For demo purposes
-
 export default function RecentActivity() {
+  const { user } = useAuth();
+  
   const { data: journalEntries } = useQuery<JournalEntry[]>({
-    queryKey: [`/api/journal/${DEFAULT_USER_ID}`],
+    queryKey: [`/api/journal/${user?.id}`],
+    enabled: !!user?.id,
   });
 
   const { data: sadhanaEntries } = useQuery<SadhanaEntry[]>({
-    queryKey: [`/api/sadhana/${DEFAULT_USER_ID}`],
+    queryKey: [`/api/sadhana/${user?.id}`],
+    enabled: !!user?.id,
   });
 
   // Create activity items from data
-  const activities = [];
+  const activities: {
+    id: string;
+    icon: typeof PenTool;
+    iconColor: string;
+    iconBg: string;
+    title: string;
+    description: string;
+    time: Date | string;
+  }[] = [];
 
   // Add recent journal entries
   if (journalEntries) {
@@ -23,9 +34,9 @@ export default function RecentActivity() {
       activities.push({
         id: `journal-${entry.id}`,
         icon: PenTool,
-        iconColor: "text-sacred-orange",
-        iconBg: "bg-sacred-orange/10",
-        title: "Journal Entry Added",
+        iconColor: "text-orange-500",
+        iconBg: "bg-orange-100 dark:bg-orange-900/30",
+        title: "Journal Entry",
         description: entry.title,
         time: entry.createdAt,
       });
@@ -35,16 +46,16 @@ export default function RecentActivity() {
   // Add sadhana achievements
   if (sadhanaEntries) {
     const recentCompleted = sadhanaEntries
-      .filter(entry => entry.chantingRounds >= entry.chantingTarget)
+      .filter(entry => (entry.chantingRounds || 0) >= 16)
       .slice(0, 1);
     
     recentCompleted.forEach(entry => {
       activities.push({
         id: `sadhana-${entry.id}`,
         icon: Trophy,
-        iconColor: "text-sacred-gold",
-        iconBg: "bg-sacred-gold/10",
-        title: "Sadhana Goal Completed",
+        iconColor: "text-amber-500",
+        iconBg: "bg-amber-100 dark:bg-amber-900/30",
+        title: "Sadhana Complete",
         description: `${entry.chantingRounds} rounds completed`,
         time: entry.createdAt,
       });
@@ -60,9 +71,9 @@ export default function RecentActivity() {
     recentActivities.push(
       {
         id: "welcome",
-        icon: BookOpen,
-        iconColor: "text-lotus-pink",
-        iconBg: "bg-lotus-pink/10",
+        icon: Sparkles,
+        iconColor: "text-orange-500",
+        iconBg: "bg-orange-100 dark:bg-orange-900/30",
         title: "Welcome to Sadhana Buddy",
         description: "Start your spiritual journey today",
         time: new Date(),
@@ -71,22 +82,28 @@ export default function RecentActivity() {
   }
 
   return (
-    <div className="max-w-md mx-auto px-4 mt-6 mb-20">
-      <h3 className="text-gray-800 dark:text-gray-200 font-semibold mb-4">Recent Activity</h3>
-      <div className="space-y-3">
+    <div className="px-4 mt-6 mb-6">
+      <h3 className="text-gray-800 dark:text-gray-200 font-bold text-base mb-3">Recent Activity</h3>
+      <div className="space-y-2">
         {recentActivities.map((activity) => {
           const Icon = activity.icon;
           return (
-            <div key={activity.id} className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-100 dark:border-gray-700 flex items-center space-x-3">
-              <div className={`w-10 h-10 ${activity.iconBg} rounded-full flex items-center justify-center`}>
+            <div 
+              key={activity.id} 
+              className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl p-3 shadow-sm border border-orange-100 dark:border-gray-700 flex items-center gap-3"
+            >
+              <div className={`w-10 h-10 ${activity.iconBg} rounded-xl flex items-center justify-center flex-shrink-0`}>
                 <Icon className={`w-4 h-4 ${activity.iconColor}`} />
               </div>
-              <div className="flex-1">
-                <p className="text-sm font-medium text-gray-800 dark:text-gray-200">{activity.title}</p>
-                <p className="text-xs text-gray-600 dark:text-gray-400">
-                  {activity.description} - {formatDistanceToNow(new Date(activity.time), { addSuffix: true })}
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">{activity.title}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                  {activity.description}
                 </p>
               </div>
+              <span className="text-[10px] text-gray-400 flex-shrink-0">
+                {formatDistanceToNow(new Date(activity.time), { addSuffix: true }).replace('about ', '')}
+              </span>
             </div>
           );
         })}

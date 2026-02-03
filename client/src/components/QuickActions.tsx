@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Music, Play } from "lucide-react";
+import { Target, Headphones, Calendar, PenLine } from "lucide-react";
 import { Link } from "wouter";
 import type { DevotionalSong, Lecture } from "@shared/schema";
 
@@ -15,41 +15,58 @@ export default function QuickActions() {
   const songCount = songs?.length || 0;
   const lectureCount = lectures?.length || 0;
 
+  const actions = [
+    {
+      href: "/calendar",
+      icon: Calendar,
+      iconBg: "bg-orange-100 dark:bg-orange-900/30",
+      iconColor: "text-orange-500",
+      title: "Calendar",
+      subtitle: "Festivals & Ekadasis",
+    },
+    {
+      href: "/lectures",
+      icon: Headphones,
+      iconBg: "bg-amber-100 dark:bg-amber-900/30",
+      iconColor: "text-amber-600",
+      title: "Lectures",
+      subtitle: `${lectureCount}+ by Prabhupada`,
+    },
+    {
+      href: "/journal",
+      icon: PenLine,
+      iconBg: "bg-yellow-100 dark:bg-yellow-900/30",
+      iconColor: "text-yellow-600",
+      title: "Journal",
+      subtitle: "Spiritual reflections",
+    },
+    {
+      href: "/goals",
+      icon: Target,
+      iconBg: "bg-rose-100 dark:bg-rose-900/30",
+      iconColor: "text-rose-500",
+      title: "Goals",
+      subtitle: "Set your targets",
+    },
+  ];
+
   return (
-    <div className="max-w-md mx-auto px-4 mt-6">
-      <h3 className="text-gray-800 dark:text-gray-200 font-semibold mb-4">Quick Access</h3>
-      <div className="grid grid-cols-2 gap-4">
-        {/* Devotional Songs */}
-        <Link href="/songs">
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow cursor-pointer">
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-10 h-10 bg-lotus-pink/10 rounded-full flex items-center justify-center">
-                <Music className="w-5 h-5 text-lotus-pink" />
+    <div className="px-4 mt-6">
+      <h3 className="text-gray-800 dark:text-gray-200 font-bold text-base mb-3">Quick Access</h3>
+      <div className="grid grid-cols-2 gap-3">
+        {actions.map((action) => (
+          <Link key={action.href} href={action.href}>
+            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl p-4 shadow-sm border border-orange-100 dark:border-gray-700 hover:shadow-md hover:scale-[1.02] transition-all cursor-pointer">
+              <div className="flex items-center mb-2">
+                <div className={`w-10 h-10 ${action.iconBg} rounded-xl flex items-center justify-center`}>
+                  <action.icon className={`w-5 h-5 ${action.iconColor}`} />
+                </div>
               </div>
-              <span className="text-xs text-gray-500 dark:text-gray-400">
-                {songCount}+ songs
-              </span>
+              <h4 className="font-semibold text-gray-800 dark:text-gray-200 text-sm">{action.title}</h4>
+              <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">{action.subtitle}</p>
             </div>
-            <h4 className="font-medium text-gray-800 dark:text-gray-200 text-sm">Devotional Songs</h4>
-            <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">Bhajans & Kirtans</p>
-          </div>
-        </Link>
-        
-        {/* Classes & Lectures */}
-        <Link href="/lectures">
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow cursor-pointer">
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-10 h-10 bg-peaceful-blue/10 rounded-full flex items-center justify-center">
-                <Play className="w-5 h-5 text-peaceful-blue" />
-              </div>
-              <span className="text-xs text-gray-500 dark:text-gray-400">
-                {lectureCount}+ lectures
-              </span>
-            </div>
-            <h4 className="font-medium text-gray-800 dark:text-gray-200 text-sm">Classes & Lectures</h4>
-            <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">By Prabhupada</p>
-          </div>
-        </Link>
+          </Link>
+        ))}
       </div>
     </div>
   );

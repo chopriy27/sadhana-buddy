@@ -1,11 +1,11 @@
 import { Link, useLocation } from "wouter";
-import { Home, Music, TrendingUp, BookOpen, Target, User } from "lucide-react";
+import { Home, TrendingUp, BookOpen, Calendar, User } from "lucide-react";
 import { useMobileFeatures } from "@/hooks/use-mobile-features";
 import { ImpactStyle } from "@capacitor/haptics";
 
 const navigationItems = [
   { path: "/", label: "Hub", icon: Home },
-  { path: "/songs", label: "Songs", icon: Music },
+  { path: "/calendar", label: "Calendar", icon: Calendar },
   { path: "/tracker", label: "Tracker", icon: TrendingUp },
   { path: "/journal", label: "Journal", icon: BookOpen },
   { path: "/profile", label: "Profile", icon: User },
@@ -26,10 +26,10 @@ export default function BottomNavigation() {
           {navigationItems.map((item) => {
             const Icon = item.icon;
             const isActive = location === item.path;
-            
+
             return (
               <Link key={item.path} href={item.path}>
-                <button 
+                <button
                   className="flex flex-col items-center py-2 px-3 transition-colors mobile-touch-target no-select"
                   onClick={handleNavigation}
                 >
@@ -40,11 +40,10 @@ export default function BottomNavigation() {
                   ) : (
                     <Icon className="w-5 h-5 text-gray-400 dark:text-gray-500 mb-1" />
                   )}
-                  <span className={`text-xs font-medium ${
-                    isActive 
-                      ? "text-sacred-orange" 
+                  <span className={`text-xs font-medium ${isActive
+                      ? "text-sacred-orange"
                       : "text-gray-400 dark:text-gray-500"
-                  }`}>
+                    }`}>
                     {item.label}
                   </span>
                 </button>

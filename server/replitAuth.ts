@@ -5,12 +5,11 @@ import passport from "passport";
 import session from "express-session";
 import type { Express, RequestHandler } from "express";
 import memoize from "memoizee";
-import connectPg from "connect-pg-simple";
+import MemoryStore from "memorystore";
 import { storage } from "./storage";
 
-if (!process.env.REPLIT_DOMAINS) {
-  throw new Error("Environment variable REPLIT_DOMAINS not provided");
-}
+// Check if running in Replit environment
+const isReplitEnv = !!process.env.REPLIT_DOMAINS;
 
 const getOidcConfig = memoize(
   async () => {
@@ -24,21 +23,18 @@ const getOidcConfig = memoize(
 
 export function getSession() {
   const sessionTtl = 7 * 24 * 60 * 60 * 1000; // 1 week
-  const pgStore = connectPg(session);
-  const sessionStore = new pgStore({
-    conString: process.env.DATABASE_URL,
-    createTableIfMissing: false,
-    ttl: sessionTtl,
-    tableName: "sessions",
-  });
+  const MemoryStoreSession = MemoryStore(session);
+  
   return session({
-    secret: process.env.SESSION_SECRET!,
-    store: sessionStore,
+    secret: process.env.SESSION_SECRET || 'sadhana-tracker-dev-secret-change-in-production',
+    store: new MemoryStoreSession({
+      checkPeriod: 86400000 // prune expired entries every 24h
+    }),
     resave: false,
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       maxAge: sessionTtl,
     },
   });
@@ -71,6 +67,49 @@ export async function setupAuth(app: Express) {
   app.use(getSession());
   app.use(passport.initialize());
   app.use(passport.session());
+
+  // Skip Replit OIDC setup if not in Replit environment
+  if (!isReplitEnv) {
+    console.log("Not in Replit environment - using mock authentication for development");
+    
+    // Mock authentication for local development
+    app.get("/api/login", (req, res) => {
+      // Create a mock user session for development
+      const mockUser = {
+        claims: {
+          sub: 'dev-user-123',
+          email: 'dev@example.com',
+          first_name: 'Dev',
+          last_name: 'User',
+        },
+        expires_at: Math.floor(Date.now() / 1000) + 86400, // 24 hours
+      };
+      
+      req.login(mockUser, async (err) => {
+        if (err) {
+          return res.status(500).json({ message: "Login failed" });
+        }
+        // Upsert the mock user
+        await upsertUser(mockUser.claims);
+        res.redirect("/");
+      });
+    });
+
+    app.get("/api/callback", (req, res) => {
+      res.redirect("/");
+    });
+
+    app.get("/api/logout", (req, res) => {
+      req.logout(() => {
+        res.redirect("/");
+      });
+    });
+
+    passport.serializeUser((user: Express.User, cb) => cb(null, user));
+    passport.deserializeUser((user: Express.User, cb) => cb(null, user));
+    
+    return;
+  }
 
   const config = await getOidcConfig();
 
@@ -130,8 +169,13 @@ export async function setupAuth(app: Express) {
 export const isAuthenticated: RequestHandler = async (req, res, next) => {
   const user = req.user as any;
 
-  if (!req.isAuthenticated() || !user.expires_at) {
+  if (!req.isAuthenticated() || !user) {
     return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  // For mock auth (no expires_at check needed)
+  if (!user.expires_at) {
+    return next();
   }
 
   const now = Math.floor(Date.now() / 1000);

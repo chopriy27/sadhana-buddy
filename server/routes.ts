@@ -1,9 +1,7 @@
-import type { Express } from "express";
+import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
-import multer from "multer";
-import path from "path";
 import { storage } from "./storage";
-import { setupAuth, isAuthenticated } from "./replitAuth";
+import { verifyIdToken, isFirebaseConfigured } from "./firebase";
 import { aiRecommendationEngine, type RecommendationContext } from "./ai-recommendations";
 import { 
   insertSadhanaEntrySchema,
@@ -11,31 +9,79 @@ import {
   insertUserChallengeSchema,
   insertFavoriteSongSchema,
   insertUserGoalsSchema,
-} from "@shared/schema";
+} from "./schemas";
 
-// Configure multer for file uploads
-const upload = multer({
-  storage: multer.memoryStorage(),
-  limits: {
-    fileSize: 5 * 1024 * 1024, // 5MB limit
-  },
-  fileFilter: (req, file, cb) => {
-    if (file.mimetype.startsWith('image/')) {
-      cb(null, true);
-    } else {
-      cb(new Error('Only image files are allowed'));
+// Firebase Auth middleware
+interface AuthenticatedRequest extends Request {
+  user?: {
+    uid: string;
+    email?: string;
+    name?: string;
+  };
+}
+
+async function firebaseAuthMiddleware(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+  const authHeader = req.headers.authorization;
+  
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ message: 'Unauthorized - No token provided' });
+  }
+
+  const token = authHeader.split('Bearer ')[1];
+  
+  try {
+    const decodedToken = await verifyIdToken(token);
+    if (!decodedToken) {
+      return res.status(401).json({ message: 'Unauthorized - Invalid token' });
     }
-  },
-});
+    
+    req.user = {
+      uid: decodedToken.uid,
+      email: decodedToken.email,
+      name: decodedToken.name,
+    };
+    
+    next();
+  } catch (error) {
+    console.error('Auth middleware error:', error);
+    return res.status(401).json({ message: 'Unauthorized - Token verification failed' });
+  }
+}
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Auth middleware
-  await setupAuth(app);
+  // Firebase Auth sync endpoint - creates/updates user in our database
+  app.post('/api/auth/sync', firebaseAuthMiddleware, async (req: AuthenticatedRequest, res) => {
+    try {
+      const { id, email, firstName, lastName, profileImageUrl, displayName } = req.body;
+      
+      // Verify the user ID matches the token
+      if (id !== req.user?.uid) {
+        return res.status(403).json({ message: 'User ID mismatch' });
+      }
+
+      // Upsert user in database
+      const user = await storage.upsertUser({
+        id,
+        email,
+        firstName,
+        lastName,
+        profileImageUrl,
+      });
+
+      res.json(user);
+    } catch (error) {
+      console.error("Error syncing user:", error);
+      res.status(500).json({ message: "Failed to sync user" });
+    }
+  });
 
   // Auth routes
-  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
+  app.get('/api/auth/user', firebaseAuthMiddleware, async (req: AuthenticatedRequest, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user?.uid;
+      if (!userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
       const user = await storage.getUser(userId);
       res.json(user);
     } catch (error) {
@@ -44,36 +90,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Profile picture upload endpoint
-  app.post('/api/upload/profile-picture', isAuthenticated, upload.single('profilePicture'), async (req: any, res) => {
-    try {
-      if (!req.file) {
-        return res.status(400).json({ message: "No file uploaded" });
-      }
-
-      const userId = req.user.claims.sub;
-      
-      // Convert buffer to base64 for storage
-      const base64Image = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
-      
-      // Update user profile with new image URL
-      await storage.updateUserProfilePicture(userId, base64Image);
-      
-      res.json({ 
-        message: "Profile picture uploaded successfully",
-        profileImageUrl: base64Image 
-      });
-      
-    } catch (error) {
-      console.error("Error uploading profile picture:", error);
-      res.status(500).json({ message: "Failed to upload profile picture" });
-    }
-  });
-  
   // Sadhana endpoints
-  app.get("/api/sadhana/:userId", isAuthenticated, async (req: any, res) => {
+  app.get("/api/sadhana/:userId", async (req, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.params.userId;
       const entries = await storage.getSadhanaEntries(userId, 30);
       res.json(entries);
     } catch (error) {
@@ -81,9 +101,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/sadhana/:userId/today", isAuthenticated, async (req: any, res) => {
+  app.get("/api/sadhana/:userId/today", async (req, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.params.userId;
       const today = new Date().toISOString().split('T')[0];
       const entry = await storage.getSadhanaEntry(userId, today);
       res.json(entry || null);
@@ -123,7 +143,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Journal endpoints
   app.get("/api/journal/:userId", async (req, res) => {
     try {
-      const userId = parseInt(req.params.userId);
+      const userId = req.params.userId;
       const entries = await storage.getJournalEntries(userId, 20);
       res.json(entries);
     } catch (error) {
@@ -260,7 +280,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // User progress endpoints
   app.get("/api/progress/:userId", async (req, res) => {
     try {
-      const userId = parseInt(req.params.userId);
+      const userId = req.params.userId;
       const progress = await storage.getUserProgress(userId);
       res.json(progress || null);
     } catch (error) {
@@ -270,7 +290,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.put("/api/progress/:userId", async (req, res) => {
     try {
-      const userId = parseInt(req.params.userId);
+      const userId = req.params.userId;
       const progress = await storage.updateUserProgress(userId, req.body);
       res.json(progress);
     } catch (error) {
@@ -290,7 +310,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/challenges/user/:userId", async (req, res) => {
     try {
-      const userId = parseInt(req.params.userId);
+      const userId = req.params.userId;
       const userChallenges = await storage.getActiveUserChallenges(userId);
       res.json(userChallenges);
     } catch (error) {
@@ -325,7 +345,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Favorite Songs endpoints
   app.get("/api/favorites/:userId", async (req, res) => {
     try {
-      const userId = parseInt(req.params.userId);
+      const userId = req.params.userId;
       const favorites = await storage.getFavoriteSongs(userId);
       res.json(favorites);
     } catch (error) {
@@ -345,7 +365,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.delete("/api/favorites/:userId/:songId", async (req, res) => {
     try {
-      const userId = parseInt(req.params.userId);
+      const userId = req.params.userId;
       const songId = parseInt(req.params.songId);
       const removed = await storage.removeFavoriteSong(userId, songId);
       if (!removed) {
@@ -359,7 +379,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/favorites/:userId/:songId/check", async (req, res) => {
     try {
-      const userId = parseInt(req.params.userId);
+      const userId = req.params.userId;
       const songId = parseInt(req.params.songId);
       const isFavorited = await storage.isSongFavorited(userId, songId);
       res.json({ isFavorited });
@@ -428,8 +448,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // User profile update endpoint
+  app.patch("/api/user/:userId/profile", async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const { firstName, lastName } = req.body;
+      
+      // Get existing user
+      const existingUser = await storage.getUser(userId);
+      if (!existingUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      // Update user with new data
+      const updatedUser = await storage.upsertUser({
+        ...existingUser,
+        firstName: firstName !== undefined ? firstName : existingUser.firstName,
+        lastName: lastName !== undefined ? lastName : existingUser.lastName,
+      });
+      
+      res.json(updatedUser);
+    } catch (error) {
+      console.error("Error updating user profile:", error);
+      res.status(500).json({ message: "Failed to update profile" });
+    }
+  });
+
   // AI Recommendation endpoints
-  app.post("/api/recommendations/:userId", isAuthenticated, async (req: any, res) => {
+  app.post("/api/recommendations/:userId", async (req, res) => {
     try {
       const userId = req.params.userId;
       const { currentMood, timeOfDay, practiceLevel, spiritualFocus, count = 5 } = req.body;
@@ -444,14 +490,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         storage.getFavoriteSongs(userId),
         storage.getSadhanaEntries(userId, 7), // Last 7 days
         storage.getJournalEntries(userId, 5), // Last 5 entries
-        storage.getSongs()
+        storage.getDevotionalSongs()
       ]);
 
       // Calculate average sadhana progress
       const avgProgress = recentSadhana.length > 0 ? {
-        chantingRounds: Math.round(recentSadhana.reduce((sum, entry) => sum + entry.chantingRounds, 0) / recentSadhana.length),
+        chantingRounds: Math.round(recentSadhana.reduce((sum, entry) => sum + (entry.chantingRounds || 0), 0) / recentSadhana.length),
         readingPages: Math.round(recentSadhana.reduce((sum, entry) => sum + (entry.pagesRead || 0), 0) / recentSadhana.length),
-        hearingMinutes: Math.round(recentSadhana.reduce((sum, entry) => sum + entry.hearingMinutes, 0) / recentSadhana.length)
+        hearingMinutes: Math.round(recentSadhana.reduce((sum, entry) => sum + (entry.hearingLectures || 0), 0) / recentSadhana.length)
       } : undefined;
 
       const context: RecommendationContext = {
@@ -481,7 +527,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/recommendations/:userId/preferences", isAuthenticated, async (req: any, res) => {
+  app.get("/api/recommendations/:userId/preferences", async (req, res) => {
     try {
       const userId = req.params.userId;
       

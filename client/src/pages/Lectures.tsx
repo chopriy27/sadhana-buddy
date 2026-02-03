@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Play, Clock, ExternalLink, Search, Filter } from "lucide-react";
+import { Play, Clock, ExternalLink, Search, Filter, X, Maximize2, Volume2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -11,11 +11,87 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import type { Lecture } from "@shared/schema";
+import Logo from "@/components/Logo";
+
+// Types for YouTube content
+type YouTubeContent = 
+  | { type: 'video'; id: string }
+  | { type: 'playlist'; id: string }
+  | null;
+
+// Helper to extract YouTube video/playlist ID from various URL formats
+function getYouTubeContent(url: string): YouTubeContent {
+  if (!url) return null;
+  
+  // Check for playlist first
+  const playlistMatch = url.match(/[?&]list=([a-zA-Z0-9_-]+)/);
+  if (playlistMatch) {
+    return { type: 'playlist', id: playlistMatch[1] };
+  }
+  
+  // Handle different YouTube video URL formats
+  const videoPatterns = [
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/v\/)([^&?\s]+)/,
+    /^([a-zA-Z0-9_-]{11})$/, // Direct video ID
+  ];
+  
+  for (const pattern of videoPatterns) {
+    const match = url.match(pattern);
+    if (match) return { type: 'video', id: match[1] };
+  }
+  
+  return null;
+}
+
+// YouTube Embed Component
+function YouTubePlayer({ 
+  content, 
+  title,
+  onClose 
+}: { 
+  content: YouTubeContent; 
+  title: string;
+  onClose: () => void;
+}) {
+  if (!content) return null;
+  
+  // Generate embed URL based on content type
+  const embedUrl = content.type === 'playlist'
+    ? `https://www.youtube.com/embed/videoseries?list=${content.id}&autoplay=1&rel=0`
+    : `https://www.youtube.com/embed/${content.id}?autoplay=1&rel=0&modestbranding=1`;
+  
+  return (
+    <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden">
+      <iframe
+        src={embedUrl}
+        title={title}
+        className="absolute inset-0 w-full h-full"
+        frameBorder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+      />
+    </div>
+  );
+}
 
 export default function Lectures() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTopic, setSelectedTopic] = useState<string>("all");
+  const [selectedLecture, setSelectedLecture] = useState<Lecture | null>(null);
+  const [isPlayerOpen, setIsPlayerOpen] = useState(false);
 
   const { data: lectures, isLoading } = useQuery<Lecture[]>({
     queryKey: ["/api/lectures"],
@@ -37,12 +113,32 @@ export default function Lectures() {
 
   const formatDuration = (seconds: number) => {
     if (seconds === 0) return "";
-    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    if (hours > 0) {
+      return `${hours}h ${minutes}m`;
+    }
     return `${minutes} min`;
   };
 
-  const openLecture = (videoUrl: string) => {
-    window.open(videoUrl, '_blank', 'noopener,noreferrer');
+  const handlePlayLecture = (lecture: Lecture) => {
+    const content = getYouTubeContent(lecture.videoUrl || "");
+    if (content) {
+      setSelectedLecture(lecture);
+      setIsPlayerOpen(true);
+    } else {
+      // Fallback to opening in browser if we can't extract video ID
+      window.open(lecture.videoUrl || "https://www.youtube.com/@TheAcharya1", '_blank', 'noopener,noreferrer');
+    }
+  };
+
+  const handleClosePlayer = () => {
+    setIsPlayerOpen(false);
+    setSelectedLecture(null);
+  };
+
+  const openInBrowser = (url: string) => {
+    window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   if (isLoading) {
@@ -61,14 +157,17 @@ export default function Lectures() {
   return (
     <div className="min-h-screen bg-warm-white dark:bg-gray-900 pb-20">
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-soft-gray dark:border-gray-700 sticky top-0 z-50">
-        <div className="max-w-md mx-auto px-4 py-4">
-          <h1 className="text-xl font-bold text-gray-800 dark:text-gray-200">
-            Prabhupada's Lectures
-          </h1>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-            Authentic teachings by A.C. Bhaktivedanta Swami Prabhupada
-          </p>
+      <header className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg shadow-sm border-b border-orange-100 dark:border-gray-700 sticky top-0 z-50">
+        <div className="max-w-md mx-auto px-4 py-3 flex items-center gap-3">
+          <Logo size={36} />
+          <div>
+            <h1 className="text-lg font-bold text-gray-800 dark:text-gray-200">
+              Prabhupada's Lectures
+            </h1>
+            <p className="text-[10px] text-gray-500 -mt-0.5">
+              Authentic teachings
+            </p>
+          </div>
         </div>
       </header>
 
@@ -107,55 +206,142 @@ export default function Lectures() {
             <p className="text-gray-500 dark:text-gray-400">No lectures found</p>
           </div>
         ) : (
-          filteredLectures.map((lecture) => (
-            <div
-              key={lecture.id}
-              className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-100 dark:border-gray-700"
-            >
-              <div className="flex items-start gap-3">
-                <div className="w-12 h-12 bg-peaceful-blue/10 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Play className="w-6 h-6 text-peaceful-blue" />
-                </div>
-                
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-gray-800 dark:text-gray-200 text-sm leading-tight mb-1">
-                    {lecture.title}
-                  </h3>
-                  
-                  <div className="flex items-center gap-2 mb-2">
-                    <Badge variant="secondary" className="text-xs">
-                      {lecture.topic}
-                    </Badge>
-                    {lecture.duration && lecture.duration > 0 && formatDuration(lecture.duration) && (
-                      <div className="flex items-center gap-1">
-                        <Clock className="w-3 h-3 text-gray-400" />
-                        <span className="text-xs text-gray-500">
-                          {formatDuration(lecture.duration)}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                  
-                  {lecture.description && (
-                    <p className="text-xs text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
-                      {lecture.description}
-                    </p>
-                  )}
-                  
-                  <Button
-                    onClick={() => openLecture(lecture.videoUrl || "https://www.youtube.com/@TheAcharya1")}
-                    size="sm"
-                    className="bg-peaceful-blue hover:bg-peaceful-blue/90 text-white"
+          filteredLectures.map((lecture) => {
+            const youtubeContent = getYouTubeContent(lecture.videoUrl || "");
+            const hasPlayableVideo = youtubeContent !== null;
+            
+            return (
+              <div
+                key={lecture.id}
+                className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-100 dark:border-gray-700"
+              >
+                <div className="flex items-start gap-3">
+                  {/* Thumbnail / Play Button */}
+                  <button
+                    onClick={() => handlePlayLecture(lecture)}
+                    className="w-16 h-16 bg-gradient-to-br from-orange-400 to-amber-500 rounded-xl flex items-center justify-center flex-shrink-0 hover:from-orange-500 hover:to-amber-600 transition-all group shadow-md"
                   >
-                    <ExternalLink className="w-3 h-3 mr-1" />
-                    Watch Lectures
+                    <Play className="w-7 h-7 text-white group-hover:scale-110 transition-transform" fill="white" />
+                  </button>
+                  
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-gray-800 dark:text-gray-200 text-sm leading-tight mb-1">
+                      {lecture.title}
+                    </h3>
+                    
+                    <div className="flex items-center gap-2 mb-2 flex-wrap">
+                      <Badge variant="secondary" className="text-xs">
+                        {lecture.topic}
+                      </Badge>
+                      {lecture.duration && lecture.duration > 0 && formatDuration(lecture.duration) && (
+                        <div className="flex items-center gap-1">
+                          <Clock className="w-3 h-3 text-gray-400" />
+                          <span className="text-xs text-gray-500">
+                            {formatDuration(lecture.duration)}
+                          </span>
+                        </div>
+                      )}
+                      {hasPlayableVideo && (
+                        <Badge variant="outline" className="text-xs text-green-600 border-green-300">
+                          <Volume2 className="w-3 h-3 mr-1" />
+                          {youtubeContent?.type === 'playlist' ? 'Playlist' : 'In-App'}
+                        </Badge>
+                      )}
+                    </div>
+                    
+                    {lecture.description && (
+                      <p className="text-xs text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
+                        {lecture.description}
+                      </p>
+                    )}
+                    
+                    <div className="flex gap-2">
+                      <Button
+                        onClick={() => handlePlayLecture(lecture)}
+                        size="sm"
+                        className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white"
+                      >
+                        <Play className="w-3 h-3 mr-1" />
+                        Play
+                      </Button>
+                      <Button
+                        onClick={() => openInBrowser(lecture.videoUrl || "https://www.youtube.com/@TheAcharya1")}
+                        size="sm"
+                        variant="outline"
+                      >
+                        <ExternalLink className="w-3 h-3 mr-1" />
+                        Browser
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })
+        )}
+      </div>
+
+      {/* Video Player Sheet (Mobile Optimized) */}
+      <Sheet open={isPlayerOpen} onOpenChange={setIsPlayerOpen}>
+        <SheetContent side="bottom" className="h-[85vh] p-0 rounded-t-3xl">
+          <div className="flex flex-col h-full">
+            {/* Header */}
+            <SheetHeader className="px-4 py-3 border-b flex-shrink-0">
+              <div className="flex items-center justify-between">
+                <SheetTitle className="text-base truncate pr-4">
+                  {selectedLecture?.title || "Now Playing"}
+                </SheetTitle>
+                <div className="flex gap-2">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8"
+                    onClick={() => openInBrowser(selectedLecture?.videoUrl || "")}
+                  >
+                    <Maximize2 className="w-4 h-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8"
+                    onClick={handleClosePlayer}
+                  >
+                    <X className="w-4 h-4" />
                   </Button>
                 </div>
               </div>
+            </SheetHeader>
+            
+            {/* Video Player */}
+            <div className="flex-1 bg-black flex items-center justify-center">
+              {selectedLecture && getYouTubeContent(selectedLecture.videoUrl || "") && (
+                <YouTubePlayer
+                  content={getYouTubeContent(selectedLecture.videoUrl || "")}
+                  title={selectedLecture.title}
+                  onClose={handleClosePlayer}
+                />
+              )}
             </div>
-          ))
-        )}
-      </div>
+            
+            {/* Lecture Details */}
+            <div className="p-4 bg-white dark:bg-gray-800 border-t flex-shrink-0">
+              <div className="flex items-center gap-2 mb-2">
+                <Badge variant="secondary">{selectedLecture?.topic}</Badge>
+                {selectedLecture?.duration && selectedLecture.duration > 0 && (
+                  <span className="text-xs text-gray-500">
+                    {formatDuration(selectedLecture.duration)}
+                  </span>
+                )}
+              </div>
+              {selectedLecture?.description && (
+                <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-3">
+                  {selectedLecture.description}
+                </p>
+              )}
+            </div>
+          </div>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 }

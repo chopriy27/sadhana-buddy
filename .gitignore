@@ -4,3 +4,17 @@ dist
 server/public
 vite.config.ts.*
 *.tar.gz
+
+# Firebase credentials (keep secret!)
+firebase-credentials.json
+*.firebase*.json
+*-firebase-adminsdk-*.json
+*firebase*adminsdk*.json
+
+# Environment files
+.env
+.env.*
+
+# Other sensitive/local files
+cookies.txt
+.local/

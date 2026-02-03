@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2, Target, Edit3, Save, X, Globe } from "lucide-react";
 import { useState, useEffect } from "react";
 import type { UserGoals, InsertUserGoals, User } from "@shared/schema";
+import Logo from "@/components/Logo";
 import { isUnauthorizedError } from "@/lib/authUtils";
 
 // Common timezone list for Vaishnava communities worldwide
@@ -179,23 +180,26 @@ export default function Goals() {
   }
 
   return (
-    <div className="space-y-6 p-4">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-            My Spiritual Goals
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-1">
-            Customize your daily spiritual practice targets
-          </p>
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 pb-20">
+      <header className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg shadow-sm border-b border-orange-100 dark:border-gray-700 sticky top-0 z-40">
+        <div className="max-w-md mx-auto px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Logo size={36} />
+            <div>
+              <h1 className="text-lg font-bold text-gray-800 dark:text-gray-200">My Goals</h1>
+              <p className="text-[10px] text-gray-500 -mt-0.5">Daily Practice Targets</p>
+            </div>
+          </div>
+          {!isEditing && (
+            <Button onClick={handleEdit} variant="outline" size="sm">
+              <Edit3 className="h-4 w-4 mr-1" />
+              Edit
+            </Button>
+          )}
         </div>
-        {!isEditing && (
-          <Button onClick={handleEdit} variant="outline">
-            <Edit3 className="h-4 w-4 mr-2" />
-            Edit Goals
-          </Button>
-        )}
-      </div>
+      </header>
+
+      <div className="max-w-md mx-auto px-4 py-4 space-y-4">
 
       <Card>
         <CardHeader>
@@ -379,6 +383,7 @@ export default function Goals() {
           </div>
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 }

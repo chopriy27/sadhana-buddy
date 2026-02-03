@@ -11,86 +11,15 @@ import Lectures from "@/pages/Lectures";
 import Tracker from "@/pages/Tracker";
 import Journal from "@/pages/Journal";
 import Profile from "@/pages/Profile";
+import Calendar from "@/pages/Calendar";
+import EventDetail from "@/pages/EventDetail";
+import Goals from "@/pages/Goals";
+import Auth from "@/pages/Auth";
 
 import NotFound from "@/pages/not-found";
 import BottomNavigation from "@/components/BottomNavigation";
 import Onboarding from "@/components/Onboarding";
-import logoImage from "@assets/ChatGPT Image Aug 13, 2025, 10_03_33 AM_1755104655512.png";
-
-function Landing() {
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-8 text-center bg-warm-white dark:bg-gray-900">
-      <div className="max-w-md space-y-8">
-        {/* Logo */}
-        <div className="flex justify-center mb-8">
-          <img 
-            src={logoImage} 
-            alt="Sadhana Buddy Logo" 
-            className="w-32 h-32 object-contain"
-          />
-        </div>
-        
-        {/* Title */}
-        <div className="space-y-3">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
-            Sadhana Buddy
-          </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300 font-medium">
-            Your spiritual practice companion
-          </p>
-        </div>
-        
-        {/* Features */}
-        <div className="space-y-6">
-          <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl p-6 border border-orange-200/50 dark:border-gray-700/50 shadow-lg">
-            <p className="text-gray-700 dark:text-gray-300 text-base leading-relaxed">
-              Track daily sadhana, explore devotional songs, listen to authentic Prabhupada lectures, and grow in your spiritual journey with Krishna consciousness
-            </p>
-          </div>
-          
-          {/* Sign In Button */}
-          <button
-            onClick={() => window.location.href = '/api/login'}
-            className="w-full font-bold text-lg py-5 px-8 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
-            style={{ 
-              backgroundColor: '#f97316',
-              color: '#ffffff',
-              border: '2px solid #ea580c'
-            }}
-          >
-            <span style={{ color: '#ffffff', fontWeight: 'bold' }}>
-              Begin Your Spiritual Journey
-            </span>
-          </button>
-          
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            Sign in with your Replit account to access your personal spiritual practice dashboard
-          </p>
-        </div>
-        
-        {/* Features List */}
-        <div className="grid grid-cols-2 gap-4 mt-8">
-          <div className="bg-white/60 dark:bg-gray-800/60 rounded-lg p-4 text-center">
-            <div className="text-2xl mb-2">📿</div>
-            <div className="text-sm font-medium text-gray-700 dark:text-gray-300">Daily Sadhana</div>
-          </div>
-          <div className="bg-white/60 dark:bg-gray-800/60 rounded-lg p-4 text-center">
-            <div className="text-2xl mb-2">🎵</div>
-            <div className="text-sm font-medium text-gray-700 dark:text-gray-300">Devotional Songs</div>
-          </div>
-          <div className="bg-white/60 dark:bg-gray-800/60 rounded-lg p-4 text-center">
-            <div className="text-2xl mb-2">📚</div>
-            <div className="text-sm font-medium text-gray-700 dark:text-gray-300">Prabhupada Lectures</div>
-          </div>
-          <div className="bg-white/60 dark:bg-gray-800/60 rounded-lg p-4 text-center">
-            <div className="text-2xl mb-2">📝</div>
-            <div className="text-sm font-medium text-gray-700 dark:text-gray-300">Spiritual Journal</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+import Logo from "@/components/Logo";
 
 function Router() {
   const { isReady } = useMobileFeatures();
@@ -107,13 +36,16 @@ function Router() {
 
   if (!isReady || isLoading || (isAuthenticated && goalsLoading)) {
     return (
-      <div className="min-h-screen bg-sacred-orange flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-orange-400 via-amber-500 to-yellow-500 flex items-center justify-center">
         <div className="text-center text-white">
-          <div className="w-16 h-16 mx-auto mb-4 animate-spin">
-            <div className="w-full h-full border-4 border-white border-t-transparent rounded-full"></div>
+          <div className="flex justify-center mb-4">
+            <Logo size={80} className="animate-pulse" />
           </div>
           <h1 className="text-xl font-semibold">Sadhana Buddy</h1>
-          <p className="text-sm opacity-80">Loading your spiritual journey...</p>
+          <p className="text-sm opacity-80 mt-1">Loading your spiritual journey...</p>
+          <div className="mt-4">
+            <div className="w-8 h-8 mx-auto border-3 border-white border-t-transparent rounded-full animate-spin"></div>
+          </div>
         </div>
       </div>
     );
@@ -135,7 +67,7 @@ function Router() {
       <div className="pb-16 min-h-screen"> {/* Add padding bottom for fixed navigation */}
         <Switch>
           {!isAuthenticated ? (
-            <Route path="/" component={Landing} />
+            <Route path="/" component={Auth} />
           ) : (
             <>
               <Route path="/" component={Hub} />
@@ -144,6 +76,9 @@ function Router() {
               <Route path="/tracker" component={Tracker} />
               <Route path="/journal" component={Journal} />
               <Route path="/profile" component={Profile} />
+              <Route path="/calendar" component={Calendar} />
+              <Route path="/goals" component={Goals} />
+              <Route path="/event/:id" component={EventDetail} />
             </>
           )}
           <Route component={NotFound} />

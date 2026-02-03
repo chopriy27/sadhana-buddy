@@ -1,4 +1,4 @@
-import { Search, Bell, Plus } from "lucide-react";
+import { Search, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Logo from "@/components/Logo";
 import FestivalBanner from "@/components/FestivalBanner";
@@ -9,28 +9,31 @@ import RecentActivity from "@/components/RecentActivity";
 
 export default function Hub() {
   return (
-    <div className="min-h-screen bg-warm-white dark:bg-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 pb-20">
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-soft-gray dark:border-gray-700 sticky top-0 z-50">
+      <header className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg shadow-sm border-b border-orange-100 dark:border-gray-700 sticky top-0 z-50">
         <div className="max-w-md mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <Logo size={32} />
-            <h1 className="text-lg font-semibold text-gray-800 dark:text-gray-200">Sadhana Buddy</h1>
+            <Logo size={36} />
+            <div>
+              <h1 className="text-lg font-bold text-gray-800 dark:text-gray-200">Sadhana Buddy</h1>
+              <p className="text-[10px] text-gray-500 -mt-0.5">Your Spiritual Companion</p>
+            </div>
           </div>
-          <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="icon">
+          <div className="flex items-center space-x-2">
+            <Button variant="ghost" size="icon" className="h-9 w-9">
               <Search className="w-5 h-5 text-gray-600 dark:text-gray-400" />
             </Button>
-            <Button variant="ghost" size="icon" className="relative">
+            <Button variant="ghost" size="icon" className="relative h-9 w-9">
               <Bell className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-              <span className="absolute -top-1 -right-1 w-3 h-3 bg-lotus-pink rounded-full"></span>
+              <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-orange-500 rounded-full border-2 border-white dark:border-gray-800"></span>
             </Button>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main>
+      <main className="max-w-md mx-auto">
         <FestivalBanner />
         <SadhanaProgress />
         <DailyVerse />
@@ -38,10 +41,6 @@ export default function Hub() {
         <RecentActivity />
       </main>
 
-      {/* Floating Action Button */}
-      <Button className="fixed bottom-20 right-4 w-14 h-14 bg-gradient-to-br from-sacred-orange to-saffron rounded-full shadow-lg z-40">
-        <Plus className="w-6 h-6 text-white" />
-      </Button>
     </div>
   );
 }

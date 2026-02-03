@@ -1,38 +1,147 @@
-import {
-  type User,
-  type InsertUser,
-  type SadhanaEntry,
-  type InsertSadhanaEntry,
-  type JournalEntry,
-  type InsertJournalEntry,
-  type DevotionalSong,
-  type InsertDevotionalSong,
-  type Lecture,
-  type InsertLecture,
-  type Festival,
-  type InsertFestival,
-  type DailyVerse,
-  type InsertDailyVerse,
-  type UserProgress,
-  type InsertUserProgress,
-  type Challenge,
-  type InsertChallenge,
-  type UserChallenge,
-  type InsertUserChallenge,
-  type FavoriteSong,
-  type InsertFavoriteSong,
-  type UserGoals,
-  type InsertUserGoals,
-  type UpsertUser,
-} from "@shared/schema";
-import { db } from "./db";
-import { eq, desc, and, sql } from "drizzle-orm";
-import * as schema from "@shared/schema";
-import { parseVaishnavCalendar, convertToFestivals } from "./calendarParser";
+import { firestore, COLLECTIONS } from "./firebase";
 import { parseAuthenticCalendar, convertToAuthenticFestivals } from "./authentnicCalendarParser";
 import { parseVaishnavSongBook, convertToDevotionalSongs, knownVaishnavSongs } from "./songParser";
-import { readFileSync } from "fs";
 import { join } from "path";
+import { FieldValue } from 'firebase-admin/firestore';
+
+// Types (simplified for Firestore - no Drizzle dependencies)
+export interface User {
+  id: string;
+  email: string | null;
+  firstName: string | null;
+  lastName: string | null;
+  profileImageUrl: string | null;
+  timezone: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface SadhanaEntry {
+  id: number;
+  userId: string;
+  date: string;
+  chantingRounds: number;
+  readingPrabhupada: boolean;
+  bookTitle: string | null;
+  pagesRead: number;
+  hearingLectures: number;
+  createdAt: Date;
+}
+
+export interface JournalEntry {
+  id: number;
+  userId: string;
+  title: string;
+  content: string;
+  mood: string | null;
+  createdAt: Date;
+}
+
+export interface DevotionalSong {
+  id: number;
+  title: string;
+  author: string;
+  category: string;
+  mood: string;
+  lyrics: string | null;
+  lyricsPreview: string | null;
+  pageReference: string | null;
+  audioUrl: string | null;
+  createdAt: Date;
+}
+
+export interface Lecture {
+  id: number;
+  title: string;
+  speaker: string;
+  topic: string;
+  duration: number | null;
+  videoUrl: string | null;
+  description: string | null;
+  createdAt: Date;
+}
+
+export interface Festival {
+  id: number;
+  name: string;
+  date: string;
+  description: string | null;
+  significance: string | null;
+  observances: string[] | null;
+}
+
+export interface DailyVerse {
+  id: number;
+  verse: string;
+  translation: string;
+  source: string;
+  date: string;
+}
+
+export interface UserProgress {
+  id: number;
+  userId: string;
+  booksRead: string[];
+  lecturesHeard: number[];
+  totalChantingRounds: number;
+  currentStreak: number;
+  longestStreak: number;
+  updatedAt: Date;
+}
+
+export interface Challenge {
+  id: number;
+  title: string;
+  description: string;
+  type: string;
+  target: number;
+  duration: number;
+  startDate: string;
+  endDate: string;
+  isActive: boolean;
+}
+
+export interface UserChallenge {
+  id: number;
+  userId: string;
+  challengeId: number;
+  progress: number;
+  completed: boolean;
+  joinedAt: Date;
+}
+
+export interface FavoriteSong {
+  id: number;
+  userId: string;
+  songId: number;
+  createdAt: Date;
+}
+
+export interface UserGoals {
+  id: number;
+  userId: string;
+  dailyChantingRounds: number;
+  dailyReadingPages: number;
+  dailyHearingLectures: number;
+  isOnboardingComplete: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// Insert types (for creating new records)
+export type InsertUser = Omit<User, 'createdAt' | 'updatedAt'>;
+export type UpsertUser = Partial<User> & { id: string };
+export type InsertSadhanaEntry = Omit<SadhanaEntry, 'id' | 'createdAt'>;
+export type InsertJournalEntry = Omit<JournalEntry, 'id' | 'createdAt'>;
+export type InsertDevotionalSong = Omit<DevotionalSong, 'id' | 'createdAt'>;
+export type InsertLecture = Omit<Lecture, 'id' | 'createdAt'>;
+export type InsertFestival = Omit<Festival, 'id'>;
+export type InsertDailyVerse = Omit<DailyVerse, 'id'>;
+export type InsertUserProgress = Omit<UserProgress, 'id' | 'updatedAt'>;
+export type InsertChallenge = Omit<Challenge, 'id'>;
+export type InsertUserChallenge = Omit<UserChallenge, 'id' | 'joinedAt'>;
+export type InsertFavoriteSong = Omit<FavoriteSong, 'id' | 'createdAt'>;
+export type InsertUserGoals = Omit<UserGoals, 'id' | 'createdAt' | 'updatedAt'>;
 
 export interface IStorage {
   // Users
@@ -94,6 +203,30 @@ export interface IStorage {
   updateUserGoals(userId: string, goals: Partial<InsertUserGoals>): Promise<UserGoals>;
 }
 
+// Counter for generating auto-increment IDs
+async function getNextId(collection: string): Promise<number> {
+  const counterRef = firestore.collection('counters').doc(collection);
+
+  try {
+    const result = await firestore.runTransaction(async (transaction) => {
+      const counterDoc = await transaction.get(counterRef);
+      let nextId = 1;
+
+      if (counterDoc.exists) {
+        nextId = (counterDoc.data()?.value || 0) + 1;
+      }
+
+      transaction.set(counterRef, { value: nextId });
+      return nextId;
+    });
+
+    return result;
+  } catch (error) {
+    // Fallback: use timestamp-based ID
+    return Date.now();
+  }
+}
+
 export class DatabaseStorage implements IStorage {
   private devotionalSongsData: DevotionalSong[] = [];
   private lecturesData: Lecture[] = [];
@@ -113,106 +246,186 @@ export class DatabaseStorage implements IStorage {
     this.seedChallenges();
   }
 
-  // Users - Database operations
+  // Users - Firestore operations
   async getUser(id: string): Promise<User | undefined> {
-    const [user] = await db.select().from(schema.users).where(eq(schema.users.id, id));
-    return user || undefined;
+    const doc = await firestore.collection(COLLECTIONS.users).doc(id).get();
+    if (!doc.exists) return undefined;
+
+    const data = doc.data()!;
+    return {
+      ...data,
+      id: doc.id,
+      createdAt: data.createdAt?.toDate() || new Date(),
+      updatedAt: data.updatedAt?.toDate() || new Date(),
+    } as User;
   }
 
   async upsertUser(userData: UpsertUser): Promise<User> {
-    const [user] = await db
-      .insert(schema.users)
-      .values(userData)
-      .onConflictDoUpdate({
-        target: schema.users.id,
-        set: {
-          ...userData,
-          updatedAt: new Date(),
-        },
-      })
-      .returning();
-    return user;
+    const userRef = firestore.collection(COLLECTIONS.users).doc(userData.id);
+    const existingDoc = await userRef.get();
+
+    const now = new Date();
+
+    // Clean undefined values - Firestore doesn't accept undefined
+    const cleanData: Record<string, any> = {
+      id: userData.id,
+      email: userData.email ?? null,
+      firstName: userData.firstName ?? null,
+      lastName: userData.lastName ?? null,
+      profileImageUrl: userData.profileImageUrl ?? null,
+      timezone: userData.timezone || 'America/New_York',
+      updatedAt: now,
+    };
+
+    if (!existingDoc.exists) {
+      cleanData.createdAt = now;
+    }
+
+    await userRef.set(cleanData, { merge: true });
+
+    return {
+      ...cleanData,
+      createdAt: existingDoc.exists ? (existingDoc.data()?.createdAt?.toDate() || now) : now,
+      updatedAt: now,
+    } as User;
   }
 
   async updateUserProfilePicture(id: string, profileImageUrl: string): Promise<User> {
-    const [user] = await db
-      .update(schema.users)
-      .set({ 
-        profileImageUrl,
-        updatedAt: new Date() 
-      })
-      .where(eq(schema.users.id, id))
-      .returning();
-    return user;
+    const userRef = firestore.collection(COLLECTIONS.users).doc(id);
+    await userRef.update({
+      profileImageUrl,
+      updatedAt: new Date()
+    });
+
+    const user = await this.getUser(id);
+    return user!;
   }
 
-  // Sadhana Entries - Database operations
+  // Sadhana Entries - Firestore operations
   async getSadhanaEntry(userId: string, date: string): Promise<SadhanaEntry | undefined> {
-    const [entry] = await db
-      .select()
-      .from(schema.sadhanaEntries)
-      .where(and(eq(schema.sadhanaEntries.userId, userId), eq(schema.sadhanaEntries.date, date)));
-    return entry || undefined;
+    const snapshot = await firestore
+      .collection(COLLECTIONS.sadhanaEntries)
+      .where('userId', '==', userId)
+      .where('date', '==', date)
+      .limit(1)
+      .get();
+
+    if (snapshot.empty) return undefined;
+
+    const doc = snapshot.docs[0];
+    const data = doc.data();
+    return {
+      ...data,
+      id: data.id,
+      createdAt: data.createdAt?.toDate() || new Date(),
+    } as SadhanaEntry;
   }
 
   async getSadhanaEntries(userId: string, limit = 30): Promise<SadhanaEntry[]> {
-    return await db
-      .select()
-      .from(schema.sadhanaEntries)
-      .where(eq(schema.sadhanaEntries.userId, userId))
-      .orderBy(desc(schema.sadhanaEntries.date))
-      .limit(limit);
+    const snapshot = await firestore
+      .collection(COLLECTIONS.sadhanaEntries)
+      .where('userId', '==', userId)
+      .orderBy('date', 'desc')
+      .limit(limit)
+      .get();
+
+    return snapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        ...data,
+        id: data.id,
+        createdAt: data.createdAt?.toDate() || new Date(),
+      } as SadhanaEntry;
+    });
   }
 
   async createSadhanaEntry(insertEntry: InsertSadhanaEntry): Promise<SadhanaEntry> {
-    const [entry] = await db
-      .insert(schema.sadhanaEntries)
-      .values(insertEntry)
-      .returning();
-    return entry;
+    const id = await getNextId(COLLECTIONS.sadhanaEntries);
+    const entry = {
+      ...insertEntry,
+      id,
+      createdAt: new Date(),
+    };
+
+    await firestore.collection(COLLECTIONS.sadhanaEntries).doc(id.toString()).set(entry);
+
+    return entry as SadhanaEntry;
   }
 
   async updateSadhanaEntry(id: number, updateData: Partial<InsertSadhanaEntry>): Promise<SadhanaEntry | undefined> {
-    const [entry] = await db
-      .update(schema.sadhanaEntries)
-      .set(updateData)
-      .where(eq(schema.sadhanaEntries.id, id))
-      .returning();
-    return entry || undefined;
+    const docRef = firestore.collection(COLLECTIONS.sadhanaEntries).doc(id.toString());
+    const doc = await docRef.get();
+
+    if (!doc.exists) return undefined;
+
+    await docRef.update(updateData);
+
+    const updated = await docRef.get();
+    const data = updated.data()!;
+    return {
+      ...data,
+      id: data.id,
+      createdAt: data.createdAt?.toDate() || new Date(),
+    } as SadhanaEntry;
   }
 
-  // Journal Entries - Database operations
+  // Journal Entries - Firestore operations
   async getJournalEntries(userId: string, limit = 20): Promise<JournalEntry[]> {
-    return await db
-      .select()
-      .from(schema.journalEntries)
-      .where(eq(schema.journalEntries.userId, userId))
-      .orderBy(desc(schema.journalEntries.createdAt))
-      .limit(limit);
+    const snapshot = await firestore
+      .collection(COLLECTIONS.journalEntries)
+      .where('userId', '==', userId)
+      .orderBy('createdAt', 'desc')
+      .limit(limit)
+      .get();
+
+    return snapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        ...data,
+        id: data.id,
+        createdAt: data.createdAt?.toDate() || new Date(),
+      } as JournalEntry;
+    });
   }
 
   async createJournalEntry(insertEntry: InsertJournalEntry): Promise<JournalEntry> {
-    const [entry] = await db
-      .insert(schema.journalEntries)
-      .values(insertEntry)
-      .returning();
-    return entry;
+    const id = await getNextId(COLLECTIONS.journalEntries);
+    const entry = {
+      ...insertEntry,
+      id,
+      createdAt: new Date(),
+    };
+
+    await firestore.collection(COLLECTIONS.journalEntries).doc(id.toString()).set(entry);
+
+    return entry as JournalEntry;
   }
 
   async updateJournalEntry(id: number, updateData: Partial<InsertJournalEntry>): Promise<JournalEntry | undefined> {
-    const [entry] = await db
-      .update(schema.journalEntries)
-      .set(updateData)
-      .where(eq(schema.journalEntries.id, id))
-      .returning();
-    return entry || undefined;
+    const docRef = firestore.collection(COLLECTIONS.journalEntries).doc(id.toString());
+    const doc = await docRef.get();
+
+    if (!doc.exists) return undefined;
+
+    await docRef.update(updateData);
+
+    const updated = await docRef.get();
+    const data = updated.data()!;
+    return {
+      ...data,
+      id: data.id,
+      createdAt: data.createdAt?.toDate() || new Date(),
+    } as JournalEntry;
   }
 
   async deleteJournalEntry(id: number): Promise<boolean> {
-    const result = await db
-      .delete(schema.journalEntries)
-      .where(eq(schema.journalEntries.id, id));
-    return (result.rowCount || 0) > 0;
+    const docRef = firestore.collection(COLLECTIONS.journalEntries).doc(id.toString());
+    const doc = await docRef.get();
+
+    if (!doc.exists) return false;
+
+    await docRef.delete();
+    return true;
   }
 
   // Devotional Songs - In-memory with seeded data
@@ -264,9 +477,9 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createLecture(insertLecture: InsertLecture): Promise<Lecture> {
-    const lecture: Lecture = { 
-      ...insertLecture, 
-      id: this.lecturesData.length + 1, 
+    const lecture: Lecture = {
+      ...insertLecture,
+      id: this.lecturesData.length + 1,
       createdAt: new Date(),
       duration: insertLecture.duration || null,
       videoUrl: insertLecture.videoUrl || null,
@@ -282,16 +495,21 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getUpcomingFestivals(limit = 5): Promise<Festival[]> {
-    const today = new Date().toISOString().split('T')[0];
+    // Use yesterday's date to account for timezone differences
+    // (server runs in UTC but users may be in different timezones)
+    const now = new Date();
+    now.setDate(now.getDate() - 1);
+    const yesterday = now.toISOString().split('T')[0];
+    
     return this.festivalsData
-      .filter(festival => festival.date >= today)
+      .filter(festival => festival.date >= yesterday)
       .sort((a, b) => a.date.localeCompare(b.date))
       .slice(0, limit);
   }
 
   async createFestival(insertFestival: InsertFestival): Promise<Festival> {
-    const festival: Festival = { 
-      ...insertFestival, 
+    const festival: Festival = {
+      ...insertFestival,
       id: this.festivalsData.length + 1,
       description: insertFestival.description || null,
       significance: insertFestival.significance || null,
@@ -317,26 +535,32 @@ export class DatabaseStorage implements IStorage {
     return verse;
   }
 
-  // User Progress - Database operations
+  // User Progress - Firestore operations
   async getUserProgress(userId: string): Promise<UserProgress | undefined> {
-    const [progress] = await db
-      .select()
-      .from(schema.userProgress)
-      .where(eq(schema.userProgress.userId, userId));
-    return progress || undefined;
+    const doc = await firestore.collection(COLLECTIONS.userProgress).doc(userId).get();
+    if (!doc.exists) return undefined;
+
+    const data = doc.data()!;
+    return {
+      ...data,
+      id: data.id || 1,
+      updatedAt: data.updatedAt?.toDate() || new Date(),
+    } as UserProgress;
   }
 
   async updateUserProgress(userId: string, updateData: Partial<InsertUserProgress>): Promise<UserProgress> {
-    const existing = await this.getUserProgress(userId);
-    if (existing) {
-      const [progress] = await db
-        .update(schema.userProgress)
-        .set(updateData)
-        .where(eq(schema.userProgress.userId, userId))
-        .returning();
-      return progress;
+    const docRef = firestore.collection(COLLECTIONS.userProgress).doc(userId);
+    const existing = await docRef.get();
+
+    if (existing.exists) {
+      await docRef.update({
+        ...updateData,
+        updatedAt: new Date(),
+      });
     } else {
+      const id = await getNextId(COLLECTIONS.userProgress);
       const newProgress = {
+        id,
         userId,
         booksRead: [],
         lecturesHeard: [],
@@ -344,13 +568,12 @@ export class DatabaseStorage implements IStorage {
         currentStreak: 0,
         longestStreak: 0,
         ...updateData,
+        updatedAt: new Date(),
       };
-      const [created] = await db
-        .insert(schema.userProgress)
-        .values(newProgress)
-        .returning();
-      return created;
+      await docRef.set(newProgress);
     }
+
+    return (await this.getUserProgress(userId))!;
   }
 
   // Challenges - In-memory with seeded data
@@ -359,111 +582,159 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getActiveUserChallenges(userId: string): Promise<(UserChallenge & { challenge: Challenge })[]> {
-    const userChallenges = await db
-      .select()
-      .from(schema.userChallenges)
-      .where(eq(schema.userChallenges.userId, userId));
+    const snapshot = await firestore
+      .collection(COLLECTIONS.userChallenges)
+      .where('userId', '==', userId)
+      .get();
 
-    return userChallenges.map(uc => ({
-      ...uc,
-      challenge: this.challengesData.find(c => c.id === uc.challengeId)!
-    }));
+    return snapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        ...data,
+        id: data.id,
+        joinedAt: data.joinedAt?.toDate() || new Date(),
+        challenge: this.challengesData.find(c => c.id === data.challengeId)!
+      } as UserChallenge & { challenge: Challenge };
+    });
   }
 
   async joinChallenge(insertUserChallenge: InsertUserChallenge): Promise<UserChallenge> {
-    const [userChallenge] = await db
-      .insert(schema.userChallenges)
-      .values(insertUserChallenge)
-      .returning();
-    return userChallenge;
+    const id = await getNextId(COLLECTIONS.userChallenges);
+    const userChallenge = {
+      ...insertUserChallenge,
+      id,
+      joinedAt: new Date(),
+    };
+
+    await firestore.collection(COLLECTIONS.userChallenges).doc(id.toString()).set(userChallenge);
+
+    return userChallenge as UserChallenge;
   }
 
   async updateChallengeProgress(id: number, progress: number): Promise<UserChallenge | undefined> {
-    const [userChallenge] = await db
-      .update(schema.userChallenges)
-      .set({ progress })
-      .where(eq(schema.userChallenges.id, id))
-      .returning();
-    return userChallenge || undefined;
+    const docRef = firestore.collection(COLLECTIONS.userChallenges).doc(id.toString());
+    const doc = await docRef.get();
+
+    if (!doc.exists) return undefined;
+
+    await docRef.update({ progress });
+
+    const updated = await docRef.get();
+    const data = updated.data()!;
+    return {
+      ...data,
+      id: data.id,
+      joinedAt: data.joinedAt?.toDate() || new Date(),
+    } as UserChallenge;
   }
 
-  // Favorites - Database operations
+  // Favorites - Firestore operations
   async getFavoriteSongs(userId: string): Promise<(FavoriteSong & { song: DevotionalSong })[]> {
-    const favorites = await db
-      .select()
-      .from(schema.favoriteSongs)
-      .where(eq(schema.favoriteSongs.userId, userId));
+    const snapshot = await firestore
+      .collection(COLLECTIONS.favoriteSongs)
+      .where('userId', '==', userId)
+      .get();
 
-    return favorites.map(fav => ({
-      ...fav,
-      song: this.devotionalSongsData.find(song => song.id === fav.songId)!
-    }));
+    return snapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        ...data,
+        id: data.id,
+        createdAt: data.createdAt?.toDate() || new Date(),
+        song: this.devotionalSongsData.find(song => song.id === data.songId)!
+      } as FavoriteSong & { song: DevotionalSong };
+    });
   }
 
   async addFavoriteSong(insertFavoriteSong: InsertFavoriteSong): Promise<FavoriteSong> {
-    const [favoriteSong] = await db
-      .insert(schema.favoriteSongs)
-      .values(insertFavoriteSong)
-      .returning();
-    return favoriteSong;
+    const id = await getNextId(COLLECTIONS.favoriteSongs);
+    const favoriteSong = {
+      ...insertFavoriteSong,
+      id,
+      createdAt: new Date(),
+    };
+
+    await firestore.collection(COLLECTIONS.favoriteSongs).doc(id.toString()).set(favoriteSong);
+
+    return favoriteSong as FavoriteSong;
   }
 
   async removeFavoriteSong(userId: string, songId: number): Promise<boolean> {
-    const result = await db
-      .delete(schema.favoriteSongs)
-      .where(and(
-        eq(schema.favoriteSongs.userId, userId),
-        eq(schema.favoriteSongs.songId, songId)
-      ));
-    return (result.rowCount || 0) > 0;
+    const snapshot = await firestore
+      .collection(COLLECTIONS.favoriteSongs)
+      .where('userId', '==', userId)
+      .where('songId', '==', songId)
+      .limit(1)
+      .get();
+
+    if (snapshot.empty) return false;
+
+    await snapshot.docs[0].ref.delete();
+    return true;
   }
 
   async isSongFavorited(userId: string, songId: number): Promise<boolean> {
-    const [favorite] = await db
-      .select()
-      .from(schema.favoriteSongs)
-      .where(and(
-        eq(schema.favoriteSongs.userId, userId),
-        eq(schema.favoriteSongs.songId, songId)
-      ));
-    return !!favorite;
+    const snapshot = await firestore
+      .collection(COLLECTIONS.favoriteSongs)
+      .where('userId', '==', userId)
+      .where('songId', '==', songId)
+      .limit(1)
+      .get();
+
+    return !snapshot.empty;
   }
 
-  // User Goals
+  // User Goals - Firestore operations
   async getUserGoals(userId: string): Promise<UserGoals | undefined> {
-    const [goals] = await db
-      .select()
-      .from(schema.userGoals)
-      .where(eq(schema.userGoals.userId, userId));
-    return goals;
+    const doc = await firestore.collection(COLLECTIONS.userGoals).doc(userId).get();
+    if (!doc.exists) return undefined;
+
+    const data = doc.data()!;
+    return {
+      ...data,
+      id: data.id || 1,
+      createdAt: data.createdAt?.toDate() || new Date(),
+      updatedAt: data.updatedAt?.toDate() || new Date(),
+    } as UserGoals;
   }
 
   async createUserGoals(insertGoals: InsertUserGoals): Promise<UserGoals> {
-    const [goals] = await db
-      .insert(schema.userGoals)
-      .values(insertGoals)
-      .returning();
-    return goals;
+    const id = await getNextId(COLLECTIONS.userGoals);
+    const now = new Date();
+    const goals = {
+      ...insertGoals,
+      id,
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    await firestore.collection(COLLECTIONS.userGoals).doc(insertGoals.userId).set(goals);
+
+    return goals as UserGoals;
   }
 
   async updateUserGoals(userId: string, updateData: Partial<InsertUserGoals>): Promise<UserGoals> {
-    const [goals] = await db
-      .update(schema.userGoals)
-      .set({ ...updateData, updatedAt: new Date() })
-      .where(eq(schema.userGoals.userId, userId))
-      .returning();
-    return goals;
+    const docRef = firestore.collection(COLLECTIONS.userGoals).doc(userId);
+
+    await docRef.update({
+      ...updateData,
+      updatedAt: new Date(),
+    });
+
+    return (await this.getUserGoals(userId))!;
   }
 
   // Seed data methods
   private loadVaishnavCalendar(): void {
     try {
-      console.log("Loading 131 authentic ISKCON festivals...");
-      const calendarPath = join(process.cwd(), "attached_assets", "Pasted--January-02-Jan-2025-Disappearance-Day-of-Sri-Jiva-Goswami-02-Jan-2025-Disappearance-Day-of-S-1751383253600_1751383253601.txt");
-      const calendarEvents = parseAuthenticCalendar(calendarPath);
-      const festivals = convertToAuthenticFestivals(calendarEvents);
+      console.log("Loading authentic ISKCON festivals for 2025 and 2026...");
       
-      festivals.forEach(festival => {
+      // Load 2025 calendar
+      const calendar2025Path = join(process.cwd(), "attached_assets", "Pasted--January-02-Jan-2025-Disappearance-Day-of-Sri-Jiva-Goswami-02-Jan-2025-Disappearance-Day-of-S-1751383253600_1751383253601.txt");
+      const calendar2025Events = parseAuthenticCalendar(calendar2025Path);
+      const festivals2025 = convertToAuthenticFestivals(calendar2025Events);
+
+      festivals2025.forEach(festival => {
         const festivalWithId: Festival = {
           ...festival,
           id: this.festivalsData.length + 1,
@@ -473,8 +744,27 @@ export class DatabaseStorage implements IStorage {
         };
         this.festivalsData.push(festivalWithId);
       });
-      
-      console.log(`Successfully loaded ${this.festivalsData.length} authentic ISKCON festivals`);
+
+      console.log(`Loaded ${festivals2025.length} festivals for 2025`);
+
+      // Load 2026 calendar
+      const calendar2026Path = join(process.cwd(), "attached_assets", "calendar-2026-washington.txt");
+      const calendar2026Events = parseAuthenticCalendar(calendar2026Path);
+      const festivals2026 = convertToAuthenticFestivals(calendar2026Events);
+
+      festivals2026.forEach(festival => {
+        const festivalWithId: Festival = {
+          ...festival,
+          id: this.festivalsData.length + 1,
+          description: festival.description || null,
+          significance: festival.significance || null,
+          observances: festival.observances || null,
+        };
+        this.festivalsData.push(festivalWithId);
+      });
+
+      console.log(`Loaded ${festivals2026.length} festivals for 2026`);
+      console.log(`Successfully loaded ${this.festivalsData.length} total authentic ISKCON festivals`);
     } catch (error) {
       console.error("Error loading calendar:", error);
     }
@@ -484,14 +774,14 @@ export class DatabaseStorage implements IStorage {
     try {
       console.log("Loading songs from Vaishnava song book...");
       console.log("Building comprehensive Vaishnava song database from known sources...");
-      
+
       const songBookPath = join(process.cwd(), "attached_assets", "Vaishnava song book_1751340349202.pdf");
       const parsedSongs = parseVaishnavSongBook(songBookPath);
       console.log(`Parsed ${parsedSongs.length} songs from song book`);
-      
+
       const allSongs = [...parsedSongs, ...knownVaishnavSongs];
       const devotionalSongs = convertToDevotionalSongs(allSongs);
-      
+
       devotionalSongs.forEach(song => {
         const songWithId: DevotionalSong = {
           ...song,
@@ -502,7 +792,7 @@ export class DatabaseStorage implements IStorage {
         };
         this.devotionalSongsData.push(songWithId);
       });
-      
+
       console.log(`Successfully loaded ${this.devotionalSongsData.length} devotional songs`);
     } catch (error) {
       console.error("Error loading songs:", error);
@@ -519,7 +809,7 @@ export class DatabaseStorage implements IStorage {
         source: "Bhagavad Gita 2.70"
       }
     ];
-    
+
     this.dailyVersesData.push(...verses);
   }
 
@@ -606,7 +896,7 @@ export class DatabaseStorage implements IStorage {
         createdAt: new Date()
       }
     ];
-    
+
     this.lecturesData.push(...prabhupadaLectures);
   }
 
@@ -626,7 +916,7 @@ export class DatabaseStorage implements IStorage {
       {
         id: 2,
         type: "reading",
-        title: "Daily Reading Challenge", 
+        title: "Daily Reading Challenge",
         description: "Read Srila Prabhupada's books for at least 30 minutes daily",
         target: 30,
         duration: 30,
@@ -635,7 +925,7 @@ export class DatabaseStorage implements IStorage {
         isActive: true
       }
     ];
-    
+
     this.challengesData.push(...challenges);
   }
 }
