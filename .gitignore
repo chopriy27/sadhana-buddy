@@ -1,20 +1,81 @@
-node_modules
-dist
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+*.tsbuildinfo
+
+# macOS
 .DS_Store
-server/public
-vite.config.ts.*
-*.tar.gz
+*.swp
+*.swo
 
-# Firebase credentials (keep secret!)
-firebase-credentials.json
-*.firebase*.json
-*-firebase-adminsdk-*.json
-*firebase*adminsdk*.json
+# IDE
+.idea/
+.vscode/
+*.sublime-*
 
-# Environment files
+# Environment & Secrets
 .env
 .env.*
+.env.local
+.env.development
+.env.production
 
-# Other sensitive/local files
+# Firebase credentials (NEVER commit these!)
+firebase-credentials.json
+*-firebase-adminsdk-*.json
+*firebase*adminsdk*.json
+*.firebase*.json
+google-services.json
+GoogleService-Info.plist
+
+# Local/temporary files
 cookies.txt
 .local/
+*.log
+*.tmp
+*.temp
+
+# Vite
+vite.config.ts.*
+
+# Archives
+*.tar.gz
+*.zip
+
+# Server public (generated)
+server/public
+
+# Android build outputs
+android/build/
+android/app/build/
+android/.gradle/
+android/capacitor-cordova-android-plugins/build/
+*.apk
+*.aab
+*.keystore
+*.jks
+
+# iOS build outputs
+ios/App/Pods/
+ios/App/build/
+ios/App/App.xcworkspace/xcuserdata/
+ios/App/App.xcodeproj/xcuserdata/
+ios/App/App.xcodeproj/project.xcworkspace/xcuserdata/
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Capacitor
+capacitor.config.ts.timestamp*
+
+# Replit specific (not needed for GitHub)
+replit.md
+.replit
+
+# Unused attached assets (duplicates/old files)
+attached_assets/Vaishnava-song-book_1756687985865.pdf
+attached_assets/Seattle*
+attached_assets/image_*.png

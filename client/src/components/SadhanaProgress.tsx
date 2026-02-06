@@ -6,7 +6,7 @@ import type { SadhanaEntry, UserGoals } from "@shared/schema";
 export default function SadhanaProgress() {
   const { user } = useAuth();
   const [, setLocation] = useLocation();
-  
+
   const { data: todaysSadhana } = useQuery<SadhanaEntry | null>({
     queryKey: [`/api/sadhana/${user?.id}/today`],
     enabled: !!user?.id,
@@ -33,29 +33,29 @@ export default function SadhanaProgress() {
   const hearingProgress = Math.min((hearingMinutes / hearingTarget) * 100, 100);
 
   const totalTasks = 3;
-  const completedTasks = (chantingRounds >= chantingTarget ? 1 : 0) + 
-                        (pagesRead >= readingTarget ? 1 : 0) + 
-                        (hearingMinutes >= hearingTarget ? 1 : 0);
+  const completedTasks = (chantingRounds >= chantingTarget ? 1 : 0) +
+    (pagesRead >= readingTarget ? 1 : 0) +
+    (hearingMinutes >= hearingTarget ? 1 : 0);
   const completionPercentage = Math.round((completedTasks / totalTasks) * 100);
 
   // Progress ring component
-  const ProgressRing = ({ 
-    progress, 
-    color, 
+  const ProgressRing = ({
+    progress,
+    color,
     bgColor,
-    value, 
-    target, 
-    label 
-  }: { 
-    progress: number; 
-    color: string; 
+    value,
+    target,
+    label
+  }: {
+    progress: number;
+    color: string;
     bgColor: string;
-    value: number; 
-    target: number; 
+    value: number;
+    target: number;
     label: string;
   }) => (
     <div className="text-center">
-      <div 
+      <div
         className="w-16 h-16 mx-auto mb-2 rounded-full flex items-center justify-center relative"
         style={{
           background: `conic-gradient(from 0deg, ${color} 0deg ${progress * 3.6}deg, ${bgColor} ${progress * 3.6}deg 360deg)`
@@ -73,7 +73,7 @@ export default function SadhanaProgress() {
 
   return (
     <div className="px-4 mt-6">
-      <div 
+      <div
         className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-5 shadow-sm border border-orange-100 dark:border-gray-700 cursor-pointer hover:shadow-md transition-shadow"
         onClick={() => setLocation('/tracker')}
       >
@@ -90,10 +90,10 @@ export default function SadhanaProgress() {
             {completionPercentage === 100 && <span className="text-green-500 font-bold">✓</span>}
           </div>
         </div>
-        
+
         {/* Progress Rings */}
         <div className="grid grid-cols-3 gap-3">
-          <ProgressRing 
+          <ProgressRing
             progress={chantingProgress}
             color="#f97316"
             bgColor="#fed7aa"
@@ -101,7 +101,7 @@ export default function SadhanaProgress() {
             target={chantingTarget}
             label="Rounds"
           />
-          <ProgressRing 
+          <ProgressRing
             progress={readingProgress}
             color="#3b82f6"
             bgColor="#bfdbfe"
@@ -109,7 +109,7 @@ export default function SadhanaProgress() {
             target={readingTarget}
             label="Pages"
           />
-          <ProgressRing 
+          <ProgressRing
             progress={hearingProgress}
             color="#8b5cf6"
             bgColor="#ddd6fe"
