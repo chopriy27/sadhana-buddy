@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
@@ -78,28 +79,9 @@ app.use((req, res, next) => {
     serveStatic(app);
   }
 
-  // Serve the app - try port 5000 first, fallback to 3000
-  // Port 5000 is used by AirPlay on macOS, so we provide alternatives
-  const port = process.env.PORT ? parseInt(process.env.PORT) : 5000;
-  const fallbackPort = 3000;
-  
-  const startServer = (portToTry: number) => {
-    server.listen(portToTry, "0.0.0.0", () => {
-      log(`serving on port ${portToTry}`);
-    }).on('error', (err: NodeJS.ErrnoException) => {
-      if (err.code === 'EADDRINUSE' || err.code === 'ENOTSUP') {
-        if (portToTry === port && portToTry !== fallbackPort) {
-          log(`Port ${portToTry} unavailable, trying ${fallbackPort}...`);
-          startServer(fallbackPort);
-        } else {
-          console.error(`Could not start server on port ${portToTry}:`, err.message);
-          process.exit(1);
-        }
-      } else {
-        throw err;
-      }
-    });
-  };
-  
-  startServer(port);
+  const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;
+
+  server.listen(port, "0.0.0.0", () => {
+    log(`serving on port ${port}`);
+  });
 })();

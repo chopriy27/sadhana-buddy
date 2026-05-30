@@ -44,7 +44,7 @@ export default function Goals() {
         variant: "destructive",
       });
       setTimeout(() => {
-        window.location.href = "/api/login";
+        window.location.href = "/";
       }, 500);
       return;
     }
@@ -68,7 +68,7 @@ export default function Goals() {
           variant: "destructive",
         });
         setTimeout(() => {
-          window.location.href = "/api/login";
+          window.location.href = "/";
         }, 500);
         return;
       }
@@ -98,7 +98,7 @@ export default function Goals() {
           variant: "destructive",
         });
         setTimeout(() => {
-          window.location.href = "/api/login";
+          window.location.href = "/";
         }, 500);
         return;
       }
@@ -216,7 +216,7 @@ export default function Goals() {
             <>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="chanting">Daily Chanting Rounds</Label>
+                  <Label htmlFor="chanting">Daily Japa Rounds</Label>
                   <Input
                     id="chanting"
                     type="number"
@@ -227,7 +227,7 @@ export default function Goals() {
                     className="text-center"
                   />
                   <p className="text-sm text-gray-500 dark:text-gray-400">
-                    Rounds of Hare Krishna mantra
+                    Rounds of Hare Kṛṣṇa mahā-mantra
                   </p>
                 </div>
 
@@ -243,23 +243,24 @@ export default function Goals() {
                     className="text-center"
                   />
                   <p className="text-sm text-gray-500 dark:text-gray-400">
-                    Pages from Srila Prabhupada's books
+                    Pages from Śrīla Prabhupāda's books
                   </p>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="hearing">Daily Hearing (Lectures)</Label>
+                  <Label htmlFor="hearing">Daily Hearing (Minutes)</Label>
                   <Input
                     id="hearing"
                     type="number"
-                    min="1"
-                    max="10"
-                    value={editedGoals.dailyHearingLectures || 1}
-                    onChange={(e) => handleInputChange('dailyHearingLectures', parseInt(e.target.value) || 1)}
+                    min="10"
+                    max="480"
+                    step="10"
+                    value={editedGoals.dailyHearingLectures || 30}
+                    onChange={(e) => handleInputChange('dailyHearingLectures', parseInt(e.target.value) || 30)}
                     className="text-center"
                   />
                   <p className="text-sm text-gray-500 dark:text-gray-400">
-                    Number of lectures or kirtans
+                    Minutes of lectures or kirtans
                   </p>
                 </div>
               </div>
@@ -294,10 +295,10 @@ export default function Goals() {
                   {goals.dailyChantingRounds}
                 </div>
                 <div className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Daily Chanting Rounds
+                  Daily Japa Rounds
                 </div>
                 <div className="text-xs text-gray-500 dark:text-gray-400">
-                  Hare Krishna mantra
+                  Hare Kṛṣṇa mahā-mantra
                 </div>
               </div>
 
@@ -309,7 +310,7 @@ export default function Goals() {
                   Daily Reading Pages
                 </div>
                 <div className="text-xs text-gray-500 dark:text-gray-400">
-                  Srila Prabhupada's books
+                  Śrīla Prabhupāda's books
                 </div>
               </div>
 
@@ -321,7 +322,7 @@ export default function Goals() {
                   Daily Hearing
                 </div>
                 <div className="text-xs text-gray-500 dark:text-gray-400">
-                  Lectures & kirtans
+                  Minutes of lectures
                 </div>
               </div>
             </div>
@@ -376,7 +377,7 @@ export default function Goals() {
           </h3>
           <div className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
             <p>• Start your day with chanting to set a spiritual tone</p>
-            <p>• Read Srila Prabhupada's books during quiet moments</p>
+            <p>• Read Śrīla Prabhupāda's books during quiet moments</p>
             <p>• Listen to lectures while commuting or exercising</p>
             <p>• Track your progress daily to stay motivated</p>
             <p>• Adjust goals as needed to maintain consistency</p>

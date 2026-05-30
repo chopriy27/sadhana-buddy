@@ -99,7 +99,7 @@ export default function SadhanaProgress() {
             bgColor="#fed7aa"
             value={chantingRounds}
             target={chantingTarget}
-            label="Rounds"
+            label="Japa"
           />
           <ProgressRing
             progress={readingProgress}
@@ -115,7 +115,7 @@ export default function SadhanaProgress() {
             bgColor="#ddd6fe"
             value={hearingMinutes}
             target={hearingTarget}
-            label="Minutes"
+            label="Śravaṇa"
           />
         </div>
       </div>

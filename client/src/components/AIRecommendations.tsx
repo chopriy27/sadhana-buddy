@@ -86,7 +86,8 @@ export function AIRecommendations() {
   // Get AI recommendations
   const recommendationsMutation = useMutation<SongRecommendation[], Error, RecommendationRequest>({
     mutationFn: async (requestData: RecommendationRequest) => {
-      return await apiRequest(`/api/recommendations/${user?.id}`, "POST", requestData);
+      const res = await apiRequest("POST", `/api/recommendations/${user?.id}`, requestData);
+      return await res.json();
     },
     onError: (error) => {
       toast({

@@ -387,7 +387,7 @@ export default function Profile() {
                 <p className="text-xs text-gray-500">Total Rounds</p>
               </div>
               <div className="text-center">
-                <p className="text-2xl font-bold text-purple-500">{friends.length}</p>
+                <p className="text-2xl font-bold text-purple-500">—</p>
                 <p className="text-xs text-gray-500">Friends</p>
               </div>
               <div className="text-center">
@@ -566,161 +566,25 @@ export default function Profile() {
 
       {/* Find Friends Sheet */}
       <Sheet open={showFindFriends} onOpenChange={setShowFindFriends}>
-        <SheetContent side="bottom" className="h-[85vh] rounded-t-3xl">
+        <SheetContent side="bottom" className="h-[50vh] rounded-t-3xl">
           <SheetHeader>
-            <SheetTitle>Find Devotee Friends</SheetTitle>
+            <SheetTitle>Devotee Friends</SheetTitle>
             <SheetDescription>
               Connect with other devotees on their spiritual journey
             </SheetDescription>
           </SheetHeader>
 
-          <Tabs defaultValue="search" className="mt-4">
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="search">Search</TabsTrigger>
-              <TabsTrigger value="friends">
-                Friends ({friends.length})
-              </TabsTrigger>
-              <TabsTrigger value="pending">
-                Pending ({pendingRequests.length})
-              </TabsTrigger>
-            </TabsList>
-
-            {/* Search Tab */}
-            <TabsContent value="search" className="mt-4">
-              <div className="relative mb-4">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <Input
-                  placeholder="Search devotees by name..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-
-              <div className="space-y-2 max-h-[50vh] overflow-y-auto">
-                {searchQuery.length < 2 ? (
-                  <p className="text-center text-sm text-gray-500 py-8">
-                    Type at least 2 characters to search
-                  </p>
-                ) : searchResults.length === 0 ? (
-                  <p className="text-center text-sm text-gray-500 py-8">
-                    No devotees found matching "{searchQuery}"
-                  </p>
-                ) : (
-                  searchResults.map(userResult => (
-                    <motion.div
-                      key={userResult.id}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="flex items-center gap-3 p-3 rounded-xl border border-gray-200 dark:border-gray-700"
-                    >
-                      <Avatar name={userResult.name} size="md" />
-                      <div className="flex-1">
-                        <p className="font-medium">{userResult.name}</p>
-                        {userResult.chantingStreak && (
-                          <p className="text-xs text-gray-500">{userResult.chantingStreak} day streak</p>
-                        )}
-                      </div>
-                      {pendingRequests.includes(userResult.id) ? (
-                        <Button variant="secondary" size="sm" disabled>
-                          <Clock className="w-4 h-4 mr-1" />
-                          Pending
-                        </Button>
-                      ) : (
-                        <Button 
-                          size="sm"
-                          onClick={() => sendFriendRequest(userResult)}
-                        >
-                          <UserPlus className="w-4 h-4 mr-1" />
-                          Add
-                        </Button>
-                      )}
-                    </motion.div>
-                  ))
-                )}
-              </div>
-            </TabsContent>
-
-            {/* Friends Tab */}
-            <TabsContent value="friends" className="mt-4">
-              <div className="space-y-2 max-h-[50vh] overflow-y-auto">
-                {friends.length === 0 ? (
-                  <div className="text-center py-8">
-                    <Users className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                    <p className="text-sm text-gray-500">No friends yet</p>
-                    <p className="text-xs text-gray-400">Search and add devotees!</p>
-                  </div>
-                ) : (
-                  friends.map(friend => (
-                    <div
-                      key={friend.id}
-                      className="flex items-center gap-3 p-3 rounded-xl border border-gray-200 dark:border-gray-700"
-                    >
-                      <div className="relative">
-                        <Avatar name={friend.name} size="md" />
-                        <div className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 border-white ${
-                          friend.status === 'online' ? 'bg-green-500' : 'bg-gray-400'
-                        }`} />
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-medium">{friend.name}</p>
-                        {friend.chantingStreak && (
-                          <p className="text-xs text-gray-500">{friend.chantingStreak} day streak</p>
-                        )}
-                      </div>
-                      <Button 
-                        variant="ghost" 
-                        size="sm"
-                        className="text-red-500 hover:text-red-600 hover:bg-red-50"
-                        onClick={() => removeFriend(friend.id)}
-                      >
-                        Remove
-                      </Button>
-                    </div>
-                  ))
-                )}
-              </div>
-            </TabsContent>
-
-            {/* Pending Tab */}
-            <TabsContent value="pending" className="mt-4">
-              <div className="space-y-2 max-h-[50vh] overflow-y-auto">
-                {pendingRequests.length === 0 ? (
-                  <div className="text-center py-8">
-                    <Clock className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                    <p className="text-sm text-gray-500">No pending requests</p>
-                  </div>
-                ) : (
-                  pendingRequests.map(userId => {
-                    const pendingUser = MOCK_USERS.find(u => u.id === userId);
-                    if (!pendingUser) return null;
-                    
-                    return (
-                      <div
-                        key={userId}
-                        className="flex items-center gap-3 p-3 rounded-xl border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20"
-                      >
-                        <Avatar name={pendingUser.name} size="md" />
-                        <div className="flex-1">
-                          <p className="font-medium">{pendingUser.name}</p>
-                          <p className="text-xs text-amber-600">Request pending...</p>
-                        </div>
-                        {/* Demo button to simulate acceptance */}
-                        <Button 
-                          variant="outline"
-                          size="sm"
-                          onClick={() => simulateAcceptedRequest(userId)}
-                        >
-                          <Check className="w-4 h-4 mr-1" />
-                          Simulate Accept
-                        </Button>
-                      </div>
-                    );
-                  })
-                )}
-              </div>
-            </TabsContent>
-          </Tabs>
+          <div className="flex flex-col items-center justify-center py-12 text-center">
+            <div className="w-20 h-20 bg-gradient-to-br from-orange-100 to-amber-100 dark:from-orange-900/30 dark:to-amber-900/30 rounded-full flex items-center justify-center mb-5">
+              <Users className="w-10 h-10 text-orange-400" />
+            </div>
+            <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200 mb-2">
+              Coming Soon
+            </h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400 max-w-xs">
+              Friends & community features are currently in development. Stay tuned for the next update!
+            </p>
+          </div>
         </SheetContent>
       </Sheet>
 

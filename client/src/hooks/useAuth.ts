@@ -168,9 +168,9 @@ export function useAuth() {
       await logOut();
       setUser(null);
       queryClient.clear(); // Clear all cached queries
+      window.location.href = '/'; // Redirect to login page
     } catch (err: any) {
       setError(err.message || 'Failed to sign out');
-    } finally {
       setIsLoading(false);
     }
   }, [queryClient]);

@@ -88,9 +88,9 @@ const PRABHUPADA_BOOKS: PrabhupadaBook[] = [
   
   // Other Works
   { id: 'btg', title: 'Back to Godhead Magazine', shortTitle: 'BTG Magazine', category: 'other' },
-  { id: 'letters', title: 'Srila Prabhupada Letters', shortTitle: 'Letters', category: 'other' },
-  { id: 'conv', title: 'Conversations with Srila Prabhupada', shortTitle: 'Conversations', category: 'other' },
-  { id: 'other', title: 'Other Prabhupada Book', shortTitle: 'Other', category: 'other' },
+  { id: 'letters', title: 'Śrīla Prabhupāda Letters', shortTitle: 'Letters', category: 'other' },
+  { id: 'conv', title: 'Conversations with Śrīla Prabhupāda', shortTitle: 'Conversations', category: 'other' },
+  { id: 'other', title: 'Other Prabhupāda Book', shortTitle: 'Other', category: 'other' },
 ];
 
 // Custom Sadhana Items that users can choose from
@@ -111,10 +111,10 @@ const AVAILABLE_SADHANA_ITEMS: CustomSadhanaItem[] = [
   { id: 'offer_flowers', label: 'Offer Flowers/Arati', icon: Flower2, emoji: '🌸', description: 'Offer flowers or perform arati', category: 'daily' },
   { id: 'sing_bhajans', label: 'Sing Bhajans', icon: Music, emoji: '🎵', description: 'Sing devotional songs', category: 'daily' },
   { id: 'hear_class', label: 'Hear Bhagavatam Class', icon: Users, emoji: '📚', description: 'Attend or hear Bhagavatam class', category: 'morning' },
-  { id: 'prasadam', label: 'Honor Prasadam', icon: Coffee, emoji: '🍽️', description: 'Only eat Krishna prasadam', category: 'daily' },
+  { id: 'prasadam', label: 'Honor Prasādam', icon: Coffee, emoji: '🍽️', description: 'Only eat Kṛṣṇa prasādam', category: 'daily' },
   { id: 'evening_arati', label: 'Evening Arati', icon: Moon, emoji: '🌙', description: 'Attend Gaura Arati', category: 'evening' },
   { id: 'gayatri', label: 'Chant Gayatri', icon: Bell, emoji: '🔔', description: 'Chant Gayatri mantras', category: 'daily' },
-  { id: 'service', label: 'Temple/Devotee Service', icon: Heart, emoji: '💝', description: 'Perform seva for Krishna', category: 'daily' },
+  { id: 'service', label: 'Temple/Devotee Service', icon: Heart, emoji: '💝', description: 'Perform sevā for Kṛṣṇa', category: 'daily' },
 ];
 
 // Circular Progress Ring Component
@@ -255,7 +255,7 @@ function CelebrationModal({
             >
               ✓
             </motion.div>
-            <h3 className="text-2xl font-bold mb-2">Hare Krishna!</h3>
+            <h3 className="text-2xl font-bold mb-2">Hare Kṛṣṇa! 🙏</h3>
             <p className="text-orange-100">{message}</p>
           </div>
         </motion.div>
@@ -352,7 +352,7 @@ export default function Tracker() {
   // Check for goal completion and trigger celebration
   useEffect(() => {
     if (chantingProgress >= 100 && prevProgress < 100) {
-      setCelebrationMessage("You completed your chanting rounds!");
+      setCelebrationMessage("You completed your japa rounds!");
       setShowCelebration(true);
     }
     setPrevProgress(chantingProgress);
@@ -533,7 +533,7 @@ export default function Tracker() {
                     <p className="text-[9px] text-gray-500">/{hearingGoal}</p>
                   </div>
                 </ProgressRing>
-                <p className="text-xs font-medium text-gray-600 dark:text-gray-400 mt-2">Hearing</p>
+                <p className="text-xs font-medium text-gray-600 dark:text-gray-400 mt-2">Śravaṇa</p>
               </div>
             </div>
           </CardContent>
@@ -778,7 +778,7 @@ export default function Tracker() {
                   />
                   <div className="flex items-center space-x-2">
                     <Headphones className="w-5 h-5 text-purple-500" />
-                    <label htmlFor="hearing-checkbox" className="text-sm font-medium cursor-pointer">Hearing</label>
+                    <label htmlFor="hearing-checkbox" className="text-sm font-medium cursor-pointer">Śravaṇa</label>
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">

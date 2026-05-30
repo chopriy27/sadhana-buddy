@@ -56,7 +56,7 @@ export default function RecentActivity() {
         iconColor: "text-amber-500",
         iconBg: "bg-amber-100 dark:bg-amber-900/30",
         title: "Sadhana Complete",
-        description: `${entry.chantingRounds} rounds completed`,
+        description: `${entry.chantingRounds} japa rounds completed`,
         time: entry.createdAt,
       });
     });
@@ -74,8 +74,8 @@ export default function RecentActivity() {
         icon: Sparkles,
         iconColor: "text-orange-500",
         iconBg: "bg-orange-100 dark:bg-orange-900/30",
-        title: "Welcome to Sadhana Buddy",
-        description: "Start your spiritual journey today",
+        title: "Welcome to Sādhana Buddy",
+        description: "Begin your bhakti journey today 🙏",
         time: new Date(),
       }
     );

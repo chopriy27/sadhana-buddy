@@ -39,7 +39,7 @@ export default function Songs() {
 
   const addFavoriteMutation = useMutation({
     mutationFn: (songId: number) => 
-      apiRequest("/api/favorites", "POST", { userId, songId }),
+      apiRequest("POST", "/api/favorites", { userId, songId }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/favorites", userId] });
       toast({ description: "Added to favorites" });
@@ -51,7 +51,7 @@ export default function Songs() {
 
   const removeFavoriteMutation = useMutation({
     mutationFn: (songId: number) => 
-      apiRequest(`/api/favorites/${userId}/${songId}`, "DELETE"),
+      apiRequest("DELETE", `/api/favorites/${userId}/${songId}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/favorites", userId] });
       toast({ description: "Removed from favorites" });
@@ -277,9 +277,9 @@ export default function Songs() {
                     About This Song
                   </h4>
                   <p className="text-sm text-blue-700 dark:text-blue-300 mb-3">
-                    This devotional song is part of the authentic ISKCON Vaishnava Songbook, 
-                    compiled by the devotees at ISKCON Chowpatty. These songs have been sung 
-                    by generations of devotees in their spiritual practice.
+                    This devotional song is part of the authentic ISKCON Vaiṣṇava Songbook,
+                    compiled by the devotees at ISKCON Chowpatty. These songs have been sung
+                    by generations of devotees in their sādhana.
                   </p>
                   <p className="text-xs text-blue-600 dark:text-blue-400">
                     For complete lyrics and musical notations, please refer to kksongs.org 
@@ -289,9 +289,9 @@ export default function Songs() {
                 
                 <div className="bg-amber-50 dark:bg-amber-900/20 p-3 rounded-lg">
                   <p className="text-sm text-amber-800 dark:text-amber-200">
-                    <strong>Spiritual Context:</strong> Songs by great Vaishnava acharyas like 
-                    Bhaktivinoda Thakura and Narottama Das Thakura carry deep spiritual significance 
-                    and are considered non-different from prayers and meditation.
+                    <strong>Spiritual significance:</strong> Songs by great Vaiṣṇava ācāryas like
+                    Bhaktivinoda Ṭhākura and Narottama Dāsa Ṭhākura carry transcendental potency
+                    and are considered non-different from prayer and meditation.
                   </p>
                 </div>
               </div>

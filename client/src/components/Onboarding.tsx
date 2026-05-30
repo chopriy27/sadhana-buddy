@@ -94,7 +94,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
             Welcome to Sadhana Buddy
           </h1>
           <p className="text-gray-600 dark:text-gray-400 mt-2">
-            Let's set up your daily spiritual goals
+            Let's set up your daily sādhana goals
           </p>
         </div>
 
@@ -124,7 +124,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                   Japa Rounds
                 </h2>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  How many rounds of Hare Krishna Mahamantra would you like to chant daily?
+                  How many rounds of the Hare Kṛṣṇa mahā-mantra will you chant daily?
                 </p>
               </div>
 
@@ -185,7 +185,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                   Reading
                 </h2>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  How many pages of Srila Prabhupada's books would you like to read daily?
+                  How many pages of Śrīla Prabhupāda's books will you read daily?
                 </p>
               </div>
 
@@ -246,7 +246,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                   Hearing
                 </h2>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  How many minutes of Prabhupada's lectures would you like to hear daily?
+                  How many minutes of Śrīla Prabhupāda's lectures will you hear daily?
                 </p>
               </div>
 
@@ -327,7 +327,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                     Setting up...
                   </>
                 ) : (
-                  "Start My Journey"
+                  "Begin Sādhana 🙏"
                 )}
               </Button>
             )}
