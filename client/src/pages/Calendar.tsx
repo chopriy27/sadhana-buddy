@@ -580,17 +580,22 @@ export default function Calendar() {
                                                 </p>
                                             </div>
                                         </div>
-                                        <span className={`
-                                            text-[10px] font-medium px-2 py-1 rounded-full flex-shrink-0
-                                            ${diffDays === 0
-                                                ? 'bg-orange-500 text-white'
-                                                : diffDays === 1
-                                                    ? 'bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300'
-                                                    : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
-                                            }
-                                        `}>
-                                            {diffDays === 0 ? 'Today!' : diffDays === 1 ? 'Tomorrow' : `${diffDays}d`}
-                                        </span>
+                                        <div className="flex items-center gap-1 flex-shrink-0">
+                                            <span className={`
+                                                text-[10px] font-medium px-2 py-1 rounded-full
+                                                ${diffDays === 0
+                                                    ? 'bg-orange-500 text-white'
+                                                    : diffDays === 1
+                                                        ? 'bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300'
+                                                        : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
+                                                }
+                                            `}>
+                                                {diffDays === 0 ? 'Today!' : diffDays === 1 ? 'Tomorrow' : `${diffDays}d`}
+                                            </span>
+                                            {event.id && (
+                                                <ChevronRight className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500" />
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
                             );
