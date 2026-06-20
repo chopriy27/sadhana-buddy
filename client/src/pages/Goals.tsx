@@ -58,21 +58,8 @@ export default function Goals() {
   }, [user?.timezone]);
 
   const { data: goals, isLoading: goalsLoading } = useQuery<UserGoals>({
-    queryKey: ["/api/goals", user?.id],
+    queryKey: [`/api/goals/${user?.id}`],
     enabled: !!user?.id,
-    onError: (error: Error) => {
-      if (isUnauthorizedError(error)) {
-        toast({
-          title: "Unauthorized", 
-          description: "You are logged out. Logging in again...",
-          variant: "destructive",
-        });
-        setTimeout(() => {
-          window.location.href = "/";
-        }, 500);
-        return;
-      }
-    },
   });
 
   const updateGoalsMutation = useMutation({
@@ -82,7 +69,7 @@ export default function Goals() {
       return await response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/goals", user?.id] });
+      queryClient.invalidateQueries({ queryKey: [`/api/goals/${user?.id}`] });
       toast({
         title: "Goals Updated",
         description: "Your spiritual practice goals have been updated successfully!",

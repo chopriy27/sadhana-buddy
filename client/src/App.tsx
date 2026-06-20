@@ -1,6 +1,7 @@
 import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider, useQuery } from "@tanstack/react-query";
+import type { UserGoals } from "@shared/schema";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useMobileFeatures } from "@/hooks/use-mobile-features";
@@ -26,7 +27,7 @@ function Router() {
   const { isAuthenticated, isLoading, user } = useAuth();
 
   // Check if user has completed onboarding
-  const { data: userGoals, isLoading: goalsLoading } = useQuery({
+  const { data: userGoals, isLoading: goalsLoading } = useQuery<UserGoals | null>({
     queryKey: [`/api/goals/${user?.id}`],
     enabled: !!user?.id && isAuthenticated,
     retry: false,

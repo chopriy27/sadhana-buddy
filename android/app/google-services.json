@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "331106162214",
+    "project_id": "sadhana-buddy-68fe4",
+    "storage_bucket": "sadhana-buddy-68fe4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:331106162214:android:709204158fea22124d78e7",
+        "android_client_info": {
+          "package_name": "com.sadhanabuddy.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "331106162214-jtjo9450sab7epadrftj9clmb1ucfpq6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sadhanabuddy.app",
+            "certificate_hash": "f6a2b71676ecad70bc3f18d88de0755c8b573166"
+          }
+        },
+        {
+          "client_id": "331106162214-lqciti8v9re62igrrsf9cmri78c3itmu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sadhanabuddy.app",
+            "certificate_hash": "28c4ab6cfb3744d289c90f1a94d83e08f032ee21"
+          }
+        },
+        {
+          "client_id": "331106162214-j343vn5s3jkuj8mugmfdopkd3svqpkkf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlFsIv8oTWHSejyBT9V9uAtDUXtO0D1lU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "331106162214-j343vn5s3jkuj8mugmfdopkd3svqpkkf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

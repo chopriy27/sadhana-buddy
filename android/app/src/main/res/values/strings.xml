@@ -4,4 +4,5 @@
     <string name="title_activity_main">Sadhana Buddy</string>
     <string name="package_name">com.sadhanabuddy.app</string>
     <string name="custom_url_scheme">com.sadhanabuddy.app</string>
+    <string name="server_client_id">331106162214-j343vn5s3jkuj8mugmfdopkd3svqpkkf.apps.googleusercontent.com</string>
 </resources>

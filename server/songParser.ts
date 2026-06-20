@@ -215,7 +215,7 @@ function completeSong(songData: Partial<ParsedSong>, lyrics: string, author: str
     category: categorizeByAuthor(author) || 'bhajan',
     mood: determineMood(songData.title || '', lyrics),
     lyrics: lyrics || '',
-    audioUrl: null
+    audioUrl: undefined
   };
 }
 

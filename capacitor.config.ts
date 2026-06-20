@@ -20,6 +20,14 @@ const config: CapacitorConfig = {
     StatusBar: {
       style: "DARK",
       backgroundColor: "#FF7F50"
+    },
+    // Updated configuration for @capgo/capacitor-social-login
+    SocialLogin: {
+      providers: {
+        google: true,
+        apple: true,
+        facebook: false
+      }
     }
   }
 };

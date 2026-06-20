@@ -11,14 +11,13 @@ import {
   insertUserGoalsSchema,
 } from "./schemas";
 
-// Augment Express.User so req.user carries Firebase auth fields on all routes.
-declare global {
-  namespace Express {
-    interface User {
+declare module 'express-serve-static-core' {
+  interface Request {
+    user?: {
       uid: string;
       email?: string;
       name?: string;
-    }
+    };
   }
 }
 

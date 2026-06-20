@@ -20,7 +20,7 @@ export default function SadhanaProgress() {
   // Get actual progress values
   const chantingRounds = todaysSadhana?.chantingRounds || 0;
   const pagesRead = todaysSadhana?.pagesRead || 0;
-  const hearingMinutes = todaysSadhana?.hearingMinutes || 0;
+  const hearingMinutes = todaysSadhana?.hearingLectures || 0;
 
   // Get personalized goals from onboarding
   const chantingTarget = userGoals?.dailyChantingRounds || 16;

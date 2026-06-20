@@ -789,6 +789,8 @@ export class DatabaseStorage implements IStorage {
           createdAt: new Date(),
           lyrics: song.lyrics || null,
           audioUrl: song.audioUrl || null,
+          lyricsPreview: song.lyricsPreview ?? null,
+          pageReference: song.pageReference ?? null,
         };
         this.devotionalSongsData.push(songWithId);
       });
