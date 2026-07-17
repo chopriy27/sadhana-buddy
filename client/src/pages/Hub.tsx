@@ -1,5 +1,3 @@
-import { Bell } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import Logo from "@/components/Logo";
 import FestivalBanner from "@/components/FestivalBanner";
 import SadhanaProgress from "@/components/SadhanaProgress";
@@ -21,15 +19,10 @@ export default function Hub() {
             <Logo size={36} />
             <div>
               <h1 className="text-lg font-bold text-gray-800 dark:text-gray-200">
-                {firstName ? `Hare Kṛṣṇa, ${firstName}!` : 'Hare Kṛṣṇa! 🙏'}
+                {firstName ? `Hare Kṛṣṇa, ${firstName}!` : 'Hare Kṛṣṇa!'}
               </h1>
               <p className="text-[10px] text-gray-500 -mt-0.5">Your Sādhana Companion</p>
             </div>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Button variant="ghost" size="icon" className="relative h-9 w-9">
-              <Bell className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-            </Button>
           </div>
         </div>
       </header>

@@ -98,23 +98,22 @@ interface CustomSadhanaItem {
   id: string;
   label: string;
   icon: React.ElementType;
-  emoji: string;
   description: string;
   category: 'morning' | 'daily' | 'evening';
 }
 
 const AVAILABLE_SADHANA_ITEMS: CustomSadhanaItem[] = [
-  { id: 'mangala_arati', label: 'Mangala Arati', icon: Sun, emoji: '🌅', description: 'Attend morning arati (4:30 AM)', category: 'morning' },
-  { id: 'tulasi_puja', label: 'Tulasi Puja', icon: Flower2, emoji: '🌿', description: 'Worship Tulasi Devi', category: 'morning' },
-  { id: 'guru_puja', label: 'Guru Puja', icon: Heart, emoji: '🙏', description: 'Attend Guru Puja ceremony', category: 'morning' },
-  { id: 'deity_worship', label: 'Deity Worship', icon: Sparkles, emoji: '✨', description: 'Personal deity worship at home', category: 'morning' },
-  { id: 'offer_flowers', label: 'Offer Flowers/Arati', icon: Flower2, emoji: '🌸', description: 'Offer flowers or perform arati', category: 'daily' },
-  { id: 'sing_bhajans', label: 'Sing Bhajans', icon: Music, emoji: '🎵', description: 'Sing devotional songs', category: 'daily' },
-  { id: 'hear_class', label: 'Hear Bhagavatam Class', icon: Users, emoji: '📚', description: 'Attend or hear Bhagavatam class', category: 'morning' },
-  { id: 'prasadam', label: 'Honor Prasādam', icon: Coffee, emoji: '🍽️', description: 'Only eat Kṛṣṇa prasādam', category: 'daily' },
-  { id: 'evening_arati', label: 'Evening Arati', icon: Moon, emoji: '🌙', description: 'Attend Gaura Arati', category: 'evening' },
-  { id: 'gayatri', label: 'Chant Gayatri', icon: Bell, emoji: '🔔', description: 'Chant Gayatri mantras', category: 'daily' },
-  { id: 'service', label: 'Temple/Devotee Service', icon: Heart, emoji: '💝', description: 'Perform sevā for Kṛṣṇa', category: 'daily' },
+  { id: 'mangala_arati', label: 'Mangala Arati', icon: Sun, description: 'Attend morning arati (4:30 AM)', category: 'morning' },
+  { id: 'tulasi_puja', label: 'Tulasi Puja', icon: Flower2, description: 'Worship Tulasi Devi', category: 'morning' },
+  { id: 'guru_puja', label: 'Guru Puja', icon: Heart, description: 'Attend Guru Puja ceremony', category: 'morning' },
+  { id: 'deity_worship', label: 'Deity Worship', icon: Sparkles, description: 'Personal deity worship at home', category: 'morning' },
+  { id: 'offer_flowers', label: 'Offer Flowers/Arati', icon: Flower2, description: 'Offer flowers or perform arati', category: 'daily' },
+  { id: 'sing_bhajans', label: 'Sing Bhajans', icon: Music, description: 'Sing devotional songs', category: 'daily' },
+  { id: 'hear_class', label: 'Hear Bhagavatam Class', icon: Users, description: 'Attend or hear Bhagavatam class', category: 'morning' },
+  { id: 'prasadam', label: 'Honor Prasādam', icon: Coffee, description: 'Only eat Kṛṣṇa prasādam', category: 'daily' },
+  { id: 'evening_arati', label: 'Evening Arati', icon: Moon, description: 'Attend Gaura Arati', category: 'evening' },
+  { id: 'gayatri', label: 'Chant Gayatri', icon: Bell, description: 'Chant Gayatri mantras', category: 'daily' },
+  { id: 'service', label: 'Temple/Devotee Service', icon: Heart, description: 'Perform sevā for Kṛṣṇa', category: 'daily' },
 ];
 
 // Circular Progress Ring Component
@@ -255,7 +254,7 @@ function CelebrationModal({
             >
               ✓
             </motion.div>
-            <h3 className="text-2xl font-bold mb-2">Hare Kṛṣṇa! 🙏</h3>
+            <h3 className="text-2xl font-bold mb-2">Hare Kṛṣṇa!</h3>
             <p className="text-orange-100">{message}</p>
           </div>
         </motion.div>
@@ -865,7 +864,7 @@ export default function Tracker() {
                       checked={completedItems[item.id] || false}
                       onCheckedChange={() => toggleItemComplete(item.id)}
                     />
-                    <span className="text-lg">{item.emoji}</span>
+                    <item.icon className="w-5 h-5 text-orange-500 flex-shrink-0" />
                     <label 
                       htmlFor={item.id}
                       className={`flex-1 text-sm font-medium cursor-pointer ${
@@ -960,7 +959,7 @@ export default function Tracker() {
                       }
                     }}
                   >
-                    <span className="text-2xl">{item.emoji}</span>
+                    <item.icon className="w-6 h-6 text-orange-500 flex-shrink-0" />
                     <div className="flex-1">
                       <p className="font-medium text-sm">{item.label}</p>
                       <p className="text-xs text-gray-500">{item.description}</p>
@@ -995,7 +994,7 @@ export default function Tracker() {
                       }
                     }}
                   >
-                    <span className="text-2xl">{item.emoji}</span>
+                    <item.icon className="w-6 h-6 text-orange-500 flex-shrink-0" />
                     <div className="flex-1">
                       <p className="font-medium text-sm">{item.label}</p>
                       <p className="text-xs text-gray-500">{item.description}</p>
@@ -1030,7 +1029,7 @@ export default function Tracker() {
                       }
                     }}
                   >
-                    <span className="text-2xl">{item.emoji}</span>
+                    <item.icon className="w-6 h-6 text-orange-500 flex-shrink-0" />
                     <div className="flex-1">
                       <p className="font-medium text-sm">{item.label}</p>
                       <p className="text-xs text-gray-500">{item.description}</p>

@@ -10,7 +10,10 @@ import {
     Info,
     List,
     Grid3X3,
-    X
+    X,
+    Moon,
+    Sun,
+    Star,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
@@ -82,13 +85,13 @@ function getCategoryTextColor(category: string): string {
     }
 }
 
-function getCategoryEmoji(category: string): string {
+function CategoryIcon({ category, className = "w-5 h-5" }: { category: string; className?: string }) {
     switch (category) {
-        case 'appearance': return '🌅';
-        case 'disappearance': return '🙏';
-        case 'ekadasi': return '🌙';
-        case 'festival': return '🎉';
-        default: return '📿';
+        case 'appearance': return <Sun className={className} />;
+        case 'disappearance': return <Star className={className} />;
+        case 'ekadasi': return <Moon className={className} />;
+        case 'festival': return <Sparkles className={className} />;
+        default: return <Star className={className} />;
     }
 }
 
@@ -511,7 +514,7 @@ export default function Calendar() {
                                             {/* Event info */}
                                             <div className="flex-1 min-w-0">
                                                 <div className="flex items-center gap-2">
-                                                    <span className="text-base">{getCategoryEmoji(category)}</span>
+                                                    <CategoryIcon category={category} className="w-4 h-4 text-gray-500 dark:text-gray-400 flex-shrink-0" />
                                                     <h4 className="font-medium text-gray-800 dark:text-gray-200 text-sm truncate">
                                                         {event.name}
                                                     </h4>
@@ -660,7 +663,9 @@ export default function Calendar() {
                         {selectedDayEvents.ekadasi && (
                             <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-900/30 border-2 border-amber-200 dark:border-amber-700">
                                 <div className="flex items-start gap-3">
-                                    <div className="text-3xl">🌙</div>
+                                    <div className="w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center flex-shrink-0">
+                                        <Moon className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                                    </div>
                                     <div className="flex-1">
                                         <div className="flex items-center gap-2 mb-1">
                                             <h4 className="font-bold text-amber-800 dark:text-amber-200">
@@ -691,7 +696,9 @@ export default function Calendar() {
                                     className={`p-4 rounded-2xl border-2 cursor-pointer active:scale-[0.98] transition-transform ${getCategoryBgColor(category)}`}
                                 >
                                     <div className="flex items-start gap-3">
-                                        <div className="text-3xl">{getCategoryEmoji(category)}</div>
+                                        <div className="w-10 h-10 rounded-full bg-white/60 dark:bg-gray-700/60 flex items-center justify-center flex-shrink-0">
+                                            <CategoryIcon category={category} className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+                                        </div>
                                         <div className="flex-1">
                                             <h4 className={`font-bold text-base ${getCategoryTextColor(category)}`}>
                                                 {festival.name}

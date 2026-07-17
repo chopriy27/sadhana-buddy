@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Target, Headphones, Calendar, PenLine } from "lucide-react";
+import { Target, Headphones, Music2 } from "lucide-react";
 import { Link } from "wouter";
 import type { DevotionalSong, Lecture } from "@shared/schema";
 
@@ -17,12 +17,12 @@ export default function QuickActions() {
 
   const actions = [
     {
-      href: "/calendar",
-      icon: Calendar,
+      href: "/songs",
+      icon: Music2,
       iconBg: "bg-orange-100 dark:bg-orange-900/30",
       iconColor: "text-orange-500",
-      title: "Calendar",
-      subtitle: "Festivals & Ekadasis",
+      title: "Songs",
+      subtitle: `${songCount} bhajans & kirtans`,
     },
     {
       href: "/lectures",
@@ -31,14 +31,6 @@ export default function QuickActions() {
       iconColor: "text-amber-600",
       title: "Lectures",
       subtitle: `${lectureCount}+ by Prabhupada`,
-    },
-    {
-      href: "/journal",
-      icon: PenLine,
-      iconBg: "bg-yellow-100 dark:bg-yellow-900/30",
-      iconColor: "text-yellow-600",
-      title: "Journal",
-      subtitle: "Spiritual reflections",
     },
     {
       href: "/goals",
@@ -53,7 +45,7 @@ export default function QuickActions() {
   return (
     <div className="px-4 mt-6">
       <h3 className="text-gray-800 dark:text-gray-200 font-bold text-base mb-3">Quick Access</h3>
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-3 gap-3">
         {actions.map((action) => (
           <Link key={action.href} href={action.href}>
             <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl p-4 shadow-sm border border-orange-100 dark:border-gray-700 hover:shadow-md hover:scale-[1.02] transition-all cursor-pointer">

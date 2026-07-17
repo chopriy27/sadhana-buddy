@@ -1009,7 +1009,7 @@ export default function EventDetail() {
                                             ? 'bg-white/20'
                                             : 'bg-white/30'
                                     }`}>
-                                    {diffDays === 0 ? '🎉 Today!' :
+                                    {diffDays === 0 ? 'Today!' :
                                         diffDays === 1 ? 'Tomorrow' :
                                             diffDays < 0 ? `${Math.abs(diffDays)} days ago` :
                                                 `${diffDays} days remaining`}
@@ -1131,7 +1131,7 @@ export default function EventDetail() {
                         <div className="flex flex-wrap gap-2">
                             {suggestedBhajans.map((bhajan, i) => (
                                 <span key={i} className="px-3 py-1.5 bg-rose-50 dark:bg-rose-900/20 rounded-full text-sm font-medium text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800">
-                                    🎵 {bhajan}
+                                    {bhajan}
                                 </span>
                             ))}
                         </div>

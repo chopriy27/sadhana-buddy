@@ -29,13 +29,11 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
       dailyHearingLectures: number;
       dailyChantingRounds: number;
     }) => {
-      console.log('Submitting goals:', { userId: user?.id, ...goals });
       const response = await apiRequest('POST', '/api/goals', {
         userId: user?.id,
         ...goals,
         isOnboardingComplete: true,
       });
-      console.log('Goals response:', response);
       return response;
     },
     onSuccess: () => {
@@ -327,7 +325,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                     Setting up...
                   </>
                 ) : (
-                  "Begin Sādhana 🙏"
+                  "Begin Sādhana"
                 )}
               </Button>
             )}

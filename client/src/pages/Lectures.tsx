@@ -143,7 +143,7 @@ export default function Lectures() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-warm-white dark:bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 flex items-center justify-center">
         <div className="text-center">
           <div className="w-12 h-12 mx-auto mb-4 animate-spin">
             <div className="w-full h-full border-4 border-sacred-orange border-t-transparent rounded-full"></div>
@@ -155,7 +155,7 @@ export default function Lectures() {
   }
 
   return (
-    <div className="min-h-screen bg-warm-white dark:bg-gray-900 pb-20">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 pb-20">
       {/* Header */}
       <header className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg shadow-sm border-b border-orange-100 dark:border-gray-700 sticky top-0 z-50">
         <div className="max-w-md mx-auto px-4 py-3 flex items-center gap-3">

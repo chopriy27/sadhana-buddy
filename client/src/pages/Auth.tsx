@@ -114,7 +114,7 @@ export default function Auth() {
             Sadhana Buddy
           </h1>
           <p className="text-gray-600 dark:text-gray-400 mt-1 text-sm">
-            {mode === 'login' && 'Hare Kṛṣṇa 🙏'}
+            {mode === 'login' && 'Hare Kṛṣṇa'}
             {mode === 'signup' && 'Begin your sādhana'}
             {mode === 'forgot-password' && 'Reset your password'}
           </p>

@@ -75,7 +75,7 @@ export default function RecentActivity() {
         iconColor: "text-orange-500",
         iconBg: "bg-orange-100 dark:bg-orange-900/30",
         title: "Welcome to Sādhana Buddy",
-        description: "Begin your bhakti journey today 🙏",
+        description: "Begin your bhakti journey today",
         time: new Date(),
       }
     );

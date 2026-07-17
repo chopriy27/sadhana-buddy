@@ -2,7 +2,6 @@ import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { verifyIdToken, isFirebaseConfigured, firestore, COLLECTIONS } from "./firebase";
-import { aiRecommendationEngine, type RecommendationContext } from "./ai-recommendations";
 import {
   insertSadhanaEntrySchema,
   insertJournalEntrySchema,
@@ -544,80 +543,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error updating timezone:", error);
       res.status(500).json({ message: "Failed to update timezone" });
-    }
-  });
-
-  // AI Recommendation endpoints
-  app.post("/api/recommendations/:userId", auth, async (req: Request, res) => {
-    if (!requireOwner(req, res, req.params.userId)) return;
-    try {
-      const userId = req.params.userId;
-      const { currentMood, timeOfDay, practiceLevel, spiritualFocus, count = 5 } = req.body;
-
-      const [
-        favoriteSongs,
-        recentSadhana,
-        recentJournal,
-        allSongs
-      ] = await Promise.all([
-        storage.getFavoriteSongs(userId),
-        storage.getSadhanaEntries(userId, 7),
-        storage.getJournalEntries(userId, 5),
-        storage.getDevotionalSongs()
-      ]);
-
-      const avgProgress = recentSadhana.length > 0 ? {
-        chantingRounds: Math.round(recentSadhana.reduce((sum, entry) => sum + (entry.chantingRounds || 0), 0) / recentSadhana.length),
-        readingPages: Math.round(recentSadhana.reduce((sum, entry) => sum + (entry.pagesRead || 0), 0) / recentSadhana.length),
-        hearingMinutes: Math.round(recentSadhana.reduce((sum, entry) => sum + (entry.hearingLectures || 0), 0) / recentSadhana.length)
-      } : undefined;
-
-      const context: RecommendationContext = {
-        userId,
-        currentMood,
-        timeOfDay,
-        practiceLevel,
-        recentSadhanaProgress: avgProgress,
-        recentJournalEntries: recentJournal
-          .filter(entry => entry.mood != null)
-          .map(entry => ({ mood: entry.mood!, content: entry.content })),
-        favoriteSongs: favoriteSongs.map(f => f.song)
-      };
-
-      const recommendations = await aiRecommendationEngine.generateRecommendations(
-        allSongs,
-        context,
-        count
-      );
-
-      res.json(recommendations);
-    } catch (error) {
-      console.error("Error generating recommendations:", error);
-      res.status(500).json({ message: "Failed to generate recommendations" });
-    }
-  });
-
-  app.get("/api/recommendations/:userId/preferences", auth, async (req: Request, res) => {
-    if (!requireOwner(req, res, req.params.userId)) return;
-    try {
-      const userId = req.params.userId;
-
-      const [favoriteSongs, journalEntries] = await Promise.all([
-        storage.getFavoriteSongs(userId),
-        storage.getJournalEntries(userId, 20)
-      ]);
-
-      const preferences = await aiRecommendationEngine.analyzeUserPreferences(
-        favoriteSongs.map(f => f.song),
-        journalEntries
-          .filter(entry => entry.mood != null)
-          .map(entry => ({ mood: entry.mood!, content: entry.content }))
-      );
-
-      res.json(preferences);
-    } catch (error) {
-      console.error("Error analyzing preferences:", error);
-      res.status(500).json({ message: "Failed to analyze preferences" });
     }
   });
 
