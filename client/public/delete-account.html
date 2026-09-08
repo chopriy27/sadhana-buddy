@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Account - Sadhana Buddy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #fff7ed 0%, #fffbeb 100%);
+            min-height: 100vh;
+        }
+        h1 {
+            color: #ea580c;
+            margin-bottom: 10px;
+            font-size: 2rem;
+        }
+        h2 {
+            color: #c2410c;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        ol, ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .last-updated {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+        }
+        .step-box {
+            background: #fff;
+            border-left: 4px solid #ea580c;
+            padding: 20px;
+            border-radius: 0 10px 10px 0;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+        }
+        .warning {
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .contact {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        a {
+            color: #ea580c;
+        }
+        .app-name {
+            font-weight: bold;
+            color: #ea580c;
+        }
+    </style>
+</head>
+<body>
+    <h1>Delete Your Account</h1>
+    <p class="last-updated">Sadhana Buddy &mdash; Account &amp; Data Deletion</p>
+
+    <p>You can request deletion of your <span class="app-name">Sadhana Buddy</span> account and all associated data at any time. This page describes how to request deletion and what data is removed.</p>
+
+    <div class="warning">
+        <strong>Note:</strong> Account deletion is permanent and cannot be undone. All your spiritual practice data, journal entries, and goals will be permanently erased.
+    </div>
+
+    <h2>How to Delete Your Account</h2>
+
+    <div class="step-box">
+        <strong>Option 1 &mdash; Within the app (recommended):</strong>
+        <ol>
+            <li>Open Sadhana Buddy and sign in to your account.</li>
+            <li>Tap the profile icon or navigate to <strong>Settings</strong>.</li>
+            <li>Scroll to the bottom and tap <strong>Delete Account</strong>.</li>
+            <li>Confirm the deletion when prompted.</li>
+        </ol>
+    </div>
+
+    <div class="step-box">
+        <strong>Option 2 &mdash; Email request:</strong>
+        <ol>
+            <li>Send an email to <a href="mailto:privacy@sadhanabuddy.com">privacy@sadhanabuddy.com</a> from the email address associated with your account.</li>
+            <li>Use the subject line: <strong>Account Deletion Request</strong>.</li>
+            <li>We will process your request and confirm deletion within 30 days.</li>
+        </ol>
+    </div>
+
+    <h2>What Data Is Deleted</h2>
+    <p>Upon account deletion, the following data is permanently removed from our systems:</p>
+    <ul>
+        <li>Your account credentials (email address, display name)</li>
+        <li>All sadhana tracking data (japa rounds, reading pages, hearing minutes)</li>
+        <li>Journal entries and personal reflections</li>
+        <li>Spiritual practice goals and preferences</li>
+        <li>App activity and usage history</li>
+    </ul>
+
+    <h2>Data Retention</h2>
+    <p>Once your deletion request is processed:</p>
+    <ul>
+        <li>All personal data is deleted from our Firestore database immediately.</li>
+        <li>Firebase Authentication credentials are removed within 30 days.</li>
+        <li>No data is retained after deletion is complete.</li>
+        <li>Anonymized, non-identifiable aggregate statistics (if any) may be retained.</li>
+    </ul>
+
+    <div class="contact">
+        <h2>Contact Us</h2>
+        <p>If you have questions about account deletion or your data, please contact us:</p>
+        <p><strong>Email:</strong> <a href="mailto:privacy@sadhanabuddy.com">privacy@sadhanabuddy.com</a></p>
+        <p><a href="/privacy-policy.html">View our full Privacy Policy</a></p>
+    </div>
+</body>
+</html>
