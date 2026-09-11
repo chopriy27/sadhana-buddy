@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
+import { useLocation } from "wouter";
 import { Search, Heart, User, Music } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,7 +14,15 @@ import { useAuth } from "@/hooks/useAuth";
 import type { DevotionalSong, FavoriteSong } from "@shared/schema";
 
 export default function Songs() {
-  const [search, setSearch] = useState("");
+  const [location] = useLocation();
+  const [search, setSearch] = useState(() =>
+    new URLSearchParams(window.location.search).get("search") || ""
+  );
+
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search).get("search");
+    if (q !== null) setSearch(q);
+  }, [location]);
   const [category, setCategory] = useState<string>("");
   const [mood, setMood] = useState<string>("");
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);

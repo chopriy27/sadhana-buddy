@@ -45,9 +45,12 @@ export default function DailyVerse() {
             <h3 className="font-bold text-sm">Daily Verse</h3>
           </div>
           
-          <blockquote className="text-sm leading-relaxed mb-3 font-medium">
+          <p className="text-sm leading-relaxed mb-2 font-medium italic opacity-90">
+            {verse.verse}
+          </p>
+          <p className="text-sm leading-relaxed mb-3 text-white/85">
             "{verse.translation}"
-          </blockquote>
+          </p>
           
           <div className="flex items-center justify-between">
             <p className="text-white/70 text-xs font-medium">— {verse.source}</p>

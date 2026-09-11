@@ -1130,9 +1130,13 @@ export default function EventDetail() {
                         </div>
                         <div className="flex flex-wrap gap-2">
                             {suggestedBhajans.map((bhajan, i) => (
-                                <span key={i} className="px-3 py-1.5 bg-rose-50 dark:bg-rose-900/20 rounded-full text-sm font-medium text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800">
+                                <button
+                                    key={i}
+                                    onClick={() => setLocation(`/songs?search=${encodeURIComponent(bhajan)}`)}
+                                    className="px-3 py-1.5 bg-rose-50 dark:bg-rose-900/20 rounded-full text-sm font-medium text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800 hover:bg-rose-100 dark:hover:bg-rose-900/40 cursor-pointer transition-colors"
+                                >
                                     {bhajan}
-                                </span>
+                                </button>
                             ))}
                         </div>
                     </div>
