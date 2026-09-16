@@ -23,18 +23,16 @@ export default function Songs() {
   const { toast } = useToast();
   const { user } = useAuth();
 
-  if (!user) {
-    return <div>Please log in to access songs.</div>;
-  }
-
-  const userId = user.id;
+  const userId = user?.id;
 
   const { data: songs, isLoading } = useQuery<DevotionalSong[]>({
     queryKey: ["/api/songs", { category, mood, search }],
+    enabled: !!user,
   });
 
   const { data: favorites } = useQuery<(FavoriteSong & { song: DevotionalSong })[]>({
     queryKey: ["/api/favorites", userId],
+    enabled: !!userId,
   });
 
   const addFavoriteMutation = useMutation({
@@ -60,6 +58,10 @@ export default function Songs() {
       toast({ description: "Failed to remove from favorites", variant: "destructive" });
     },
   });
+
+  if (!user) {
+    return <div>Please log in to access songs.</div>;
+  }
 
   const categories = ["bhajan", "kirtan", "prayer"];
   const moods = ["devotional", "meditative", "joyful"];
@@ -227,26 +229,14 @@ export default function Songs() {
                 </div>
               </div>
 
-              <div className="bg-amber-50 dark:bg-amber-900/20 p-4 rounded-lg">
-                <h4 className="font-medium text-amber-800 dark:text-amber-200 mb-2">About This Song</h4>
-                <p className="text-sm text-amber-700 dark:text-amber-300 mb-3">
-                  This devotional song is part of the authentic ISKCON Vaiṣṇava Songbook,
-                  compiled by the devotees at ISKCON Chowpatty. These songs have been sung
-                  by generations of devotees in their sādhana.
-                </p>
-                <p className="text-xs text-amber-600 dark:text-amber-400">
-                  For complete lyrics and musical notations, please refer to kksongs.org
-                  or the official ISKCON Vaishnava Songbook.
-                </p>
-              </div>
-
-              <div className="bg-orange-50 dark:bg-orange-900/20 p-3 rounded-lg">
-                <p className="text-sm text-orange-800 dark:text-orange-200">
-                  <strong>Spiritual significance:</strong> Songs by great Vaiṣṇava ācāryas like
-                  Bhaktivinoda Ṭhākura and Narottama Dāsa Ṭhākura carry transcendental potency
-                  and are considered non-different from prayer and meditation.
-                </p>
-              </div>
+              {selectedSong.lyrics && (
+                <div className="bg-amber-50 dark:bg-amber-900/20 p-4 rounded-lg max-h-80 overflow-y-auto">
+                  <h4 className="font-medium text-amber-800 dark:text-amber-200 mb-3">Lyrics</h4>
+                  <p className="text-sm text-amber-900 dark:text-amber-100 leading-relaxed whitespace-pre-line font-medium italic">
+                    {selectedSong.lyrics}
+                  </p>
+                </div>
+              )}
             </div>
           )}
         </DialogContent>
