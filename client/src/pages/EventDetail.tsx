@@ -542,7 +542,7 @@ const festivalInfo: Record<string, {
             'Special bhoga offerings featuring seasonal fruits'
         ],
         story: 'In the writings of the Six Goswamis, the swing pastimes of Rādhā and Kṛṣṇa in the forests of Vṛndāvan during the monsoon are described as particularly intimate and sweet. The sound of kadamba flowers in the rain, the peacock\'s call, and the beautifully decorated swings form the backdrop for these beloved pastimes.',
-        bhajans: ['Jaya Radhe Jaya Krsna Jaya Vrndavana', 'Jaya Jaya Radha Krsna', 'Radhe Radhe Syama Sri Radhe']
+        bhajans: ['Jaya Radhe Jaya Krsna Jaya Vrndavana', 'Jaya Radhe Jaya Radhe Radhe', 'Radhe Radhe Syama Sri Radhe']
     },
     'nandotsava': {
         significance: 'Nandotsava is the joyful celebration by Nanda Mahārāja and the residents of Vṛndāvan the day after Kṛṣṇa\'s appearance (Janmāṣṭamī). The entire cowherd community celebrated the birth of Nanda\'s son with charity, feasting, and music throughout Gokula.',
