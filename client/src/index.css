@@ -160,6 +160,10 @@
     padding-right: env(safe-area-inset-right);
   }
 
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
   .mobile-touch-target {
     min-height: 44px;
     min-width: 44px;

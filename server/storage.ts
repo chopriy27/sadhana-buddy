@@ -522,7 +522,7 @@ export class DatabaseStorage implements IStorage {
   // Daily Verses - In-memory with seeded data
   async getDailyVerse(date: string): Promise<DailyVerse | undefined> {
     if (this.dailyVersesData.length === 0) return undefined;
-    const d = new Date(date + 'T00:00:00');
+    const d = new Date(date + 'T00:00:00Z');
     const startOfYear = new Date(d.getFullYear(), 0, 0);
     const dayOfYear = Math.floor((d.getTime() - startOfYear.getTime()) / (1000 * 60 * 60 * 24));
     return this.dailyVersesData[dayOfYear % this.dailyVersesData.length];

@@ -60,7 +60,10 @@ export default function Auth() {
     try {
       await loginWithGoogle();
     } catch (err: any) {
-      toast({ title: 'Failed to sign in with Google', variant: 'destructive' });
+      const msg = err?.message?.includes('No ID Token')
+        ? 'Google sign-in not configured for this build. Check Firebase SHA fingerprints.'
+        : 'Failed to sign in with Google';
+      toast({ title: msg, variant: 'destructive' });
     } finally {
       setIsSubmitting(false);
     }

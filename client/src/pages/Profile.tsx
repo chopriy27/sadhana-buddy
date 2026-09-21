@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { 
-  User, BookOpen, Target, Award, Calendar, TrendingUp, LogOut, 
+import {
+  User, BookOpen, Target, Award, Calendar, TrendingUp, LogOut,
   Edit3, Save, X, Search, UserPlus, Users, Check, Clock, Heart,
   Settings, ChevronRight, Bell, Shield, HelpCircle, MessageCircle,
-  Mail, Globe, Eye, EyeOff, Lock, Smartphone, Volume2
+  Mail, Globe, Eye, EyeOff, Lock, Smartphone, Volume2, ArrowLeft
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -591,7 +591,10 @@ export default function Profile() {
       {/* Settings Sheet */}
       <Sheet open={showSettings} onOpenChange={setShowSettings}>
         <SheetContent side="right" className="w-full sm:max-w-md">
-          <SheetHeader>
+          <SheetHeader className="flex flex-row items-center gap-3 pb-2 border-b">
+            <Button variant="ghost" size="icon" onClick={() => setShowSettings(false)}>
+              <ArrowLeft className="w-5 h-5" />
+            </Button>
             <SheetTitle>Settings</SheetTitle>
           </SheetHeader>
 

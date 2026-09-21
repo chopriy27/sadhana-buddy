@@ -240,36 +240,36 @@ export const EKADASI_DATES: EkadasiDate[] = [
     // February 2026
     {
         name: 'Vijaya Ekadasi', paksha: 'krishna', month: 'February',
-        dates: { india: '2026-02-12', us_west: '2026-02-11', us_east: '2026-02-12', europe: '2026-02-12', australia: '2026-02-12' },
+        dates: { india: '2026-02-12', us_west: '2026-02-12', us_east: '2026-02-12', europe: '2026-02-12', australia: '2026-02-12' },
         fastingInstructions: 'Fast from grains. Lord Rama observed this before building the bridge to Lanka. Grants victory.'
     },
     {
         name: 'Amalaki Ekadasi', paksha: 'shukla', month: 'February',
-        dates: { india: '2026-02-27', us_west: '2026-02-26', us_east: '2026-02-27', europe: '2026-02-27', australia: '2026-02-27' },
+        dates: { india: '2026-02-27', us_west: '2026-02-27', us_east: '2026-02-27', europe: '2026-02-27', australia: '2026-02-27' },
         fastingInstructions: 'Fast from grains. Worship the Amalaki tree (Indian gooseberry). Very auspicious.'
     },
 
     // March 2026
     {
         name: 'Papamocani Ekadasi', paksha: 'krishna', month: 'March',
-        dates: { india: '2026-03-14', us_west: '2026-03-13', us_east: '2026-03-14', europe: '2026-03-14', australia: '2026-03-14' },
+        dates: { india: '2026-03-14', us_west: '2026-03-14', us_east: '2026-03-14', europe: '2026-03-14', australia: '2026-03-14' },
         fastingInstructions: 'Fast from grains. Removes all sins (papa). Highly purifying.'
     },
     {
         name: 'Kamada Ekadasi', paksha: 'shukla', month: 'March',
-        dates: { india: '2026-03-28', us_west: '2026-03-27', us_east: '2026-03-28', europe: '2026-03-28', australia: '2026-03-28' },
+        dates: { india: '2026-03-28', us_west: '2026-03-28', us_east: '2026-03-28', europe: '2026-03-28', australia: '2026-03-28' },
         fastingInstructions: 'Fast from grains. Fulfills all material and spiritual desires (kama).'
     },
 
     // April 2026
     {
         name: 'Varuthini Ekadasi', paksha: 'krishna', month: 'April',
-        dates: { india: '2026-04-13', us_west: '2026-04-12', us_east: '2026-04-13', europe: '2026-04-13', australia: '2026-04-13' },
+        dates: { india: '2026-04-13', us_west: '2026-04-13', us_east: '2026-04-13', europe: '2026-04-13', australia: '2026-04-13' },
         fastingInstructions: 'Fast from grains. Protects one from hellish conditions. Very powerful.'
     },
     {
         name: 'Mohini Ekadasi', paksha: 'shukla', month: 'April',
-        dates: { india: '2026-04-27', us_west: '2026-04-26', us_east: '2026-04-27', europe: '2026-04-27', australia: '2026-04-27' },
+        dates: { india: '2026-04-27', us_west: '2026-04-27', us_east: '2026-04-27', europe: '2026-04-27', australia: '2026-04-27' },
         fastingInstructions: 'Fast from grains. Named after Lord Vishnu\'s Mohini form. Enchanting blessings.'
     },
 
@@ -281,91 +281,91 @@ export const EKADASI_DATES: EkadasiDate[] = [
     },
     {
         name: 'Padmini Ekadasi (Adhika Masa)', paksha: 'shukla', month: 'May',
-        dates: { india: '2026-05-26', us_west: '2026-05-25', us_east: '2026-05-26', europe: '2026-05-26', australia: '2026-05-26' },
+        dates: { india: '2026-05-26', us_west: '2026-05-26', us_east: '2026-05-26', europe: '2026-05-26', australia: '2026-05-26' },
         fastingInstructions: 'Fast from grains. Special Ekadasi in the extra month (Purusottama Adhika Masa). Very rare and auspicious.'
     },
 
     // June 2026
     {
         name: 'Parama Ekadasi (Adhika Masa)', paksha: 'krishna', month: 'June',
-        dates: { india: '2026-06-11', us_west: '2026-06-10', us_east: '2026-06-11', europe: '2026-06-11', australia: '2026-06-11' },
+        dates: { india: '2026-06-11', us_west: '2026-06-11', us_east: '2026-06-11', europe: '2026-06-11', australia: '2026-06-11' },
         fastingInstructions: 'Fast from grains. Special Ekadasi in the extra month (Purusottama Adhika Masa). Extremely rare.'
     },
     {
         name: 'Pandava Nirjala Ekadasi', paksha: 'shukla', month: 'June',
-        dates: { india: '2026-06-25', us_west: '2026-06-24', us_east: '2026-06-25', europe: '2026-06-25', australia: '2026-06-25' },
+        dates: { india: '2026-06-25', us_west: '2026-06-25', us_east: '2026-06-25', europe: '2026-06-25', australia: '2026-06-25' },
         fastingInstructions: 'Complete fast without even water (nirjala). Most powerful Ekadasi. Equal to observing all 24 Ekadasis.'
     },
 
     // July 2026
     {
         name: 'Yogini Ekadasi', paksha: 'krishna', month: 'July',
-        dates: { india: '2026-07-10', us_west: '2026-07-09', us_east: '2026-07-10', europe: '2026-07-10', australia: '2026-07-10' },
+        dates: { india: '2026-07-10', us_west: '2026-07-10', us_east: '2026-07-10', europe: '2026-07-10', australia: '2026-07-10' },
         fastingInstructions: 'Fast from grains. Removes even the sin of killing a brahmana.'
     },
     {
         name: 'Sayana Ekadasi (Devshayani)', paksha: 'shukla', month: 'July',
-        dates: { india: '2026-07-24', us_west: '2026-07-23', us_east: '2026-07-24', europe: '2026-07-24', australia: '2026-07-24' },
+        dates: { india: '2026-07-24', us_west: '2026-07-24', us_east: '2026-07-24', europe: '2026-07-24', australia: '2026-07-24' },
         fastingInstructions: 'Fast from grains. Lord Vishnu goes to sleep. Chaturmas begins.'
     },
 
     // August 2026
     {
         name: 'Kamika Ekadasi', paksha: 'krishna', month: 'August',
-        dates: { india: '2026-08-08', us_west: '2026-08-07', us_east: '2026-08-08', europe: '2026-08-08', australia: '2026-08-08' },
+        dates: { india: '2026-08-08', us_west: '2026-08-08', us_east: '2026-08-08', europe: '2026-08-08', australia: '2026-08-08' },
         fastingInstructions: 'Fast from grains. Destroys all sinful reactions. Offer Tulasi leaves.'
     },
     {
         name: 'Pavitraropana Ekadasi (Putrada)', paksha: 'shukla', month: 'August',
-        dates: { india: '2026-08-23', us_west: '2026-08-22', us_east: '2026-08-23', europe: '2026-08-23', australia: '2026-08-23' },
+        dates: { india: '2026-08-23', us_west: '2026-08-23', us_east: '2026-08-23', europe: '2026-08-23', australia: '2026-08-23' },
         fastingInstructions: 'Fast from grains. Offer sacred thread to Lord Vishnu. Jhulana Yatra begins.'
     },
 
     // September 2026
     {
         name: 'Annada Ekadasi (Aja Ekadasi)', paksha: 'krishna', month: 'September',
-        dates: { india: '2026-09-07', us_west: '2026-09-06', us_east: '2026-09-07', europe: '2026-09-07', australia: '2026-09-07' },
+        dates: { india: '2026-09-22', us_west: '2026-09-07', us_east: '2026-09-22', europe: '2026-09-22', australia: '2026-09-22' },
         fastingInstructions: 'Fast from grains. Grants food (anna) and removes sins. Near Janmashtami.'
     },
     {
         name: 'Parsva Ekadasi (Parivartini)', paksha: 'shukla', month: 'September',
-        dates: { india: '2026-09-22', us_west: '2026-09-21', us_east: '2026-09-22', europe: '2026-09-22', australia: '2026-09-22' },
+        dates: { india: '2026-10-06', us_west: '2026-09-22', us_east: '2026-10-06', europe: '2026-10-06', australia: '2026-10-06' },
         fastingInstructions: 'Fast from grains. Lord Vishnu turns to His side while sleeping. Vamana Dvadasi next day.'
     },
 
     // October 2026
     {
         name: 'Indira Ekadasi', paksha: 'krishna', month: 'October',
-        dates: { india: '2026-10-06', us_west: '2026-10-05', us_east: '2026-10-06', europe: '2026-10-06', australia: '2026-10-06' },
+        dates: { india: '2026-10-21', us_west: '2026-10-06', us_east: '2026-10-21', europe: '2026-10-21', australia: '2026-10-21' },
         fastingInstructions: 'Fast from grains. Liberates ancestors from hellish planets. During Pitru Paksha.'
     },
     {
         name: 'Pasankusa Ekadasi', paksha: 'shukla', month: 'October',
-        dates: { india: '2026-10-21', us_west: '2026-10-20', us_east: '2026-10-21', europe: '2026-10-21', australia: '2026-10-21' },
+        dates: { india: '2026-11-04', us_west: '2026-10-21', us_east: '2026-11-04', europe: '2026-11-04', australia: '2026-11-04' },
         fastingInstructions: 'Fast from grains. Named after Lord Vishnu\'s goad (ankusa). Controls the mind.'
     },
 
     // November 2026
     {
         name: 'Rama Ekadasi', paksha: 'krishna', month: 'November',
-        dates: { india: '2026-11-04', us_west: '2026-11-03', us_east: '2026-11-04', europe: '2026-11-04', australia: '2026-11-04' },
+        dates: { india: '2026-11-20', us_west: '2026-11-04', us_east: '2026-11-20', europe: '2026-11-20', australia: '2026-11-20' },
         fastingInstructions: 'Fast from grains. Very dear to Goddess Lakshmi (Rama). Before Diwali.'
     },
     {
         name: 'Utthana Ekadasi (Devprabodhini)', paksha: 'shukla', month: 'November',
-        dates: { india: '2026-11-20', us_west: '2026-11-19', us_east: '2026-11-20', europe: '2026-11-20', australia: '2026-11-20' },
+        dates: { india: '2026-12-04', us_west: '2026-11-20', us_east: '2026-12-04', europe: '2026-12-04', australia: '2026-12-04' },
         fastingInstructions: 'Fast from grains. Lord Vishnu awakens. Chaturmas ends. Bhishma Panchaka begins.'
     },
 
     // December 2026
     {
         name: 'Utpanna Ekadasi', paksha: 'krishna', month: 'December',
-        dates: { india: '2026-12-04', us_west: '2026-12-03', us_east: '2026-12-04', europe: '2026-12-04', australia: '2026-12-04' },
+        dates: { india: '2026-12-04', us_west: '2026-12-04', us_east: '2026-12-04', europe: '2026-12-04', australia: '2026-12-04' },
         fastingInstructions: 'Fast from grains. Origin of Ekadasi. Mother of all Ekadasis. Very significant.'
     },
     {
         name: 'Moksada Ekadasi (Gita Jayanti)', paksha: 'shukla', month: 'December',
-        dates: { india: '2026-12-20', us_west: '2026-12-19', us_east: '2026-12-20', europe: '2026-12-20', australia: '2026-12-20' },
+        dates: { india: '2026-12-20', us_west: '2026-12-20', us_east: '2026-12-20', europe: '2026-12-20', australia: '2026-12-20' },
         fastingInstructions: 'Fast from grains. Grants liberation (moksha). Gita Jayanti - Bhagavad Gita was spoken on this day.'
     },
 ];

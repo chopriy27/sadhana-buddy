@@ -1,9 +1,9 @@
 import { useState, useEffect, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { 
-  Calendar, Plus, CheckCircle, Circle, Target, Book, Music, 
+import {
+  Calendar, Plus, CheckCircle, Circle, Target, Book, Music,
   Headphones, Settings, X, Sparkles, Flame, Sun, Moon,
-  Heart, Flower2, Bell, Users, Coffee, ChevronsUpDown, Check
+  Heart, Flower2, Bell, Users, Coffee, ChevronsUpDown, Check, Star, Trash2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -275,6 +275,8 @@ export default function Tracker() {
   const [enabledItems, setEnabledItems] = useState<string[]>([]);
   const [completedItems, setCompletedItems] = useState<Record<string, boolean>>({});
   const [showSettings, setShowSettings] = useState(false);
+  const [customSadhanaItems, setCustomSadhanaItems] = useState<{id: string, label: string}[]>([]);
+  const [newCustomItemText, setNewCustomItemText] = useState("");
   
   // Celebration state
   const [showCelebration, setShowCelebration] = useState(false);
@@ -305,10 +307,37 @@ export default function Tracker() {
     }
   }, [today]);
 
+  // Load custom items from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem('customSadhanaItems');
+    if (saved) {
+      setCustomSadhanaItems(JSON.parse(saved));
+    }
+  }, []);
+
   // Save enabled items to localStorage
   const saveEnabledItems = (items: string[]) => {
     setEnabledItems(items);
     localStorage.setItem('enabledSadhanaItems', JSON.stringify(items));
+  };
+
+  const saveCustomItems = (items: {id: string, label: string}[]) => {
+    setCustomSadhanaItems(items);
+    localStorage.setItem('customSadhanaItems', JSON.stringify(items));
+  };
+
+  const addCustomItem = () => {
+    const trimmed = newCustomItemText.trim();
+    if (!trimmed) return;
+    const newItem = { id: 'custom_' + Date.now(), label: trimmed };
+    saveCustomItems([...customSadhanaItems, newItem]);
+    saveEnabledItems([...enabledItems, newItem.id]);
+    setNewCustomItemText("");
+  };
+
+  const deleteCustomItem = (id: string) => {
+    saveCustomItems(customSadhanaItems.filter(i => i.id !== id));
+    saveEnabledItems(enabledItems.filter(i => i !== id));
   };
 
   // Toggle item completion
@@ -422,8 +451,12 @@ export default function Tracker() {
     return streak;
   };
 
-  // Get enabled items with their details
-  const activeItems = AVAILABLE_SADHANA_ITEMS.filter(item => enabledItems.includes(item.id));
+  // Get enabled items with their details (standard + custom)
+  const activeStandardItems = AVAILABLE_SADHANA_ITEMS.filter(item => enabledItems.includes(item.id));
+  const activeCustomItems = customSadhanaItems
+    .filter(item => enabledItems.includes(item.id))
+    .map(item => ({ ...item, icon: Star, description: 'Custom practice', category: 'daily' as const }));
+  const activeItems = [...activeStandardItems, ...activeCustomItems];
   const completedCount = activeItems.filter(item => completedItems[item.id]).length;
 
   return (
@@ -1041,10 +1074,69 @@ export default function Tracker() {
                 ))}
               </div>
             </div>
+
+            {/* Custom Practices */}
+            <div>
+              <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2 flex items-center gap-2">
+                <Star className="w-4 h-4" /> Your Own Practices
+              </h3>
+              <div className="space-y-2">
+                {customSadhanaItems.map(item => (
+                  <div
+                    key={item.id}
+                    className={`flex items-center gap-3 p-3 rounded-xl border-2 transition-all ${
+                      enabledItems.includes(item.id)
+                        ? 'border-orange-400 bg-orange-50 dark:bg-orange-900/20'
+                        : 'border-gray-200 dark:border-gray-700'
+                    }`}
+                  >
+                    <div
+                      className="flex-1 flex items-center gap-3 cursor-pointer"
+                      onClick={() => {
+                        if (enabledItems.includes(item.id)) {
+                          saveEnabledItems(enabledItems.filter(i => i !== item.id));
+                        } else {
+                          saveEnabledItems([...enabledItems, item.id]);
+                        }
+                      }}
+                    >
+                      <Star className="w-6 h-6 text-orange-500 flex-shrink-0" />
+                      <p className="font-medium text-sm">{item.label}</p>
+                    </div>
+                    {enabledItems.includes(item.id) && (
+                      <CheckCircle className="w-5 h-5 text-orange-500" />
+                    )}
+                    <button
+                      onClick={() => deleteCustomItem(item.id)}
+                      className="text-gray-400 hover:text-red-500 transition-colors ml-1"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+                <div className="flex gap-2 mt-2">
+                  <Input
+                    placeholder="Add your own practice..."
+                    value={newCustomItemText}
+                    onChange={e => setNewCustomItemText(e.target.value)}
+                    onKeyDown={e => e.key === 'Enter' && addCustomItem()}
+                    className="flex-1 text-sm"
+                  />
+                  <Button
+                    size="sm"
+                    onClick={addCustomItem}
+                    disabled={!newCustomItemText.trim()}
+                    className="bg-orange-500 hover:bg-orange-600 text-white"
+                  >
+                    <Plus className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="absolute bottom-0 left-0 right-0 p-4 bg-white dark:bg-gray-800 border-t">
-            <Button 
+            <Button
               className="w-full bg-gradient-to-r from-orange-500 to-amber-500"
               onClick={() => setShowSettings(false)}
             >
