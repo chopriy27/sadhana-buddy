@@ -48,11 +48,9 @@ export default function QuickActions() {
       <div className="grid grid-cols-3 gap-3">
         {actions.map((action) => (
           <Link key={action.href} href={action.href}>
-            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl p-4 shadow-sm border border-orange-100 dark:border-gray-700 hover:shadow-md hover:scale-[1.02] transition-all cursor-pointer">
-              <div className="flex items-center mb-2">
-                <div className={`w-10 h-10 ${action.iconBg} rounded-xl flex items-center justify-center`}>
-                  <action.icon className={`w-5 h-5 ${action.iconColor}`} />
-                </div>
+            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl p-4 shadow-sm border border-orange-100 dark:border-gray-700 hover:shadow-md hover:scale-[1.02] transition-all cursor-pointer flex flex-col items-center text-center">
+              <div className={`w-10 h-10 ${action.iconBg} rounded-xl flex items-center justify-center mb-2`}>
+                <action.icon className={`w-5 h-5 ${action.iconColor}`} />
               </div>
               <h4 className="font-semibold text-gray-800 dark:text-gray-200 text-sm">{action.title}</h4>
               <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">{action.subtitle}</p>

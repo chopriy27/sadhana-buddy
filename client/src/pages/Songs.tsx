@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
@@ -202,22 +202,29 @@ export default function Songs() {
 
       {/* Song detail dialog */}
       <Dialog open={!!selectedSong} onOpenChange={() => setSelectedSong(null)}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center justify-between">
-              <span>{selectedSong?.title}</span>
+        <DialogContent className="max-w-md max-h-[85vh] flex flex-col [&>button]:hidden">
+          {/* Custom header with title, heart, and close */}
+          <div className="flex items-center justify-between pb-2 border-b flex-shrink-0">
+            <DialogTitle className="text-base font-semibold pr-2">{selectedSong?.title}</DialogTitle>
+            <div className="flex items-center gap-1">
               <Button
                 variant="ghost"
-                size="sm"
+                size="icon"
+                className="h-8 w-8"
                 onClick={() => selectedSong && toggleFavorite(selectedSong.id)}
               >
                 <Heart className={`w-4 h-4 ${selectedSong && isSongFavorited(selectedSong.id) ? "fill-red-500 text-red-500" : "text-gray-400"}`} />
               </Button>
-            </DialogTitle>
-          </DialogHeader>
+              <DialogClose asChild>
+                <Button variant="ghost" size="icon" className="h-8 w-8">
+                  <span className="text-lg leading-none text-gray-500">&times;</span>
+                </Button>
+              </DialogClose>
+            </div>
+          </div>
 
           {selectedSong && (
-            <div className="space-y-4">
+            <div className="space-y-4 overflow-y-auto flex-1 pt-2">
               <div className="space-y-2">
                 <div className="flex items-center space-x-2">
                   <User className="w-4 h-4 text-gray-500" />
@@ -230,7 +237,7 @@ export default function Songs() {
               </div>
 
               {selectedSong.lyrics && (
-                <div className="bg-amber-50 dark:bg-amber-900/20 p-4 rounded-lg max-h-80 overflow-y-auto">
+                <div className="bg-amber-50 dark:bg-amber-900/20 p-4 rounded-lg">
                   <h4 className="font-medium text-amber-800 dark:text-amber-200 mb-3">Lyrics</h4>
                   <p className="text-sm text-amber-900 dark:text-amber-100 leading-relaxed whitespace-pre-line font-medium italic">
                     {selectedSong.lyrics}

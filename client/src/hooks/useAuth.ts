@@ -185,6 +185,12 @@ export function useAuth() {
     }
   }, []);
 
+  const refreshUser = useCallback(async () => {
+    if (firebaseUser) {
+      await syncUserWithBackend(firebaseUser);
+    }
+  }, [firebaseUser, syncUserWithBackend]);
+
   return {
     user,
     firebaseUser,
@@ -197,6 +203,7 @@ export function useAuth() {
     loginWithApple,
     logout,
     forgotPassword,
+    refreshUser,
     getIdToken,
   };
 }

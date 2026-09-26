@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Capacitor } from '@capacitor/core';
+import { App } from '@capacitor/app';
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
@@ -17,10 +18,19 @@ export function useMobileFeatures() {
           // Configure status bar
           await StatusBar.setStyle({ style: Style.Light });
           await StatusBar.setBackgroundColor({ color: '#FF7F50' });
-          
+
           // Hide splash screen after app loads
           await SplashScreen.hide();
-          
+
+          // Handle Android back button — go back in browser history instead of exiting
+          App.addListener('backButton', ({ canGoBack }) => {
+            if (canGoBack) {
+              window.history.back();
+            } else {
+              App.exitApp();
+            }
+          });
+
           setIsReady(true);
         } catch (error) {
           console.warn('Mobile features initialization failed:', error);

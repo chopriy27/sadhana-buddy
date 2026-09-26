@@ -283,7 +283,7 @@ export default function Lectures() {
 
       {/* Video Player Sheet (Mobile Optimized) */}
       <Sheet open={isPlayerOpen} onOpenChange={setIsPlayerOpen}>
-        <SheetContent side="bottom" className="h-[85vh] p-0 rounded-t-3xl">
+        <SheetContent side="bottom" className="h-[85vh] p-0 rounded-t-3xl [&>button:first-child]:hidden">
           <div className="flex flex-col h-full">
             {/* Header */}
             <SheetHeader className="px-4 py-3 border-b flex-shrink-0">

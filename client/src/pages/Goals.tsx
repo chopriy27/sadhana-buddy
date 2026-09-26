@@ -28,7 +28,7 @@ const COMMON_TIMEZONES = [
 ];
 
 export default function Goals() {
-  const { user, isAuthenticated, isLoading: authLoading } = useAuth();
+  const { user, isAuthenticated, isLoading: authLoading, refreshUser } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [isEditing, setIsEditing] = useState(false);
@@ -104,7 +104,7 @@ export default function Goals() {
       return await response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+      refreshUser();
       toast({
         title: "Timezone Updated",
         description: "Festival reminders will now show in your local timezone!",
