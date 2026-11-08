@@ -3,7 +3,6 @@ import FestivalBanner from "@/components/FestivalBanner";
 import SadhanaProgress from "@/components/SadhanaProgress";
 import DailyVerse from "@/components/DailyVerse";
 import QuickActions from "@/components/QuickActions";
-import RecentActivity from "@/components/RecentActivity";
 import { useAuth } from "@/hooks/useAuth";
 
 export default function Hub() {
@@ -33,7 +32,6 @@ export default function Hub() {
         <SadhanaProgress />
         <DailyVerse />
         <QuickActions />
-        <RecentActivity />
       </main>
 
     </div>

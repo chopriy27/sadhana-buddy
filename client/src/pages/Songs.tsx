@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { Search, Heart, User, Music } from "lucide-react";
+import { Search, Heart, User, Music, ArrowLeft } from "lucide-react";
+import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +14,7 @@ import { useAuth } from "@/hooks/useAuth";
 import type { DevotionalSong, FavoriteSong } from "@shared/schema";
 
 export default function Songs() {
+  const [, setLocation] = useLocation();
   const [search, setSearch] = useState(() =>
     new URLSearchParams(window.location.search).get("search") || ""
   );
@@ -90,8 +92,14 @@ export default function Songs() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800">
       <header className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg shadow-sm border-b border-orange-100 dark:border-gray-700 sticky top-0 z-50">
-        <div className="max-w-md mx-auto px-4 py-3">
-          <h1 className="text-lg font-semibold text-gray-800 dark:text-gray-200">Devotional Songs</h1>
+        <div className="max-w-md mx-auto px-4 py-3 flex items-center gap-3">
+          <button
+            onClick={() => setLocation("/")}
+            className="p-1.5 rounded-lg hover:bg-orange-100 dark:hover:bg-gray-700 transition-colors"
+          >
+            <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+          </button>
+          <h1 className="text-lg font-bold text-gray-800 dark:text-gray-200">Devotional Songs</h1>
         </div>
       </header>
 
@@ -241,6 +249,15 @@ export default function Songs() {
                   <h4 className="font-medium text-amber-800 dark:text-amber-200 mb-3">Lyrics</h4>
                   <p className="text-sm text-amber-900 dark:text-amber-100 leading-relaxed whitespace-pre-line font-medium italic">
                     {selectedSong.lyrics}
+                  </p>
+                </div>
+              )}
+
+              {selectedSong.translation && (
+                <div className="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-lg">
+                  <h4 className="font-medium text-orange-800 dark:text-orange-200 mb-3">Translation</h4>
+                  <p className="text-sm text-orange-900 dark:text-orange-100 leading-relaxed whitespace-pre-line">
+                    {selectedSong.translation}
                   </p>
                 </div>
               )}

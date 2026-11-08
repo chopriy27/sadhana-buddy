@@ -44,6 +44,7 @@ export interface DevotionalSong {
   category: string;
   mood: string;
   lyrics: string | null;
+  translation: string | null;
   lyricsPreview: string | null;
   pageReference: string | null;
   audioUrl: string | null;
@@ -792,6 +793,7 @@ export class DatabaseStorage implements IStorage {
           id: this.devotionalSongsData.length + 1,
           createdAt: new Date(),
           lyrics: song.lyrics || null,
+          translation: (song as any).translation || null,
           audioUrl: song.audioUrl || null,
           lyricsPreview: song.lyricsPreview ?? null,
           pageReference: song.pageReference ?? null,

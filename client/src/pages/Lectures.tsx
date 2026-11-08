@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Play, Clock, ExternalLink, Search, Filter, X, Maximize2, Volume2 } from "lucide-react";
+import { Play, Clock, ExternalLink, Search, Filter, X, Maximize2, Volume2, ArrowLeft } from "lucide-react";
+import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -88,6 +89,7 @@ function YouTubePlayer({
 }
 
 export default function Lectures() {
+  const [, setLocation] = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTopic, setSelectedTopic] = useState<string>("all");
   const [selectedLecture, setSelectedLecture] = useState<Lecture | null>(null);
@@ -159,6 +161,12 @@ export default function Lectures() {
       {/* Header */}
       <header className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg shadow-sm border-b border-orange-100 dark:border-gray-700 sticky top-0 z-50">
         <div className="max-w-md mx-auto px-4 py-3 flex items-center gap-3">
+          <button
+            onClick={() => setLocation("/")}
+            className="p-1.5 rounded-lg hover:bg-orange-100 dark:hover:bg-gray-700 transition-colors"
+          >
+            <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+          </button>
           <Logo size={36} />
           <div>
             <h1 className="text-lg font-bold text-gray-800 dark:text-gray-200">

@@ -33,7 +33,7 @@ const acharyaInfo: Record<string, {
 }> = {
     'srila prabhupada': {
         title: 'Founder-Ācārya of ISKCON',
-        bio: 'His Divine Grace A.C. Bhaktivedanta Swami Prabhupāda (1896–1977) was the Founder-Ācārya of the International Society for Kṛṣṇa Consciousness (ISKCON). He translated and commented on over 80 volumes of the Vedic scriptures, including Bhagavad-gītā As It Is and Śrīmad-Bhāgavatam. He circled the globe 14 times, established 108 temples, and initiated approximately 5,000 disciples.',
+        bio: 'Śrīla Prabhupāda (1896–1977) was the Founder-Ācārya of the International Society for Kṛṣṇa Consciousness (ISKCON). Carrying out the instruction of his spiritual master, Śrīla Bhaktisiddhānta Sarasvatī Ṭhākura, he traveled to the West aboard the Jaladūta in 1965 and founded ISKCON in New York in 1966. Over eleven years, he established 108 Rādhā-Kṛṣṇa temples globally, published extensive English translations and purports of sacred Vedic texts, introduced Jagannātha Ratha-yātrā worldwide, and initiated thousands of disciples before passing into eternal pastimes in Vṛndāvan.',
         teachings: [
             'Chant Hare Kṛṣṇa and be happy',
             'Kṛṣṇa consciousness is the original consciousness',
@@ -46,7 +46,7 @@ const acharyaInfo: Record<string, {
             'Caitanya-caritāmṛta',
             'The Nectar of Devotion'
         ],
-        bhajans: ['Boro Krpa Koile Krsna', 'Krsna Tava Punya Habe Bhai', 'Sri Guru Carana Padma']
+        bhajans: ['Boro Krpa Koile Krsna', 'Sri Guru Carana Padma', 'Ohe Vaisnava Thakura', 'Je Anilo Prema Dhana Koruna Pracura']
     },
     'bhaktivinoda thakura': {
         title: 'Pioneer of Kṛṣṇa Consciousness in the Modern Age',
@@ -301,7 +301,7 @@ const acharyaInfo: Record<string, {
     },
     'gaura kisora dasa babaji': {
         title: 'Paramahaṁsa Saint and Guru of Bhaktisiddhānta',
-        bio: 'Śrīla Gaura Kiśora dāsa Bābājī Mahārāja (1838–1915) was a renowned Vaiṣṇava saint and the spiritual master of Śrīla Bhaktisiddhānta Sarasvatī Ṭhākura. He lived in Navadvīpa and Vṛndāvan as a bābājī (renunciant), known for his pure devotion, complete detachment from material life, and his direct realizations of transcendental love.',
+        bio: 'Śrīla Gaura Kiśora dāsa Bābājī Mahārāja was an exalted paramahaṁsa bābājī (Bhajananandī) in the Gauḍīya disciplic succession. A disciple of Bhāgavata dāsa Bābājī and close associate of Śrīla Bhaktivinoda Ṭhākura, he exemplified unmatched renunciation and humility. He wore discarded cloth from corpses, ate begged rice soaked in river water, and slept under trees or overturned boats. In 1900, he accepted Śrīla Bhaktisiddhānta Sarasvatī Ṭhākura as his only initiated disciple. He passed into eternal pastimes on Utthāna Ekādaśī in 1915.',
         teachings: [
             'Pure devotion requires complete detachment from material concerns',
             'The holy dhāma reveals itself to sincere seekers',
@@ -311,11 +311,11 @@ const acharyaInfo: Record<string, {
         famousWorks: [
             'Teachings preserved through Bhaktisiddhānta\'s writings'
         ],
-        bhajans: ['Gurudeva Krpa Bindu Diya', 'Sri Guru Carana Padma']
+        bhajans: ['Namo Gaura-Kisoraya', 'Gaurangera Duti Pada', 'Je Anilo Prema Dhana Koruna Pracura', 'Ohe Vaisnava Thakura']
     },
     'narahari sarakara thakura': {
         title: 'Intimate Associate of Śrī Caitanya Mahāprabhu',
-        bio: 'Śrī Narahari Sārakāra Ṭhākura was one of the closest associates of Śrī Caitanya Mahāprabhu in Navadvīpa and Śrīkhaṇḍa. He was known for his deep love for the Lord and his beautiful bhajans. He was the spiritual master of Locanā dāsa Ṭhākura, who wrote the famous Caitanya-maṅgala.',
+        bio: 'Śrī Narahari Sārakāra Ṭhākura was an intimate associate of Lord Caitanya Mahāprabhu from Śrīkhaṇḍa who regularly served Mahāprabhu by fanning Him with a cāmara whisk. He composed sweet Bengali devotional songs glorifying Śrī Gaurāṅga\'s pastimes and was the spiritual master of Locanā dāsa Ṭhākura, who wrote the famous Caitanya-maṅgala.',
         teachings: [
             'Personal service to the Lord is the highest engagement',
             'Devotional songs carry the Lord\'s mercy',
@@ -323,14 +323,14 @@ const acharyaInfo: Record<string, {
             'Kṛṣṇa is present in His holy name and His devotees'
         ],
         famousWorks: [
-            'Several bhajans and devotional songs',
+            'Several bhajans and devotional songs glorifying Gaurāṅga',
             'Teachings preserved in Caitanya-maṅgala'
         ],
-        bhajans: ['Jiv Jago Jiv Jago', 'Sri Krsna Caitanya Prabhu Jive Doya Kori']
+        bhajans: ['Sri Hari Vasare Hari Kirtana Vidhana', 'Madana Mohana Tanu Gauranga Sundara', 'Gaurangera Duti Pada']
     },
     'vasudeva ghosh': {
-        title: 'Singer and Associate of Nityānanda Prabhu',
-        bio: 'Śrī Vāsudeva Ghoṣa was an associate of Śrī Caitanya Mahāprabhu and a companion of Nityānanda Prabhu. He was a wonderful singer of devotional songs. His compositions, including the famous "Yadi Gaura Na Hoito," are still sung in Bengal today and reflect his pure love for Gaura-Nitāi.',
+        title: 'Singer and Associate of Lord Caitanya and Nityānanda',
+        bio: 'Śrī Vāsudeva Ghoṣa was an intimate associate of Lord Caitanya Mahāprabhu and, in Vraja-līlā, the sakhī named Guntinga. Known for his sweet saṅkīrtana alongside his brothers Govinda and Mādhava Ghoṣa, his singing was so moving that even wood and stone would melt, inspiring Lord Nityānanda to dance. He eventually resided in Tamluk, where a unique Deity of Mahāprabhu giving blessings is worshipped.',
         teachings: [
             'Devotional singing carries spiritual potency',
             'The mercy of Gaura and Nitāi is unlimited',
@@ -339,14 +339,14 @@ const acharyaInfo: Record<string, {
         ],
         famousWorks: [
             'Gaurāṅga Tumi More Doyā Nā Chāḍiho',
-            'Jaya Jaya Jagannātha Sacīra',
+            'Jaya Jaya Jagannātha Sacīra Nandan',
             'Yadi Gaura Nā Hoito'
         ],
-        bhajans: ['Gauranga Tumi More Doya Na Chadiho', 'Jaya Jaya Jagannatha Sacira', 'Yadi Gaura Na Hoito']
+        bhajans: ['Gauranga Tumi More Doya Na Chadiho', 'Jaya Jaya Jagannatha Sacira Nandan', 'Yadi Gaura Na Hoito']
     },
     'srinivasa acharya': {
         title: 'Preacher of Gauḍīya Vaiṣṇavism in Oḍisha and Bengal',
-        bio: 'Śrīla Śrīnivāsa Ācārya was one of the most important preachers of Gauḍīya Vaiṣṇavism after the generation of the Six Goswamis. He retrieved the books of the Six Goswamis when they were stolen during a journey from Vṛndāvan to Bengal, and this dramatic event resulted in the conversion of the thief king. He established many devotees throughout Oḍisha and Bengal.',
+        bio: 'Śrī Śrīnivāsa Ācārya Ṭhākur was an associate of Lord Caitanya Mahāprabhu and an embodiment of Gaura-śakti. His birth was foretold by Lord Caitanya Himself. He received initiation from Gopāla Bhaṭṭa Goswami and mastered Gauḍīya philosophy under Śrīla Jīva Goswami at Rādhā-Dāmodara temple in Vṛndāvan, earning the title "Ācārya". Alongside Narottama dāsa Ṭhākura and Śyāmānanda Prabhu, he led the first transcendental book distribution party across Bengal and Oḍisha and converted King Bīr Hāmbir to Vaiṣṇavism.',
         teachings: [
             'The books of the Six Goswamis are the life of the movement',
             'Preaching the glories of the Lord transforms even enemies',
@@ -357,7 +357,7 @@ const acharyaInfo: Record<string, {
             'Kṛṣṇotkīrtana Gāna Nartana Parau',
             'Teachings documented in Bhakti-ratnākara'
         ],
-        bhajans: ['Krsnotkirtana Gana Nartana Parau', 'Je Anilo Prema Dhana Koruna Pracura']
+        bhajans: ['Krsnotkirtana Gana Nartana Parau', 'Je Anilo Prema Dhana Koruna Pracura', 'Sri Guru Carana Padma']
     },
     'syamananda prabhu': {
         title: 'Preacher of Gauḍīya Vaiṣṇavism in Oḍisha',
@@ -374,8 +374,8 @@ const acharyaInfo: Record<string, {
         bhajans: ['Radhe Jaya Jaya Madhava Dayite', 'Radha Krsna Bol Bol']
     },
     'rasikananda prabhu': {
-        title: 'Disciple of Śyāmānanda and Great Preacher',
-        bio: 'Śrī Rasikānanda Prabhu was the foremost disciple of Śyāmānanda Prabhu. He is famous for the miracle of converting a wild elephant by singing the holy names. He established many centers of devotion in Oḍisha and Jhārkhaṇḍ and is celebrated for his miraculous preaching.',
+        title: 'Foremost Disciple of Śyāmānanda and Great Preacher',
+        bio: 'Śrī Rasikānanda Deva (Rasika Murāri) appeared in Rohiṇī around 1590 AD as the son of King Acyuta Deva and Queen Bhavānī. As the foremost disciple of Śrī Śyāmānanda Prabhu, he spent sixteen years preaching across Bengal and Oḍisha, transforming kings, robbers, tigers, and even a ferocious wild elephant into devotees of Kṛṣṇa. He entered into his eternal pastimes by taking shelter at the lotus feet of Kṣīra-cora Gopīnātha in Remunā.',
         teachings: [
             'The holy name can transform even animals',
             'Pure devotion knows no limits',
@@ -386,7 +386,93 @@ const acharyaInfo: Record<string, {
             'Śrī Prema-bhakti Candrikā',
             'Multiple devotional compositions'
         ],
-        bhajans: ['Radha Krsna Bol Bol', 'Hare Krishna Maha Mantra']
+        bhajans: ['Ohe Vaisnava Thakura']
+    },
+    'gadadhara dasa goswami': {
+        title: 'Intimate Associate of Lord Caitanya and Lord Nityānanda',
+        bio: 'Śrī Gadādhara dāsa Goswami is considered a united expansion of Candrakānti gopī (an expansion of Śrīmatī Rādhārāṇī\'s effulgence) and Pūrṇānanda (an expansion of Lord Balarāma\'s girlfriend). He was an intimate associate of Lord Caitanya Mahāprabhu and Lord Nityānanda who actively spread kīrtana and Kṛṣṇa consciousness across Bengal.',
+        teachings: [
+            'Spreading kīrtana is the highest service',
+            'The mercy of Nitāi-Gaura is freely available to all',
+            'Association of pure devotees transforms the heart',
+            'Devotional songs carry transcendental potency'
+        ],
+        famousWorks: [
+            'Service documented in Caitanya-caritāmṛta and Caitanya-bhāgavata'
+        ],
+        bhajans: ['Je Anilo Prema Dhana Koruna Pracura', 'Ohe Vaisnava Thakura', 'Thakura Vaisnava Pada']
+    },
+    'dhananjaya pandita': {
+        title: 'Participant in Lord Caitanya\'s Saṅkīrtana Movement',
+        bio: 'Śrī Dhanañjaya Paṇḍita participated extensively in Lord Caitanya\'s saṅkīrtana pastimes in Navadvīpa. Under the direct order of Lord Caitanya, he traveled widely to preach Kṛṣṇa consciousness.',
+        teachings: [
+            'Spreading the holy name by the Lord\'s direct order',
+            'Kīrtana is the yuga-dharma for this age',
+            'Service to the Lord\'s preaching mission',
+            'Following the Lord\'s direct instructions'
+        ],
+        famousWorks: [
+            'Service documented in Caitanya-bhāgavata'
+        ],
+        bhajans: ['Je Anilo Prema Dhana Koruna Pracura', 'Ohe Vaisnava Thakura', 'Vrndavana Vasi Jata Vaisnavera Gana']
+    },
+    'bhugarbha goswami': {
+        title: 'Discoverer of Sacred Places in Vṛndāvan',
+        bio: 'Śrī Bhugarbha Goswami, along with his close friend Lokanātha Goswami, located lost sacred places in Vṛndāvan under the direct order of Lord Caitanya Mahāprabhu. He traveled from Bengal to Vṛndāvan and helped establish the Gauḍīya presence in the holy dhāma.',
+        teachings: [
+            'The holy dhāma must be revealed and preserved for future generations',
+            'Obedience to the spiritual master is essential',
+            'Service in the dhāma is the highest spiritual gift',
+            'Association with pure Vaiṣṇavas is invaluable'
+        ],
+        famousWorks: [
+            'Service documented in Bhakti-ratnākara'
+        ],
+        bhajans: ['Je Anilo Prema Dhana Koruna Pracura', 'Ohe Vaisnava Thakura', 'Vrndavana Vasi Jata Vaisnavera Gana']
+    },
+    'kasisvara pandita': {
+        title: 'Bodyguard and Servant of Lord Caitanya',
+        bio: 'Śrī Kāśīśvara Paṇḍita served as Lord Caitanya\'s bodyguard in Jagannātha Purī and distributed prasādam following kīrtana. He was a devoted servant of the Lord who protected Him during His ecstatic kīrtana pastimes.',
+        teachings: [
+            'Protecting and serving the Lord is the highest duty',
+            'Distribution of prasādam spreads the Lord\'s mercy',
+            'Humble service to the Lord\'s devotees',
+            'The Lord\'s kīrtana is non-different from the Lord Himself'
+        ],
+        famousWorks: [
+            'Service documented in Caitanya-caritāmṛta'
+        ],
+        bhajans: ['Je Anilo Prema Dhana Koruna Pracura', 'Ohe Vaisnava Thakura', 'Vrndavana Vasi Jata Vaisnavera Gana']
+    },
+    'nimbarkacharya': {
+        title: 'Principal Ācārya of the Kumāra Sampradāya',
+        bio: 'Śrī Nimbārkācārya was the principal Ācārya of the Kumāra Sampradāya, one of the four orthodox lines of Vaiṣṇava teachers. He preached Kṛṣṇa consciousness and propounded the Dvaitādvaita (qualified dualistic) philosophy centered on Rādhā-Kṛṣṇa worship approximately 300 years before Lord Caitanya.',
+        teachings: [
+            'Dvaitādvaita — simultaneous difference and non-difference',
+            'Rādhā-Kṛṣṇa is the supreme object of worship',
+            'Devotional service is the means of liberation',
+            'The paramparā preserves the essence of Vedic wisdom'
+        ],
+        famousWorks: [
+            'Vedānta-pārijāta-saurabha',
+            'Daśaślokī',
+            'Teachings documented in the Gauḍīya tradition'
+        ],
+        bhajans: ['Hari Haraye Namah Krsna Yadavaya Namah', 'Isvara Parama Krsna']
+    },
+    'kaliya krsnadasa': {
+        title: 'Intimate Associate of Lord Nityānanda',
+        bio: 'Śrī Kaliya Kṛṣṇadāsa was a prominent disciple of Gauridāsa Paṇḍita and an intimate associate of Lord Nityānanda Prabhu and Lord Caitanya.',
+        teachings: [
+            'Service to Nityānanda Prabhu is the gateway to Kṛṣṇa',
+            'Devotional surrender brings the Lord\'s mercy',
+            'The associate of the Lord carries transcendental potency',
+            'Following the footsteps of the pure devotees'
+        ],
+        famousWorks: [
+            'Service documented in Caitanya-bhāgavata'
+        ],
+        bhajans: ['Nitai Pada Kamala', 'Nitai Guna Mani', 'Je Anilo Prema Dhana Koruna Pracura']
     }
 };
 
@@ -441,7 +527,7 @@ const festivalInfo: Record<string, {
             'Offering special bhoga to Lord Jagannātha'
         ],
         story: 'The Ratha Yātrā commemorates Kṛṣṇa\'s return to Vṛndāvan after many years in Dvārakā. The gopīs\' intense love in separation is celebrated as the highest devotional mood. Lord Caitanya Mahāprabhu Himself danced in ecstasy before Lord Jagannātha\'s chariot in Purī every year.',
-        bhajans: ['Jaya Jaya Jagannatha Sacira', 'He Govinda He Gopal Kesava Madhava', 'Yadi Gaura Na Hoito']
+        bhajans: ['Jaya Jaya Jagannatha Sacira Nandan', 'He Govinda He Gopal Kesava Madhava', 'Yadi Gaura Na Hoito']
     },
     'radhastami': {
         significance: 'The appearance day of Śrīmatī Rādhārāṇī, the eternal consort of Lord Kṛṣṇa and the embodiment of His pleasure potency (hlādinī-śakti). Rādhārāṇī is the topmost devotee and the queen of Vṛndāvan. Her love for Kṛṣṇa is the highest expression of devotional service known in any of the universes.',
@@ -458,7 +544,7 @@ const festivalInfo: Record<string, {
         bhajans: ['Radhe Jaya Jaya Madhava Dayite', 'Jaya Radhe Jaya Radhe Radhe', 'Radha Krsna Bol Bol']
     },
     'govardhan puja': {
-        significance: 'Govardhana Pūjā celebrates the day Lord Kṛṣṇa lifted Govardhana Hill to shelter the residents of Vṛndāvan from the devastating rain sent by the pride-stricken Indra. This festival establishes that devotion to the Supreme Lord is superior to ritual worship aimed at material benefits.',
+        significance: 'Govardhana Pūjā (Annakūṭa) commemorates Lord Kṛṣṇa instructing the cowherd men of Vṛndāvan to stop their traditional sacrifice to King Indra and instead worship Govardhana Hill, local brāhmaṇas, and the cows. In response to Indra\'s anger and devastating rains, Lord Kṛṣṇa lifted Govardhana Hill on the little finger of His left hand for seven days to shelter all the residents and animals of Vṛndāvan. Go Pūjā highlights the sacred principle of cow protection, acknowledging cows and bulls as the mother and father of human society.',
         observances: [
             'Offering an Annakūṭ (mountain of food) to Lord Kṛṣṇa',
             'Circumambulating Govardhana Hill (or a symbolic representation)',
@@ -468,31 +554,32 @@ const festivalInfo: Record<string, {
             'Reading the Govardhan-līlā from Śrīmad-Bhāgavatam'
         ],
         story: 'When the cowherd community prepared to worship Indra, young Kṛṣṇa convinced them to instead worship Govardhana Hill and the cows. The enraged Indra sent devastating rain. Kṛṣṇa then lifted Govardhana Hill with one finger and held it aloft for seven days as an umbrella, sheltering all the residents and animals of Vṛndāvan.',
-        bhajans: ['Jaya Radha Giri Vara Dhari', 'Nanda Ke Ananda Bhaiyo', 'Jaya Radha Madhava']
+        bhajans: ['Nija Pati Bhuja']
     },
     'gopastami': {
-        significance: 'Gopāṣṭamī marks the day Lord Kṛṣṇa was recognized as a fully qualified cowherd boy and given responsibility for herding the full herd of cows of Vṛndāvan, entering a new level of His eternal cowherd pastimes with the gopas.',
+        significance: 'Gopāṣṭamī (or Goṣṭhāṣṭamī) occurs on the eighth lunar day of the bright fortnight of Kārtika. It is a coming-of-age celebration marking the day Nanda Mahārāja gave Lord Kṛṣṇa full responsibility for grazing the adult cows of Vṛndāvan. Prior to this day Kṛṣṇa was a tender of calves (vatsapa), but upon entering the age of paugaṇḍa He officially became a qualified cowherd boy (gopa). Lord Kṛṣṇa walked barefoot through the pastures of Vṛndāvan on this day to bless and purify the earth with His lotus footprints.',
         observances: [
             'Worshipping cows and calves as manifestations of divine abundance',
+            'Visiting cow shelters (gośālas) to bathe and decorate cows',
             'Offering flowers, garlands, and food to cows',
             'Reading about Kṛṣṇa\'s cowherd pastimes from Śrīmad-Bhāgavatam',
-            'Celebrating with kīrtan and prasādam',
-            'Serving or donating to go-śālā (cow protection projects)'
+            'Circumambulating cows (pradakṣiṇā)',
+            'Celebrating with kīrtan and prasādam'
         ],
         story: 'On the eighth day of the bright fortnight of Kārtika, the cowherd community performed the ceremony elevating Kṛṣṇa and Balarāma from tending calves to tending the full herd of cows. All the residents of Vṛndāvan celebrated this event with great joy.',
-        bhajans: ['Yasomati Nandana', 'Nanda Ke Ananda Bhaiyo', 'Jaya Radha Madhava']
+        bhajans: ['Bhaja Bhakata Vatsala', 'Nija Pati Bhuja', 'Yasomati Nandana', 'Vande Krsna Nanda Kumara']
     },
     'dipavali': {
-        significance: 'In the Vaiṣṇava tradition, Dīpāvalī is observed as the day King Bali Daityarāja was sent to rule the lower planets by Lord Vāmana, and as the day the residents of Ayodhyā welcomed Lord Rāmacandra back after 14 years of exile. It is a festival of light commemorating the victory of devotion over pride.',
+        significance: 'In the Gauḍīya Vaiṣṇava tradition, Dīpāvalī (Dīpa-dān) is a celebration marking Lord Rāmacandra\'s return to His capital, Ayodhyā, following the defeat of the demon Rāvaṇa. Although Kālī Pūjā coincides with this time, Gauḍīya Vaiṣṇavas do not regularly observe the worship of Durgā Devī (Kālī).',
         observances: [
             'Lighting dīyas (lamps) to welcome Lord Rāmacandra\'s return',
             'Offering special prayers to Lord Viṣṇu and Lakṣmī Devī',
-            'Remembering the pastimes of Lord Vāmana and King Bali',
+            'Remembering the pastimes of Lord Rāmacandra',
             'Distribution of prasādam sweets',
             'Evening saṅkīrtan by lamplight'
         ],
         story: 'When Lord Vāmana approached King Bali and requested three steps of land, Bali agreed despite his guru Śukrācārya\'s warning. The Lord expanded to cover the entire universe in two steps. Bali\'s pure devotion was so great that the Lord blessed him and installed him as ruler of the lower planets, promising to stand guard at his door.',
-        bhajans: ['Jaya Radha Madhava', 'Bolo Hari Bolo', 'Hare Krishna Maha Mantra']
+        bhajans: ['Jaya Radha Madhava', 'Vibhavari Sesa']
     },
     'guru purnima': {
         significance: 'Guru Pūrṇimā, also known as Vyāsa Pūrṇimā, is the auspicious full moon day for honouring the paramparā (disciplic succession) and one\'s own spiritual master. This day commemorates the birth of Śrīla Vyāsadeva, the compiler of the Vedic scriptures.',
@@ -517,7 +604,7 @@ const festivalInfo: Record<string, {
             'Contemplating the Lord\'s universal form and mercy'
         ],
         story: 'On the full moon of Jyeṣṭha, Lord Jagannātha is brought to the bathing platform (snāna-vedī). After the elaborate bathing ceremony, the Lord is said to catch a "fever" due to exposure to the summer heat, and He rests for 14–15 days. During this period devotees intensify their hearing and chanting.',
-        bhajans: ['Jaya Jaya Jagannatha Sacira', 'He Govinda He Gopal Kesava Madhava']
+        bhajans: ['Jaya Jaya Jagannatha Sacira Nandan', 'He Govinda He Gopal Kesava Madhava']
     },
     'panihati': {
         significance: 'The Panihāṭi Ciḍā Dahī Utsava (chipped rice and yogurt festival) celebrates the famous pastime of Raghunātha dāsa Goswami\'s initiation by Nityānanda Prabhu on the banks of the Gaṅgā at Panihāṭi. This festival represents the unlimited mercy of Nityānanda Prabhu through devotee community service.',
@@ -595,7 +682,7 @@ const festivalInfo: Record<string, {
         bhajans: ['Isvara Parama Krsna', 'Namamisvaram Saccidananda Rupam']
     },
     'caturmasya': {
-        significance: 'Cāturmāsya ("four months") is a period of special austerity beginning on Śayana Ekādaśī when Lord Viṣṇu takes rest, and ending on Utthāna Ekādaśī when He awakens. Devotees observe additional vows, increase spiritual practices, and avoid certain foods each month.',
+        significance: 'Cāturmāsya ("four months") is a period of special austerity beginning on Śayana Ekādaśī when Lord Viṣṇu takes rest, and ending on Utthāna Ekādaśī when He awakens. Devotees observe additional vows, increase spiritual practices, and avoid certain foods each month. The final day concludes the sacred four-month period of heightened vows and dietary austerities that began in the month of Āṣāḍha.',
         observances: [
             'First month: Avoid leafy vegetables (hārita)',
             'Second month: Avoid yogurt (dadhi)',
@@ -605,7 +692,7 @@ const festivalInfo: Record<string, {
             'Special pūjā and kīrtan programs',
             'Study of scriptures with increased attention'
         ],
-        bhajans: ['Sri Guru Carana Padma', 'Narada Muni Bajay Vina', 'Hare Krishna Maha Mantra']
+        bhajans: ['Maha Prasade Govinde', 'Sarira Avidya Jala']
     },
     'nityananda trayodasi': {
         significance: 'Nityānanda Trayodaśī celebrates the appearance of Śrī Nityānanda Prabhu, the avatāra of Lord Balarāma who came as the most intimate associate of Śrī Caitanya Mahāprabhu. He is famed for His unlimited mercy, distributing divine love freely to all without consideration of past sinful activities.',
@@ -776,7 +863,7 @@ const festivalInfo: Record<string, {
         bhajans: ['Vibhavari Sesa', 'Narada Muni Bajay Vina', 'Hare Krishna Maha Mantra']
     },
     'utthana ekadasi': {
-        significance: 'Utthāna Ekādaśī (Devotthanī / Prabodhini Ekādaśī) falls in the bright fortnight of Kārtika and marks the end of Cāturmāsya. On this day Lord Viṣṇu "awakens" from His four-month rest. It is also the day of Tulasī-Śāligrāma Vivāha, the sacred marriage ceremony of Tulasī Devī with the Śāligrāma śilās.',
+        significance: 'Also known as Devā Utthāna Ekādaśī, Hari Prabodhini, or Ṭhulo Ekādaśī, this festival falls on the eleventh lunar day of the bright fortnight of Kārtika. It marks the end of the four-month Cāturmāsya period and signifies the awakening of Lord Viṣṇu from His cosmic sleep on the serpent Ananta Śeṣa. The conclusion of Cāturmāsya reopens the traditional wedding season. Devotees observe strict fasting, perform evening pūjā to Lord Viṣṇu and Lakṣmī with sugarcane offerings, and sing songs urging the Lord to wake.',
         observances: [
             'Completing Cāturmāsya vows with special ceremony',
             'Performing Tulasī-Śāligrāma Vivāha (sacred marriage ceremony)',
@@ -786,7 +873,7 @@ const festivalInfo: Record<string, {
             'Community celebration with prasādam feast'
         ],
         story: 'For four months, Lord Viṣṇu rests on the divine serpent Śeṣa. On Utthāna Ekādaśī He awakens. All suspended ceremonies resume. The Tulasī-Śāligrāma Vivāha performed on this day is especially auspicious, as Tulasī Devī — the embodiment of pure devotion — is ceremonially married to the Lord.',
-        bhajans: ['Namo Namah Tulasi Maharani', 'Namo Namah Tulasi Krsna Preyasi', 'Narada Muni Bajay Vina']
+        bhajans: ['Sri Hari Vasare Hari Kirtana Vidhana', 'Ceto Darpana Marjanam', 'Jaya Radha Madhava', 'Vibhavari Sesa']
     },
     'moksada ekadasi': {
         significance: 'Mokṣadā Ekādaśī falls in the bright fortnight of Mārgaśīrṣa — the same period as Gītā Jayantī. This is the Ekādaśī on which Lord Kṛṣṇa spoke the Bhagavad-gītā to Arjuna on the battlefield of Kurukṣetra. Observing this day and studying the Gītā is said to grant liberation (mokṣa).',
@@ -802,7 +889,7 @@ const festivalInfo: Record<string, {
         bhajans: ['Isvara Parama Krsna', 'Narada Muni Bajay Vina', 'Hare Krishna Maha Mantra']
     },
     'utpanna ekadasi': {
-        significance: 'Utpannā Ekādaśī is the Ekādaśī on which the goddess Ekādaśī herself was manifested from Lord Viṣṇu to defeat the demon Mura. This is the origin of all Ekādaśī observances. By learning this story, one gains the merit of all other Ekādaśīs.',
+        significance: 'Utpannā Ekādaśī occurs in the dark fortnight of Mārgaśīrṣa and commemorates the appearance of Ekādaśī Devī from the body of Lord Viṣṇu to defeat and slay the demon Mura, who had conquered the demigods. This is the origin of all Ekādaśī observances. By learning this story, one gains the merit of all other Ekādaśīs.',
         observances: [
             'Fasting from grains and beans',
             'Reading the origin story of the Ekādaśī goddess',
@@ -812,7 +899,7 @@ const festivalInfo: Record<string, {
             'Night vigil with devotional readings'
         ],
         story: 'The demon Mura was harassing all the demigods. When Lord Viṣṇu fought him for thousands of years and rested in a cave, Mura approached to kill the sleeping Lord. A beautiful goddess emerged from Lord Viṣṇu\'s body and defeated Mura. The Lord told her she would be known as Ekādaśī and worshipped throughout the universe.',
-        bhajans: ['Narada Muni Bajay Vina', 'Hare Krishna Maha Mantra']
+        bhajans: ['Sri Hari Vasare Hari Kirtana Vidhana', 'Madana Mohana Tanu Gauranga Sundara', 'Gaurangera Duti Pada']
     },
     'parama ekadasi': {
         significance: 'Paramā Ekādaśī is a special Ekādaśī that occurs only in a leap lunar year (Adhika Māsa, the extra month). Observing this Ekādaśī during the extra lunar month is considered especially powerful for purification and spiritual merit, as the extra month itself carries extraordinary blessings.',
@@ -824,6 +911,62 @@ const festivalInfo: Record<string, {
             'Charity and donations during this auspicious extra month'
         ],
         bhajans: ['Narada Muni Bajay Vina', 'Hare Krishna Maha Mantra']
+    },
+    'jagaddhatri puja': {
+        significance: 'Dedicated to Jagaddhātrī, a form of Mahāmāyā referred to as "the maintainer of the material world." Although noted on the traditional Vaiṣṇava calendar, Gauḍīya Vaiṣṇavas do not usually observe this festival.',
+        observances: [
+            'Noting the day on the Vaiṣṇava calendar',
+            'Continuing regular sādhana and chanting',
+            'Increased meditation on the Supreme Lord'
+        ],
+        bhajans: ['Hari Haraye Namah Krsna Yadavaya Namah']
+    },
+    'bhisma pancaka': {
+        significance: 'Bhīṣma Pañcaka (or Viṣṇu Pañcaka) comprises the final five sacred days of the Kārtika month (Ekādaśī to Pūrṇimā). It honors Grandfather Bhīṣma from the Mahābhārata, who fasted and meditated on Lord Kṛṣṇa while lying on a bed of arrows awaiting his departure. Devotees undertake intense vows, daily holy baths, and offering tarpana water to Bhīṣma.',
+        observances: [
+            'Daily holy baths in sacred rivers or water',
+            'Offering tarpana water to Bhīṣma',
+            'Fasting according to one\'s capacity (pañcagavya, fruits, or havishya)',
+            'Specific daily flower offerings to the Lord\'s body',
+            'Increased chanting and hearing of Viṣṇu-kathā',
+            'Meditating on Bhīṣma\'s example of devotion in adversity'
+        ],
+        bhajans: ['Namamisvaram Saccidananda Rupam', 'Jaya Radha Madhava', 'Bhaja Bhakata Vatsala']
+    },
+    'saradiya rasayatra': {
+        significance: 'Observed on Kārtika Pūrṇimā (the full moon night of Kārtika), this festival commemorates Lord Kṛṣṇa\'s divine autumn Rāsa-līlā dance with Śrīmatī Rādhārāṇī and the gopīs in Vṛndāvan. It represents the supreme expression of pure, unalloyed conjugal love (parakīya-bhāva) and marks the grand conclusion of the holy month of Kārtika.',
+        observances: [
+            'Celebrating the conclusion of the holy month of Kārtika',
+            'Meditating on Kṛṣṇa\'s transcendental Rāsa-līlā',
+            'Kīrtan glorifying Rādhā-Kṛṣṇa\'s intimate pastimes',
+            'Offering lamps and flowers to the Deities',
+            'Reading the Rāsa-pañcādhyāya from Śrīmad-Bhāgavatam'
+        ],
+        bhajans: ['Jaya Radhe Jaya Krsna Jaya Vrndavana', 'Vrndavana Ramya Sthana', 'Kusumita Vrndavane Nacata Sikhi Gane', 'Radha Kunda Tata Kunja Kutir']
+    },
+    'tulasi-saligram vivaha': {
+        significance: 'Tulasī Vivāha is the ceremonial wedding uniting Śrīmatī Tulasī Devī (the personification of Vṛndā/Lakṣmī) with the Śāligrāma śilā (personification of Lord Viṣṇu/Kṛṣṇa). Originating from the Purāṇic history of Vṛndā and Jalandhara, Lord Viṣṇu blessed Vṛndā to manifest as the sacred Tulasī plant and marry Him as Śāligrāma on Prabodhini Ekādaśī/Kārtika Pūrṇimā.',
+        observances: [
+            'Building a courtyard altar (Tulasī Vṛndāvana)',
+            'Draping Tulasī in a sari and fine ornaments',
+            'Placing Śāligrāma in a dhoti for the ceremony',
+            'Holding a white curtain (maṅgala-aṣṭaka) between them',
+            'Reciting wedding hymns and performing Kanyādāna',
+            'Celebrating with kīrtan and prasādam feast'
+        ],
+        bhajans: ['Namo Namah Tulasi Krsna Preyasi', 'Namo Namah Tulasi Maharani', 'Vrndayai Tulasi-Devyai Priyayai Kesavasya Ca', 'Gangeya Campeya']
+    },
+    'katyayani vrata': {
+        significance: 'Commemorates the beginning of the month-long vow (Mārgaśīrṣa) performed by the young cowherd maidens (gopīs) of Vṛndāvan. They bathed early each morning in the Yamunā and worshipped Goddess Kātyāyanī with incense and flowers, praying to obtain Lord Kṛṣṇa as their husband. Impressed by their unalloyed devotion, Lord Kṛṣṇa blessed them that their desires would be fulfilled during the upcoming Rāsa-līlā.',
+        observances: [
+            'Early morning bathing as the gopīs did',
+            'Worshipping the Lord with incense and flowers',
+            'Chanting extra rounds of japa',
+            'Fasting or eating only simple foods',
+            'Reading about the gopīs\' vow from Śrīmad-Bhāgavatam',
+            'Meditating on pure devotion as exemplified by the gopīs'
+        ],
+        bhajans: ['Radhe Jaya Jaya Madhava Dayite', 'Ami Jamuna Puline', 'Srita Kamala']
     }
 };
 
@@ -844,6 +987,7 @@ function extractAcharyaName(festivalName: string): string | null {
         'haridasa': 'haridasa thakura',
         'baladeva vidyabhusana': 'baladeva vidyabhusana',
         'bhaktisiddhanta': 'bhaktisiddhanta sarasvati thakura',
+        'gadadhara dasa': 'gadadhara dasa goswami',
         'gadadhara': 'gadadhara pandita',
         'srivasa': 'srivasa pandita',
         'nityananda': 'nityananda prabhu',
@@ -853,6 +997,12 @@ function extractAcharyaName(festivalName: string): string | null {
         'srinivasa acharya': 'srinivasa acharya',
         'syamananda': 'syamananda prabhu',
         'rasikananda': 'rasikananda prabhu',
+        'dhananjaya pandita': 'dhananjaya pandita',
+        'bhugarbha': 'bhugarbha goswami',
+        'kasisvara': 'kasisvara pandita',
+        'nimbarkacharya': 'nimbarkacharya',
+        'nimbarka': 'nimbarkacharya',
+        'kaliya krsnadasa': 'kaliya krsnadasa',
     };
     for (const [keyword, key] of Object.entries(keywordMap)) {
         if (lowerName.includes(keyword)) return key;
@@ -896,6 +1046,11 @@ function extractFestivalType(festivalName: string): string | null {
     if (n.includes('nityananda trayodasi')) return 'nityananda trayodasi';
     if (n.includes('rama navami') || n.includes('ramacandra vijayotsava') || n.includes('ramacandra')) return 'rama navami';
     if (n.includes('ganga puja')) return 'ganga puja';
+    if (n.includes('jagaddhatri')) return 'jagaddhatri puja';
+    if (n.includes('bhisma pancaka') || n.includes('bhishma panchaka') || n.includes('vishnu panchaka')) return 'bhisma pancaka';
+    if (n.includes('saradiya rasayatra') || n.includes('rasayatra')) return 'saradiya rasayatra';
+    if (n.includes('tulasi-saligram') || n.includes('tulasi saligram') || n.includes('tulasi vivaha')) return 'tulasi-saligram vivaha';
+    if (n.includes('katyayani vrata') || n.includes('katyayani')) return 'katyayani vrata';
     return null;
 }
 

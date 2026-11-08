@@ -7,8 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Target, Edit3, Save, X, Globe } from "lucide-react";
+import { Loader2, Target, Edit3, Save, X, Globe, ArrowLeft } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useLocation } from "wouter";
 import type { UserGoals, InsertUserGoals, User } from "@shared/schema";
 import Logo from "@/components/Logo";
 import { isUnauthorizedError } from "@/lib/authUtils";
@@ -29,6 +30,7 @@ const COMMON_TIMEZONES = [
 
 export default function Goals() {
   const { user, isAuthenticated, isLoading: authLoading, refreshUser } = useAuth();
+  const [, setLocation] = useLocation();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [isEditing, setIsEditing] = useState(false);
@@ -171,6 +173,12 @@ export default function Goals() {
       <header className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg shadow-sm border-b border-orange-100 dark:border-gray-700 sticky top-0 z-40">
         <div className="max-w-md mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
+            <button
+              onClick={() => setLocation("/")}
+              className="p-1.5 rounded-lg hover:bg-orange-100 dark:hover:bg-gray-700 transition-colors"
+            >
+              <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+            </button>
             <Logo size={36} />
             <div>
               <h1 className="text-lg font-bold text-gray-800 dark:text-gray-200">My Goals</h1>
