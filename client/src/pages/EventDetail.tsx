@@ -374,7 +374,7 @@ export default function EventDetail() {
     const festivalDetails = festivalType ? festivalInfo[festivalType] : null;
 
     const suggestedBhajans = festivalDetails?.bhajans || acharya?.bhajans || null;
-    const observances = festival.observances || festivalDetails?.observances || acharya?.observances || null;
+    const observances = festivalDetails?.observances || acharya?.observances || null;
 
     const userTimezone = user?.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone;
     const festivalDate = new Date(festival.date + 'T00:00:00');
