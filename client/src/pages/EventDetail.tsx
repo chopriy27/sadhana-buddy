@@ -441,6 +441,13 @@ export default function EventDetail() {
             </div>
 
             <main className="max-w-2xl mx-auto px-4 py-6 space-y-6">
+                {/* Description */}
+                {festival.description && (
+                    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-orange-100 dark:border-gray-700 p-5">
+                        <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{festival.description}</p>
+                    </div>
+                )}
+
                 {/* How to Observe */}
                 {observances && observances.length > 0 && (
                     <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-orange-100 dark:border-gray-700 p-5">
