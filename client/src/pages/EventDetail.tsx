@@ -25,10 +25,12 @@ interface Festival {
 const acharyaInfo: Record<string, {
     observances?: string[];
     bhajans?: string[];
+    description?: string;
 }> = {
     'srila prabhupada': {
         observances: ["Fast until noon"],
-        bhajans: ['Yadi Prabhupada Na Hoito', 'Boro Krpa Koile Krsna', 'Sri Guru Carana Padma', 'Ohe Vaisnava Thakura', 'Je Anilo Prema Dhana Koruna Pracura']
+        bhajans: ['Yadi Prabhupada Na Hoito', 'Boro Krpa Koile Krsna', 'Sri Guru Carana Padma', 'Ohe Vaisnava Thakura', 'Je Anilo Prema Dhana Koruna Pracura'],
+        description: "Srila Prabhupada (1896–1977) was the Founder-Acharya of the International Society for Krishna Consciousness (ISKCON). Carrying out the instruction of his spiritual master, Srila Bhaktisiddhanta Sarasvati Thakura, he traveled to the West aboard the Jaladutta in 1965 and founded ISKCON in New York in 1966. Over eleven years, he established 108 Radha-Krishna temples globally, published extensive English translations and purports of sacred Vedic texts such as the Srimad-Bhagavatam and Bhagavad-gita, introduced Jagannatha Ratha-yatra worldwide, and initiated thousands of disciples before passing into eternal pastimes in Vrindavana."
     },
     'bhaktivinoda thakura': {
         observances: ["Fast until noon"],
@@ -40,7 +42,8 @@ const acharyaInfo: Record<string, {
     },
     'gaura kisora dasa babaji': {
         observances: ["Fast until noon"],
-        bhajans: ['Namo Gaura-Kisoraya', 'Gaurangera Duti Pada', 'Je Anilo Prema Dhana Koruna Pracura', 'Ohe Vaisnava Thakura']
+        bhajans: ['Namo Gaura-Kisoraya', 'Gaurangera Duti Pada', 'Je Anilo Prema Dhana Koruna Pracura', 'Ohe Vaisnava Thakura'],
+        description: "Srila Gaura Kisora Dasa Babaji Maharaja was an exalted paramahamsa babaji (Bhajananandi) in the Gaudiya disciplic succession. A disciple of Bhagavata Dasa Babaji and close associate of Srila Bhaktivinoda Thakura, he exemplified unmatched renunciation, detachment (nirapeksa), and humility. He wore discarded cloth from corpses on the Ganges, ate begged rice soaked in river water garnished with salt and chili, and slept under trees or overturned boats. In 1900, he accepted Srila Bhaktisiddhanta Sarasvati Thakura as his only initiated disciple. He passed into eternal pastimes on Utthana Ekadasi in 1915."
     },
     'advaita acarya': {
         observances: ["Fast until noon"],
@@ -89,43 +92,54 @@ const acharyaInfo: Record<string, {
         bhajans: ['Nitai Pada Kamala', 'Nitai Guna Mani']
     },
     'narahari sarakara thakura': {
-        bhajans: ['Sri Hari Vasare Hari Kirtana Vidhana', 'Madana Mohana Tanu Gauranga Sundara', 'Gaurangera Duti Pada']
+        bhajans: ['Sri Hari Vasare Hari Kirtana Vidhana', 'Madana Mohana Tanu Gauranga Sundara', 'Gaurangera Duti Pada'],
+        description: "An intimate associate of Lord Chaitanya Mahaprabhu from Srikhanda who regularly served Mahaprabhu by fanning Him with a camara whisk and composed sweet Bengali devotional songs glorifying Sri Gauranga's pastimes."
     },
     'vasudeva ghosh': {
-        bhajans: ['Agam Agocara Gora', 'Akhil Gauranga Tumi More Doya Na', 'Gora Guna Gao Suni', 'Jaya Jaya Jagannatha Sacira Nandan', 'Jaya Jaya Kala Raba Nadiya Nagare', 'Madana Mohana Mani Gauranga Badana Khani', 'Niravadi Mora Mane Sacira Aginaya Nace', 'Sonari Puraba Lila', 'Yadi Gaura Na Hoito']
+        bhajans: ['Agam Agocara Gora', 'Akhil Gauranga Tumi More Doya Na', 'Gora Guna Gao Suni', 'Jaya Jaya Jagannatha Sacira Nandan', 'Jaya Jaya Kala Raba Nadiya Nagare', 'Madana Mohana Mani Gauranga Badana Khani', 'Niravadi Mora Mane Sacira Aginaya Nace', 'Sonari Puraba Lila', 'Yadi Gaura Na Hoito'],
+        description: "Sri Vasudeva Ghosh was an intimate associate of Lord Caitanya Mahaprabhu and, in Vraja-lila, the Sakhi named Guntinga. Known for his sweet sankirtana alongside his brothers Govinda and Madhava Ghosh, his singing was so moving that even wood and stone would melt, inspiring Lord Nityananda to dance. He eventually resided in Tamluk, where a unique Deity of Mahaprabhu giving blessings is worshiped."
     },
     'srinivasa acharya': {
-        bhajans: ['Krsnotkirtana Gana Nartana Parau', 'Je Anilo Prema Dhana Koruna Pracura', 'Sri Guru Carana Padma']
+        bhajans: ['Krsnotkirtana Gana Nartana Parau', 'Je Anilo Prema Dhana Koruna Pracura', 'Sri Guru Carana Padma'],
+        description: "Sri Srinivasa Acharya Thakur was an associate of Lord Chaitanya Mahaprabhu and an embodiment of Gaura-shakti (the divine energy of Lord Chaitanya). His birth was foretold by Lord Chaitanya Himself to his parents, Chaitanya Dasa and his wife, during their pilgrimage to Jagannatha Puri. He received initiation (diksha) from Gopala Bhatta Goswami and mastered Gaudiya philosophy under Srila Jiva Goswami at the Radha-Damodara temple in Vrindavan, earning the title \"Acharya\". Alongside Narottama Dasa Thakura and Shyamananda Prabhu, he spearheaded the first transcendental book distribution party, transporting bullock carts of the Goswamis' writings from Vrindavana across Bengal and Orissa. He converted King Bir Hambir to Vaishnavism and introduced a specialized style of kirtana."
     },
     'syamananda prabhu': {
         bhajans: ['Radhe Jaya Jaya Madhava Dayite']
     },
     'rasikananda prabhu': {
-        bhajans: ['Ohe Vaisnava Thakura']
+        bhajans: ['Ohe Vaisnava Thakura'],
+        description: "Sri Rasikananda Deva (Rasika Murari) appeared in Rohini around 1590 AD as the son of King Acyuta Deva and Queen Bhavani. As the foremost disciple of Sri Syamananda Prabhu, he spent sixteen years preaching the message of Sri Gaura-Nityananda across Bengal and Orissa, transforming kings, robbers, tigers, and even a ferocious wild elephant into devotees of Krishna. He entered into his eternal pastimes by taking shelter at the lotus feet of Kshira-chora Gopinatha in Remuna."
     },
     'gadadhara dasa goswami': {
-        bhajans: ['Je Anilo Prema Dhana Koruna Pracura', 'Ohe Vaisnava Thakura', 'Thakura Vaisnava Pada']
+        bhajans: ['Je Anilo Prema Dhana Koruna Pracura', 'Ohe Vaisnava Thakura', 'Thakura Vaisnava Pada'],
+        description: "Sri Gadadhara Dasa Goswami is considered a united expansion of Candrakanti gopi (an expansion of Srimati Radharani's effulgence) and Purnananda (an expansion of Lord Balarama's girlfriend). He was an intimate associate of Lord Chaitanya Mahaprabhu and Lord Nityananda who actively spread kirtana and Krishna consciousness across Bengal."
     },
     'dhananjaya pandita': {
-        bhajans: ['Je Anilo Prema Dhana Koruna Pracura', 'Vrndavana Vasi Jata Vaisnavera Gana']
+        bhajans: ['Je Anilo Prema Dhana Koruna Pracura', 'Vrndavana Vasi Jata Vaisnavera Gana'],
+        description: "Sri Dhananjaya Pandita participated extensively in Lord Chaitanya's sankirtana pastimes in Navadvipa. Under the direct order of Lord Chaitanya, he traveled widely to preach Krishna consciousness."
     },
     'bhugarbha goswami': {
-        bhajans: ['Je Anilo Prema Dhana Koruna Pracura', 'Ohe Vaisnava Thakura', 'Vrndavana Vasi Jata Vaisnavera Gana']
+        bhajans: ['Je Anilo Prema Dhana Koruna Pracura', 'Ohe Vaisnava Thakura', 'Vrndavana Vasi Jata Vaisnavera Gana'],
+        description: "Sri Bhugarbha Goswami: Along with his close friend Lokanatha Goswami, he located lost sacred places in Vrindavan under the direct order of Lord Chaitanya Mahaprabhu."
     },
     'kasisvara pandita': {
-        bhajans: ['Je Anilo Prema Dhana Koruna Pracura', 'Ohe Vaisnava Thakura', 'Vrndavana Vasi Jata Vaisnavera Gana']
+        bhajans: ['Je Anilo Prema Dhana Koruna Pracura', 'Ohe Vaisnava Thakura', 'Vrndavana Vasi Jata Vaisnavera Gana'],
+        description: "Sri Kasisvara Pandita: Served as Lord Chaitanya's bodyguard in Jagannatha Puri and distributed prasadam following kirtana."
     },
     'nimbarkacharya': {
-        bhajans: ['Hari Haraye Namah Krsna Yadavaya Namah', 'Isvara Parama Krsna']
+        bhajans: ['Hari Haraye Namah Krsna Yadavaya Namah', 'Isvara Parama Krsna'],
+        description: "Marks the appearance of Sri Nimbarkacharya, the principal Acharya of the Kumara Sampradaya (one of the four orthodox line of Vaishnava teachers). He preached Krishna consciousness and propounded the Dvaitadvaita (qualified dualistic) philosophy centered on Radha-Krishna worship approximately 300 years before Lord Chaitanya."
     },
     'kaliya krsnadasa': {
-        bhajans: ['Nitai Pada Kamala', 'Nitai Guna Mani', 'Je Anilo Prema Dhana Koruna Pracura']
+        bhajans: ['Nitai Pada Kamala', 'Nitai Guna Mani', 'Je Anilo Prema Dhana Koruna Pracura'],
+        description: "Marks the disappearance of Sri Kaliya Krsnadasa, a prominent disciple of Gauridasa Pandita and intimate associate of Lord Nityananda Prabhu and Lord Chaitanya."
     }
 };
 
 const festivalInfo: Record<string, {
     observances?: string[];
     bhajans?: string[];
+    description?: string;
 }> = {
     'janmashtami': {
         observances: ["Fast until midnight"],
@@ -170,13 +184,16 @@ const festivalInfo: Record<string, {
         bhajans: ['Jaya Jaya Jagannatha Sacira Nandan', 'Yadi Gaura Na Hoito']
     },
     'govardhan puja': {
-        bhajans: ['Krsna Pasadena Samasta Saila', 'Nija Pati Bhuja']
+        bhajans: ['Krsna Pasadena Samasta Saila', 'Nija Pati Bhuja'],
+        description: "Govardhana Puja (Annakuta) commemorates Lord Krishna instructing the cowherd men of Vrindavana to stop their traditional sacrifice to King Indra and instead worship Govardhana Hill, local brahmanas, and the cows. In response to Indra's anger and devastating rainstorms, Lord Krishna lifted Govardhana Hill on the little finger of His left hand for seven days to shelter all the residents and animals of Vrindavana, humbling Indra's pride. Go Puja highlights the sacred principle of cow protection, acknowledging cows and bulls as the mother and father of human society."
     },
     'gopastami': {
-        bhajans: ['Bhaja Bhakata Vatsala', 'Nija Pati Bhuja', 'Yasomati Nandana', 'Vande Krsna Nanda Kumara']
+        bhajans: ['Bhaja Bhakata Vatsala', 'Nija Pati Bhuja', 'Yasomati Nandana', 'Vande Krsna Nanda Kumara'],
+        description: "Gopashtami (or Gosthastami) occurs on the eighth lunar day (Ashtami) of the bright fortnight (Shukla Paksha) of the month of Kartik. It is a coming-of-age celebration marking the day Nanda Maharaja gave Lord Krishna full responsibility for grazing the adult cows of Vrindavan. Prior to this day, Krishna was a tender of calves (vatsapa), but upon entering the age of pauganda (sixth to tenth year), He officially became a qualified cowherd boy (gopa). Lord Krishna walked barefoot through the pastures of Vrindavan on this day to bless and purify the earth with His lotus footprints. Devotees observe Go-Puja by visiting cow shelters (gosalas), bathing, cleaning, and decorating cows with cloth and jewelry, feeding them special fodder, and performing circumambulations (pradakshina)."
     },
     'dipavali': {
-        bhajans: ['Rajat Kirita Mani Didhiti', 'Raghavam Karunakaram Muni Sevitam']
+        bhajans: ['Rajat Kirita Mani Didhiti', 'Raghavam Karunakaram Muni Sevitam'],
+        description: "Dipavali (Dipa-dan) is a celebration marking Lord Rama's return from exile to His capital, Ayodhya, following the defeat of the demon Ravana. Although Kali Puja coincides with this time, Gaudiya Vaishnavas do not regularly observe the worship of Durga Devi (Kali)."
     },
     'guru purnima': {
         bhajans: ['Sri Guru Carana Padma', 'Ohe Vaisnava Thakura']
@@ -197,22 +214,27 @@ const festivalInfo: Record<string, {
         bhajans: ['Isvara Parama Krsna', 'Namamisvaram Saccidananda Rupam']
     },
     'caturmasya': {
-        bhajans: ['Maha Prasade Govinde', 'Sarira Avidya Jala']
+        bhajans: ['Maha Prasade Govinde', 'Sarira Avidya Jala'],
+        description: "Concludes the sacred four-month Chaturmasya period of heightened vows and dietary austerities that began in the month of Ashadha."
     },
     'ganga puja': {
         bhajans: ['Sri Guru Carana Padma']
     },
     'bhisma pancaka': {
-        bhajans: ['Namamisvaram Saccidananda Rupam', 'Jaya Radha Madhava', 'Bhaja Bhakata Vatsala']
+        bhajans: ['Namamisvaram Saccidananda Rupam', 'Jaya Radha Madhava', 'Bhaja Bhakata Vatsala'],
+        description: "Bhisma Pancaka (or Vishnu Panchaka) comprises the final five sacred days of the Kartik month (Ekadashi to Purnima). It honors Grandfather Bhishma from the Mahabharata, who fasted and meditated on Lord Krishna while lying on a bed of arrows awaiting his departure. Devotees undertake intense vows (Kartik Vrata), daily holy baths, offering tarpana water to Bhishma, and fasting across different levels: Level 1: Consuming Panchagavya (cow products: dung, urine, milk, yogurt, and combined) across the five days. Level 2: Eating fruits and roots while avoiding grains, beans, and seeds. Level 3: Eating simple Havishya khichari prepared with specified ingredients like cow ghee and unpolished rice. Specific daily flower offerings are made to the Lord: lotus flowers to the feet on Day 1, Bilva leaves to the thighs on Day 2, fragrant scents to the navel on Day 3, Java flowers to the shoulders on Day 4, and Malati flowers to the head on Day 5."
     },
     'saradiya rasayatra': {
-        bhajans: ['Jaya Radhe Jaya Krsna Jaya Vrndavana', 'Vrndavana Ramya Sthana', 'Kusumita Vrndavane Nacata Sikhi Gane', 'Radha Kunda Tata Kunja Kutir']
+        bhajans: ['Jaya Radhe Jaya Krsna Jaya Vrndavana', 'Vrndavana Ramya Sthana', 'Kusumita Vrndavane Nacata Sikhi Gane', 'Radha Kunda Tata Kunja Kutir'],
+        description: "Observed on Kartik Purnima (the full moon night of Kartik), this festival commemorates Lord Krishna's divine autumn Rasa-lila dance with Srimati Radharani and the gopis in Vrindavan. It represents the supreme expression of pure, unalloyed conjugal love (parakiya-bhava) and marks the grand conclusion of the holy month of Kartik."
     },
     'tulasi-saligram vivaha': {
-        bhajans: ['Namo Namah Tulasi Krsna Preyasi', 'Namo Namah Tulasi Maharani', 'Vrndayai Tulasi-Devyai Priyayai Kesavasya Ca', 'Gangeya Campeya']
+        bhajans: ['Namo Namah Tulasi Krsna Preyasi', 'Namo Namah Tulasi Maharani', 'Vrndayai Tulasi-Devyai Priyayai Kesavasya Ca', 'Gangeya Campeya'],
+        description: "Tulasi Vivaha is the ceremonial wedding uniting Srimati Tulasi Devi (the personification of Vrinda / Lakshmi) with the Shaligram stone or an Amla branch (personifications of Lord Vishnu/Krishna). Originating from the Puranic history of Vrinda and Jalandhara in the Skanda, Padma, and Shiva Puranas, Lord Vishnu blessed Vrinda to manifest as the sacred Tulasi plant and marry Him as Shaligram on Prabodhini Ekadashi / Kartik Purnima. Devotees build a courtyard altar (Tulasi Vrindavana), drape Tulasi in a sari and fine ornaments, place Shaligram in a dhoti, hold a white curtain (mangal-ashtaka) between them, recite wedding hymns, and perform Kanyadaan."
     },
     'katyayani vrata': {
-        bhajans: ['Radhe Jaya Jaya Madhava Dayite', 'Ami Jamuna Puline', 'Srita Kamala']
+        bhajans: ['Radhe Jaya Jaya Madhava Dayite', 'Ami Jamuna Puline', 'Srita Kamala'],
+        description: "Commemorates the beginning of the month-long vow (Margasirsha) performed by the young unmarried cowherd maidens (gopis) of Vrindavan. They bathed early each morning in the Yamuna and worshiped Goddess Katyayani with incense and flowers, praying to obtain Lord Krishna as their husband. Impressed by their unalloyed devotion, Lord Krishna stole their garments while they bathed, climbed a kadamba tree, and blessed them that their desires would be fulfilled during the upcoming autumn Rasa-lila."
     },
     'pandava nirjala ekadasi': { bhajans: ['Maha Prasade Govinde'] },
     'yogini ekadasi': { bhajans: ['Maha Prasade Govinde'] },
@@ -224,11 +246,11 @@ const festivalInfo: Record<string, {
     'indira ekadasi': { bhajans: ['Maha Prasade Govinde'] },
     'pasankusa ekadasi': { bhajans: ['Maha Prasade Govinde'] },
     'rama ekadasi': { bhajans: ['Vibhavari Sesa'] },
-    'utthana ekadasi': { bhajans: ['Sri Hari Vasare Hari Kirtana Vidhana', 'Ceto Darpana Marjanam', 'Jaya Radha Madhava', 'Vibhavari Sesa'] },
+    'utthana ekadasi': { bhajans: ['Sri Hari Vasare Hari Kirtana Vidhana', 'Ceto Darpana Marjanam', 'Jaya Radha Madhava', 'Vibhavari Sesa'], description: "Also known as Deva Uttana Ekadashi, Hari Prabodhini, or Thulo Ekadashi, this festival falls on the eleventh lunar day of the bright fortnight of Kartik. It marks the end of the four-month Chaturmasya period and signifies the awakening of Lord Vishnu from His cosmic sleep on the serpent Ananta Shesha. The conclusion of Chaturmasya on this day reopens the traditional Hindu wedding season. Devotees observe strict fasting, perform evening puja to Lord Vishnu and Lakshmi with sugarcane offerings, and sing prabhatiya songs urging the Lord to wake." },
     'moksada ekadasi': { bhajans: ['Isvara Parama Krsna', 'Ceto Darpana Marjanam'] },
-    'utpanna ekadasi': { bhajans: ['Sri Hari Vasare Hari Kirtana Vidhana', 'Madana Mohana Tanu Gauranga Sundara', 'Gaurangera Duti Pada'] },
+    'utpanna ekadasi': { bhajans: ['Sri Hari Vasare Hari Kirtana Vidhana', 'Madana Mohana Tanu Gauranga Sundara', 'Gaurangera Duti Pada'], description: "Occurs in the dark fortnight (Krishna Paksha) of the month of Margasirsha. It commemorates the appearance of Ekadashi Devi from the body of Lord Vishnu to defeat and slay the demon Mura, who had conquered the demigods." },
     'parama ekadasi': { bhajans: ['Maha Prasade Govinde'] },
-    'jagaddhatri puja': { bhajans: ['Hari Haraye Namah Krsna Yadavaya Namah'] },
+    'jagaddhatri puja': { bhajans: ['Hari Haraye Namah Krsna Yadavaya Namah'], description: "Dedicated to Jagaddhatri, a form of Mahamaya referred to as \"the maintainer of the material world\". Although noted on the traditional calendar, Gaudiya Vaishnavas do not usually observe this festival." },
 };
 
 function extractAcharyaName(festivalName: string): string | null {
@@ -375,6 +397,7 @@ export default function EventDetail() {
 
     const suggestedBhajans = festivalDetails?.bhajans || acharya?.bhajans || null;
     const observances = festivalDetails?.observances || acharya?.observances || null;
+    const description = festivalDetails?.description || acharya?.description || null;
 
     const userTimezone = user?.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone;
     const festivalDate = new Date(festival.date + 'T00:00:00');
@@ -442,9 +465,9 @@ export default function EventDetail() {
 
             <main className="max-w-2xl mx-auto px-4 py-6 space-y-6">
                 {/* Description */}
-                {festival.description && (
+                {description && (
                     <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-orange-100 dark:border-gray-700 p-5">
-                        <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{festival.description}</p>
+                        <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{description}</p>
                     </div>
                 )}
 
