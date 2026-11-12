@@ -70,8 +70,18 @@ export async function signInWithGoogle() {
     }
   }
 
-  // Web: always use redirect (more reliable across browsers than popup)
-  return signInWithRedirect(auth, googleProvider);
+  // Web: use popup (redirect fails silently on browsers that block third-party cookies)
+  try {
+    return await signInWithPopup(auth, googleProvider);
+  } catch (error: any) {
+    if (error.code === 'auth/popup-blocked') {
+      throw Object.assign(new Error('Popup was blocked. Please allow popups for this site and try again.'), { code: 'auth/popup-blocked' });
+    }
+    if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') {
+      throw Object.assign(new Error('Sign-in was cancelled.'), { code: error.code });
+    }
+    throw error;
+  }
 }
 
 export async function logOut() {

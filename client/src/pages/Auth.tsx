@@ -59,10 +59,15 @@ export default function Auth() {
     setIsSubmitting(true);
     try {
       await loginWithGoogle();
-      // signInWithRedirect navigates away — this line is not reached
     } catch (err: any) {
       console.error('Google sign-in error:', err?.code, err?.message);
-      toast({ title: 'Could not sign in with Google. Please try again.', variant: 'destructive' });
+      const msg = err?.code === 'auth/popup-blocked'
+        ? 'Popup was blocked — please allow popups for this site and try again.'
+        : err?.code === 'auth/popup-closed-by-user' || err?.code === 'auth/cancelled-popup-request'
+          ? 'Sign-in was cancelled.'
+          : 'Could not sign in with Google. Please try again.';
+      toast({ title: msg, variant: 'destructive' });
+    } finally {
       setIsSubmitting(false);
     }
   };
