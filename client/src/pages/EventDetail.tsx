@@ -8,7 +8,8 @@ import {
     Sun,
     Moon,
     Sparkles,
-    Music
+    Music,
+    Play
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
@@ -26,19 +27,23 @@ const acharyaInfo: Record<string, {
     observances?: string[];
     bhajans?: string[];
     description?: string;
+    videos?: string[];
 }> = {
     'srila prabhupada': {
         observances: ["Fast until noon"],
         bhajans: ['Yadi Prabhupada Na Hoito', 'Boro Krpa Koile Krsna', 'Sri Guru Carana Padma', 'Ohe Vaisnava Thakura', 'Je Anilo Prema Dhana Koruna Pracura'],
-        description: "Srila Prabhupada (1896–1977) was the Founder-Acharya of the International Society for Krishna Consciousness (ISKCON). Carrying out the instruction of his spiritual master, Srila Bhaktisiddhanta Sarasvati Thakura, he traveled to the West aboard the Jaladutta in 1965 and founded ISKCON in New York in 1966. Over eleven years, he established 108 Radha-Krishna temples globally, published extensive English translations and purports of sacred Vedic texts such as the Srimad-Bhagavatam and Bhagavad-gita, introduced Jagannatha Ratha-yatra worldwide, and initiated thousands of disciples before passing into eternal pastimes in Vrindavana."
+        description: "Srila Prabhupada (1896–1977) was the Founder-Acharya of the International Society for Krishna Consciousness (ISKCON). Carrying out the instruction of his spiritual master, Srila Bhaktisiddhanta Sarasvati Thakura, he traveled to the West aboard the Jaladutta in 1965 and founded ISKCON in New York in 1966. Over eleven years, he established 108 Radha-Krishna temples globally, published extensive English translations and purports of sacred Vedic texts such as the Srimad-Bhagavatam and Bhagavad-gita, introduced Jagannatha Ratha-yatra worldwide, and initiated thousands of disciples before passing into eternal pastimes in Vrindavana.",
+        videos: ['4R5xLj0l0eQ']
     },
     'bhaktivinoda thakura': {
         observances: ["Fast until noon"],
-        bhajans: ['Vibhavari Sesa', 'Bhaja Bhakata Vatsala', 'Jaya Radha Madhava', 'Ohe Vaisnava Thakura', 'Radha Kunda Tata Kunja Kutir']
+        bhajans: ['Vibhavari Sesa', 'Bhaja Bhakata Vatsala', 'Jaya Radha Madhava', 'Ohe Vaisnava Thakura', 'Radha Kunda Tata Kunja Kutir'],
+        videos: ['ptDOC3mCn7Y']
     },
     'bhaktisiddhanta sarasvati thakura': {
         observances: ["Fast until noon"],
-        bhajans: ['Sri Guru Carana Padma', 'Ohe Vaisnava Thakura', 'Vrndavana Vasi Jata Vaisnavera Gana']
+        bhajans: ['Sri Guru Carana Padma', 'Ohe Vaisnava Thakura', 'Vrndavana Vasi Jata Vaisnavera Gana'],
+        videos: ['bXzJfRmPz_0', 'FQ0VCV8HCsg', 'MkbKZ9Liemk']
     },
     'gaura kisora dasa babaji': {
         observances: ["Fast until noon"],
@@ -47,7 +52,8 @@ const acharyaInfo: Record<string, {
     },
     'advaita acarya': {
         observances: ["Fast until noon"],
-        bhajans: ['Sri Hari Vasare Hari Kirtana Vidhana', 'Gaurangera Duti Pada', 'Ceto Darpana Marjanam']
+        bhajans: ['Sri Hari Vasare Hari Kirtana Vidhana', 'Gaurangera Duti Pada', 'Ceto Darpana Marjanam'],
+        videos: ['ECBqb3a2mi4']
     },
     'narottama dasa thakura': {
         bhajans: ['Nitai Pada Kamala', 'Kusumita Vrndavane Nacata Sikhi Gane', 'Vrndavana Ramya Sthana', 'Sri Guru Carana Padma']
@@ -80,7 +86,8 @@ const acharyaInfo: Record<string, {
         bhajans: ['Ceto Darpana Marjanam', 'Ohe Vaisnava Thakura']
     },
     'baladeva vidyabhusana': {
-        bhajans: ['Isvara Parama Krsna', 'Namamisvaram Saccidananda Rupam']
+        bhajans: ['Isvara Parama Krsna', 'Namamisvaram Saccidananda Rupam'],
+        videos: ['3SrX-NE_cak']
     },
     'gadadhara pandita': {
         bhajans: ['Gaurangera Duti Pada', 'Ceto Darpana Marjanam']
@@ -89,7 +96,8 @@ const acharyaInfo: Record<string, {
         bhajans: ['Sri Hari Vasare Hari Kirtana Vidhana', 'Ceto Darpana Marjanam']
     },
     'nityananda prabhu': {
-        bhajans: ['Nitai Pada Kamala', 'Nitai Guna Mani']
+        bhajans: ['Nitai Pada Kamala', 'Nitai Guna Mani'],
+        videos: ['df-2kram9oo']
     },
     'narahari sarakara thakura': {
         bhajans: ['Sri Hari Vasare Hari Kirtana Vidhana', 'Madana Mohana Tanu Gauranga Sundara', 'Gaurangera Duti Pada'],
@@ -140,14 +148,17 @@ const festivalInfo: Record<string, {
     observances?: string[];
     bhajans?: string[];
     description?: string;
+    videos?: string[];
 }> = {
     'janmashtami': {
         observances: ["Fast until midnight"],
-        bhajans: ['Yasomati Nandana', 'Jaya Radha Madhava', 'Bhaja Bhakata Vatsala']
+        bhajans: ['Yasomati Nandana', 'Jaya Radha Madhava', 'Bhaja Bhakata Vatsala'],
+        videos: ['rQNBQ3NXZ90']
     },
     'gaura purnima': {
         observances: ["Fast until moonrise"],
-        bhajans: ['Gaurangera Duti Pada', 'Ceto Darpana Marjanam', 'Sri Hari Vasare Hari Kirtana Vidhana']
+        bhajans: ['Gaurangera Duti Pada', 'Ceto Darpana Marjanam', 'Sri Hari Vasare Hari Kirtana Vidhana'],
+        videos: ['ZloamXmTi2c', 'MmUVQ5W0ir0', 'tWKY1arC2JU']
     },
     'nityananda trayodasi': {
         observances: ["Fast until noon"],
@@ -155,37 +166,45 @@ const festivalInfo: Record<string, {
     },
     'rama navami': {
         observances: ["Please read the GBC Śāstric Advisory Council paper for guidance on this observance"],
-        bhajans: ['Isvara Parama Krsna', 'Namamisvaram Saccidananda Rupam']
+        bhajans: ['Isvara Parama Krsna', 'Namamisvaram Saccidananda Rupam'],
+        videos: ['RymjKX-DZQY', 'm8C-vdKs3-4']
     },
     'radhastami': {
         observances: ["Fast until noon"],
-        bhajans: ['Radhe Jaya Jaya Madhava Dayite', 'Jaya Radhe Jaya Krsna Jaya Vrndavana']
+        bhajans: ['Radhe Jaya Jaya Madhava Dayite', 'Jaya Radhe Jaya Krsna Jaya Vrndavana'],
+        videos: ['tS58CDMrFxA']
     },
     'vamana': {
         observances: ["Fast until noon"],
-        bhajans: ['Isvara Parama Krsna', 'Namamisvaram Saccidananda Rupam']
+        bhajans: ['Isvara Parama Krsna', 'Namamisvaram Saccidananda Rupam'],
+        videos: ['feqV9mNJBig']
     },
     'lord balarama': {
         observances: ["Fast until noon"],
-        bhajans: ['Nitai Pada Kamala', 'Nitai Guna Mani']
+        bhajans: ['Nitai Pada Kamala', 'Nitai Guna Mani'],
+        videos: ['_G8bJ-s3fBU']
     },
     'nrsimha caturdasi': {
         observances: ["Fast until dusk"],
-        bhajans: ['Namamisvaram Saccidananda Rupam', 'Isvara Parama Krsna']
+        bhajans: ['Namamisvaram Saccidananda Rupam', 'Isvara Parama Krsna'],
+        videos: ['JyLAVllHEMk', 'bvRUUhI_zfw']
     },
     'varaha dvadasi': {
         observances: ["Fast until noon"],
-        bhajans: ['Isvara Parama Krsna', 'Namamisvaram Saccidananda Rupam']
+        bhajans: ['Isvara Parama Krsna', 'Namamisvaram Saccidananda Rupam'],
+        videos: ['8bdF7HGJvTE']
     },
     'ekadasi': {
         bhajans: ['Maha Prasade Govinde', 'Sarira Avidya Jala']
     },
     'ratha yatra': {
-        bhajans: ['Jaya Jaya Jagannatha Sacira Nandan', 'Yadi Gaura Na Hoito']
+        bhajans: ['Jaya Jaya Jagannatha Sacira Nandan', 'Yadi Gaura Na Hoito'],
+        videos: ['i1JjoFj5ErM', 'qlztoN1t_OE']
     },
     'govardhan puja': {
         bhajans: ['Krsna Pasadena Samasta Saila', 'Nija Pati Bhuja'],
-        description: "Govardhana Puja (Annakuta) commemorates Lord Krishna instructing the cowherd men of Vrindavana to stop their traditional sacrifice to King Indra and instead worship Govardhana Hill, local brahmanas, and the cows. In response to Indra's anger and devastating rainstorms, Lord Krishna lifted Govardhana Hill on the little finger of His left hand for seven days to shelter all the residents and animals of Vrindavana, humbling Indra's pride. Go Puja highlights the sacred principle of cow protection, acknowledging cows and bulls as the mother and father of human society."
+        description: "Govardhana Puja (Annakuta) commemorates Lord Krishna instructing the cowherd men of Vrindavana to stop their traditional sacrifice to King Indra and instead worship Govardhana Hill, local brahmanas, and the cows. In response to Indra's anger and devastating rainstorms, Lord Krishna lifted Govardhana Hill on the little finger of His left hand for seven days to shelter all the residents and animals of Vrindavana, humbling Indra's pride. Go Puja highlights the sacred principle of cow protection, acknowledging cows and bulls as the mother and father of human society.",
+        videos: ['yXkOerQrK7U']
     },
     'gopastami': {
         bhajans: ['Bhaja Bhakata Vatsala', 'Nija Pati Bhuja', 'Yasomati Nandana', 'Vande Krsna Nanda Kumara'],
@@ -196,7 +215,8 @@ const festivalInfo: Record<string, {
         description: "Dipavali (Dipa-dan) is a celebration marking Lord Rama's return from exile to His capital, Ayodhya, following the defeat of the demon Ravana. Although Kali Puja coincides with this time, Gaudiya Vaishnavas do not regularly observe the worship of Durga Devi (Kali)."
     },
     'guru purnima': {
-        bhajans: ['Sri Guru Carana Padma', 'Ohe Vaisnava Thakura']
+        bhajans: ['Sri Guru Carana Padma', 'Ohe Vaisnava Thakura'],
+        videos: ['u-UlNlQUQM8']
     },
     'snana yatra': {
         bhajans: ['Jaya Jaya Jagannatha Sacira Nandan']
@@ -247,7 +267,7 @@ const festivalInfo: Record<string, {
     'pasankusa ekadasi': { bhajans: ['Maha Prasade Govinde'] },
     'rama ekadasi': { bhajans: ['Vibhavari Sesa'] },
     'utthana ekadasi': { bhajans: ['Sri Hari Vasare Hari Kirtana Vidhana', 'Ceto Darpana Marjanam', 'Jaya Radha Madhava', 'Vibhavari Sesa'], description: "Also known as Deva Uttana Ekadashi, Hari Prabodhini, or Thulo Ekadashi, this festival falls on the eleventh lunar day of the bright fortnight of Kartik. It marks the end of the four-month Chaturmasya period and signifies the awakening of Lord Vishnu from His cosmic sleep on the serpent Ananta Shesha. The conclusion of Chaturmasya on this day reopens the traditional Hindu wedding season. Devotees observe strict fasting, perform evening puja to Lord Vishnu and Lakshmi with sugarcane offerings, and sing prabhatiya songs urging the Lord to wake." },
-    'moksada ekadasi': { bhajans: ['Isvara Parama Krsna', 'Ceto Darpana Marjanam'] },
+    'moksada ekadasi': { bhajans: ['Isvara Parama Krsna', 'Ceto Darpana Marjanam'], videos: ['n5kQs5v-uSA'] },
     'utpanna ekadasi': { bhajans: ['Sri Hari Vasare Hari Kirtana Vidhana', 'Madana Mohana Tanu Gauranga Sundara', 'Gaurangera Duti Pada'], description: "Occurs in the dark fortnight (Krishna Paksha) of the month of Margasirsha. It commemorates the appearance of Ekadashi Devi from the body of Lord Vishnu to defeat and slay the demon Mura, who had conquered the demigods." },
     'parama ekadasi': { bhajans: ['Maha Prasade Govinde'] },
     'jagaddhatri puja': { bhajans: ['Hari Haraye Namah Krsna Yadavaya Namah'], description: "Dedicated to Jagaddhatri, a form of Mahamaya referred to as \"the maintainer of the material world\". Although noted on the traditional calendar, Gaudiya Vaishnavas do not usually observe this festival." },
@@ -398,6 +418,7 @@ export default function EventDetail() {
     const suggestedBhajans = festivalDetails?.bhajans || acharya?.bhajans || null;
     const observances = festivalDetails?.observances || acharya?.observances || null;
     const description = festivalDetails?.description || acharya?.description || null;
+    const suggestedVideos = festivalDetails?.videos || acharya?.videos || null;
 
     const userTimezone = user?.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone;
     const festivalDate = new Date(festival.date + 'T00:00:00');
@@ -507,6 +528,29 @@ export default function EventDetail() {
                                 >
                                     {bhajan}
                                 </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* Video Lectures */}
+                {suggestedVideos && suggestedVideos.length > 0 && (
+                    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-orange-100 dark:border-gray-700 p-5">
+                        <div className="flex items-center gap-2 mb-3">
+                            <Play className="w-5 h-5 text-rose-500" />
+                            <h2 className="text-lg font-bold text-gray-800 dark:text-gray-200">Srila Prabhupada Lectures</h2>
+                        </div>
+                        <div className="space-y-4">
+                            {suggestedVideos.map((videoId, i) => (
+                                <div key={i} className="rounded-xl overflow-hidden" style={{ aspectRatio: '16/9' }}>
+                                    <iframe
+                                        src={`https://www.youtube.com/embed/${videoId}`}
+                                        className="w-full h-full"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                        title={`Srila Prabhupada lecture ${i + 1}`}
+                                    />
+                                </div>
                             ))}
                         </div>
                     </div>
