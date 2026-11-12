@@ -18,7 +18,7 @@ export default function Auth() {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { login, signUp, loginWithGoogle, loginWithApple, forgotPassword, error } = useAuth();
+  const { login, signUp, loginWithGoogle, loginWithApple, forgotPassword, error: authError } = useAuth();
   const { toast } = useToast();
 
   const handleEmailAuth = async (e: React.FormEvent) => {
@@ -60,9 +60,16 @@ export default function Auth() {
     try {
       await loginWithGoogle();
     } catch (err: any) {
-      const msg = err?.message?.includes('No ID Token')
-        ? 'Google sign-in not configured for this build. Check Firebase SHA fingerprints.'
-        : 'Failed to sign in with Google';
+      let msg = 'Failed to sign in with Google';
+      if (err?.message?.includes('No ID Token')) {
+        msg = 'Google sign-in not configured for this build. Check Firebase SHA fingerprints.';
+      } else if (err?.code === 'auth/unauthorized-domain') {
+        msg = 'This domain is not authorized for Google sign-in. Contact the app administrator.';
+      } else if (err?.code === 'auth/operation-not-allowed') {
+        msg = 'Google sign-in is not enabled. Contact the app administrator.';
+      } else if (err?.code) {
+        msg = `Google sign-in failed: ${err.code}`;
+      }
       toast({ title: msg, variant: 'destructive' });
     } finally {
       setIsSubmitting(false);
@@ -122,6 +129,13 @@ export default function Auth() {
             {mode === 'forgot-password' && 'Reset your password'}
           </p>
         </div>
+
+        {/* Redirect error banner */}
+        {authError && (
+          <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl text-sm text-red-700 dark:text-red-300">
+            {authError}
+          </div>
+        )}
 
         {/* Auth Card */}
         <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-orange-100 dark:border-gray-700">

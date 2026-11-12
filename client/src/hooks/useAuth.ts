@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { 
-  auth, 
-  onAuthStateChanged, 
-  signInWithEmail, 
+import {
+  auth,
+  onAuthStateChanged,
+  getRedirectResult,
+  signInWithEmail,
   signUpWithEmail,
   signInWithGoogle,
   signInWithApple,
@@ -96,17 +97,32 @@ export function useAuth() {
     }
   }, []);
 
+  // Handle redirect result on mount (for signInWithRedirect flow)
+  useEffect(() => {
+    getRedirectResult(auth).catch((err: any) => {
+      if (err?.code && err.code !== 'auth/no-current-user') {
+        console.error('Redirect sign-in error:', err.code, err.message);
+        setError(
+          err.code === 'auth/unauthorized-domain'
+            ? 'Sign-in blocked: this domain is not authorized in Firebase. Add it to Firebase Console → Authentication → Settings → Authorized domains.'
+            : `Sign-in failed (${err.code}): ${err.message}`
+        );
+        setIsLoading(false);
+      }
+    });
+  }, []);
+
   // Listen for auth state changes
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (fbUser) => {
       setFirebaseUser(fbUser);
-      
+
       if (fbUser) {
         await syncUserWithBackend(fbUser);
       } else {
         setUser(null);
       }
-      
+
       setIsLoading(false);
     });
 
