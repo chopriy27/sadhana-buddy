@@ -59,19 +59,10 @@ export default function Auth() {
     setIsSubmitting(true);
     try {
       await loginWithGoogle();
+      // signInWithRedirect navigates away — this line is not reached
     } catch (err: any) {
-      let msg = 'Failed to sign in with Google';
-      if (err?.message?.includes('No ID Token')) {
-        msg = 'Google sign-in not configured for this build. Check Firebase SHA fingerprints.';
-      } else if (err?.code === 'auth/unauthorized-domain') {
-        msg = 'This domain is not authorized for Google sign-in. Contact the app administrator.';
-      } else if (err?.code === 'auth/operation-not-allowed') {
-        msg = 'Google sign-in is not enabled. Contact the app administrator.';
-      } else if (err?.code) {
-        msg = `Google sign-in failed: ${err.code}`;
-      }
-      toast({ title: msg, variant: 'destructive' });
-    } finally {
+      console.error('Google sign-in error:', err?.code, err?.message);
+      toast({ title: 'Could not sign in with Google. Please try again.', variant: 'destructive' });
       setIsSubmitting(false);
     }
   };

@@ -70,15 +70,8 @@ export async function signInWithGoogle() {
     }
   }
 
-  // Web Fallback
-  try {
-    return await signInWithPopup(auth, googleProvider);
-  } catch (error: any) {
-    if (error.code === 'auth/popup-blocked') {
-      return signInWithRedirect(auth, googleProvider);
-    }
-    throw error;
-  }
+  // Web: always use redirect (more reliable across browsers than popup)
+  return signInWithRedirect(auth, googleProvider);
 }
 
 export async function logOut() {

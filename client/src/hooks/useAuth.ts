@@ -102,11 +102,7 @@ export function useAuth() {
     getRedirectResult(auth).catch((err: any) => {
       if (err?.code && err.code !== 'auth/no-current-user') {
         console.error('Redirect sign-in error:', err.code, err.message);
-        setError(
-          err.code === 'auth/unauthorized-domain'
-            ? 'Sign-in blocked: this domain is not authorized in Firebase. Add it to Firebase Console → Authentication → Settings → Authorized domains.'
-            : `Sign-in failed (${err.code}): ${err.message}`
-        );
+        setError('Could not complete Google sign-in. Please try again.');
         setIsLoading(false);
       }
     });
@@ -159,8 +155,9 @@ export function useAuth() {
     setIsLoading(true);
     try {
       await signInWithGoogle();
+      // signInWithRedirect navigates away — catch handles any pre-redirect errors
     } catch (err: any) {
-      setError(err.message || 'Failed to sign in with Google');
+      setError('Could not sign in with Google. Please try again.');
       setIsLoading(false);
       throw err;
     }
