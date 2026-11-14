@@ -466,19 +466,13 @@ export default function EventDetail() {
                                     <span>{formattedDate}</span>
                                 </div>
                             </div>
-                            <div className="mt-2">
-                                <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${diffDays === 0
-                                        ? 'bg-white text-orange-600'
-                                        : diffDays < 0
-                                            ? 'bg-white/20'
-                                            : 'bg-white/30'
-                                    }`}>
-                                    {diffDays === 0 ? 'Today!' :
-                                        diffDays === 1 ? 'Tomorrow' :
-                                            diffDays < 0 ? `${Math.abs(diffDays)} days ago` :
-                                                `${diffDays} days remaining`}
-                                </span>
-                            </div>
+                            {diffDays >= 0 && (
+                                <div className="mt-2">
+                                    <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${diffDays === 0 ? 'bg-white text-orange-600' : 'bg-white/30'}`}>
+                                        {diffDays === 0 ? 'Today!' : diffDays === 1 ? 'Tomorrow' : `${diffDays} days remaining`}
+                                    </span>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
